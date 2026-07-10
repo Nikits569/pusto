@@ -1,0 +1,51 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block edit_post %}
+
+<link rel="stylesheet" href="{% static 'profiles/css/editPost.css' %}">
+<title>{% trans 'зміна оголошення' %}</title>
+<div class="edit-container">
+    <h2 class="edit-title">{% trans 'редагування оголошення' %}</h2>
+
+    <form method="post" enctype="multipart/form-data" class="edit-form">
+        {% csrf_token %}
+
+        <!-- Основні поля -->
+        <div class="form-section">
+            {{ form.as_p }}
+        </div>
+
+        <!-- Поточні зображення -->
+        <div class="form-section">
+            <h3>{% trans 'поточні зображення' %}</h3>
+            <div class="image-grid">
+                {% for img in images %}
+                    <div class="image-card">
+                        <img src="{{ img.image.url }}" alt="image">
+                        <label class="delete-checkbox">
+                            <input type="checkbox" name="delete_images" value="{{ img.id }}">
+                            {% trans 'видалити' %}
+                        </label>
+                    </div>
+                {% empty %}
+                    <p class="empty-text">{% trans 'немає зображень' %}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Додати зображення -->
+        <div class="form-section">
+            <h3>{% trans 'додати зображення' %}</h3>
+            <input type="file" name="images" multiple class="file-input">
+        </div>
+
+        <!-- Кнопка -->
+        <div class="form-actions">
+            <button type="submit" class="save-btn">{% trans 'зберегти зміни' %}</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

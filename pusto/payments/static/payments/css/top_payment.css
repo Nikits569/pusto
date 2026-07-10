@@ -1,0 +1,294 @@
+.payment-page {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-card {
+    width: 100%;
+    max-width: 560px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.payment-card__header {
+    padding: 32px 32px 20px;
+    background: #202B6C;
+    color: #fff;
+}
+
+.payment-title {
+    margin: 0 0 8px;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 800;
+}
+
+.payment-subtitle {
+    margin: 0;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.payment-info {
+    padding: 28px 32px 32px;
+}
+
+.info-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.info-row:first-child {
+    padding-top: 0;
+}
+
+.info-label {
+    min-width: 90px;
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.info-value {
+    text-align: right;
+    font-size: 15px;
+    color: #0f172a;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.price-box {
+    margin-top: 24px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.price-box__label {
+    font-size: 15px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.price-box__value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #111827;
+}
+
+/* STRIPE STYLES — ЗАКОМЕНТОВАНО, НЕ УДАЛЕНО */
+/*
+.payment-form {
+    margin-top: 24px;
+}
+
+.form-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #334155;
+}
+
+.stripe-card {
+    padding: 16px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 16px;
+    background: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stripe-card:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.form-error {
+    min-height: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #dc2626;
+}
+*/
+
+.payment-note {
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #64748b;
+}
+
+.status-box {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 24px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    border: 1px solid;
+}
+
+.status-box--success {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #065f46;
+}
+
+.status-box p {
+    margin: 4px 0 0;
+    font-size: 14px;
+}
+
+.status-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #10b981;
+    color: white;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.payment-manual-box {
+    margin-top: 16px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+.payment-manual-box .info-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.payment-manual-box .info-row:first-child {
+    padding-top: 0;
+}
+
+.payment-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    box-sizing: border-box;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn--primary {
+    margin-top: 18px;
+    background: #202B6C;
+    color: #fff;
+}
+
+.btn--secondary {
+    background: #111827;
+    color: #fff;
+}
+
+.payment-actions .btn {
+    flex: 1 1 calc(50% - 6px);
+    width: auto;
+    margin-top: 0;
+}
+
+/* LOADER ОСТАВЛЕН, НО ОН БЫЛ НУЖЕН ДЛЯ STRIPE */
+/*
+.btn-loader {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+*/
+
+.hidden {
+    display: none;
+}
+
+/* АНИМАЦИЯ ОСТАВЛЕНА ТОЛЬКО КАК ЗАКОМЕНТИРОВАННАЯ, Т.К. БЫЛА ДЛЯ LOADER */
+/*
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+*/
+
+@media (max-width: 640px) {
+    .payment-card__header,
+    .payment-info {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .payment-title {
+        font-size: 24px;
+    }
+
+    .info-row,
+    .price-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .info-value {
+        text-align: left;
+    }
+
+    .price-box__value {
+        font-size: 24px;
+    }
+
+    .payment-actions {
+        flex-direction: column;
+    }
+
+    .payment-actions .btn {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+}

@@ -1,0 +1,65 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block create_claim %}
+<link rel="stylesheet" href="{% static 'support/css/create_claim.css' %}">
+<title>{% trans 'скарга на оголошення' %}</title>
+<div class="claim-page">
+    <div class="claim-wrapper">
+        <div class="claim-card">
+
+            <div class="claim-card__header">
+                <div class="claim-badge">{% trans 'Скарга' %}</div>
+                <h1 class="claim-title">{% trans 'Подати скаргу' %}</h1>
+                <p class="claim-subtitle">
+                    {% trans 'Коротко опишіть проблему, щоб модерація могла її перевірити.' %}
+                </p>
+            </div>
+
+            <div class="claim-target">
+                <div class="claim-target__label">{% trans 'Оголошення' %}</div>
+                <div class="claim-target__value">{{ target.title }} <span>{{target.created_at }} - {{ target.city }}</span> </div>
+            </div>
+
+            <form method="post" class="claim-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {% for error in form.non_field_errors %}
+                            <div class="form-error-item">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field }}
+
+                        {% if field.errors %}
+                            <div class="field-errors">
+                                {% for error in field.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="buttonsBottom">
+                    <a href="javascript:history.back()" class="btn btn-claim-secondary">
+                        {% trans 'Назад' %}
+                    </a>
+                    <div class="claim-actions">
+                        <button type="submit" class="btn btn-claim-submit">
+                            {% trans 'Надіслати' %}
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

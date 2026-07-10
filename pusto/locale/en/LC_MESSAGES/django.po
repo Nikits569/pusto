@@ -1,0 +1,1368 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-30 17:08+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: pusto/settings.py:42
+msgid "Ukrainian"
+msgstr ""
+
+#: pusto/settings.py:43
+msgid "English"
+msgstr ""
+
+msgid "вхід"
+msgstr "login"
+
+msgid "мій профіль"
+msgstr "my profile"
+
+msgid "пошук"
+msgstr "search"
+
+msgid "потрібна допомога?"
+msgstr "need help?"
+
+msgid "відповімо протягом 24 годин."
+msgstr "We will respond within 24 hours."
+
+msgid "надіслати"
+msgstr "send"
+
+msgid "користувачам"
+msgstr "for users"
+
+msgid "Усі оголошення"
+msgstr "all ads"
+
+msgid "Робота"
+msgstr "job"
+
+msgid "Житло"
+msgstr "Dwelling"
+
+msgid "Речі"
+msgstr "things"
+
+msgid "Обране"
+msgstr "Chosen"
+
+msgid "компанія"
+msgstr "company"
+
+msgid "реклама на сайті"
+msgstr "advertising on the site"
+
+msgid "партнерство"
+msgstr "partnership"
+
+msgid "правова інформація"
+msgstr "legal information"
+
+msgid "умови користування"
+msgstr "terms of use"
+
+msgid "політика конфіденційності"
+msgstr "privacy policy"
+
+msgid "політика cookies"
+msgstr "cookie policy"
+
+msgid "правила спільноти"
+msgstr "community rules"
+
+msgid "скарги та видалення контенту"
+msgstr "complaints and content removal"
+
+msgid "платні полсуги"
+msgstr "paid services"
+
+msgid "Будь ласка, увійдіть до облікового запису або зареєструйтесь"
+msgstr "Please log in or register."
+
+msgid "підтвердження володіння постами"
+msgstr "post ownership confirmation"
+
+msgid "Підтвердження володіння постами"
+msgstr "Post Ownership Confirmation"
+
+msgid ""
+"Щоб підтвердити, що ці пости належать вам, перейдіть у Telegram-бота з того "
+"акаунта, з якого вони були опубліковані."
+msgstr ""
+"To confirm that these posts belong to you, go to the Telegram bot using the "
+"account from which they were published."
+
+msgid "Після підтвердження ви зможете:"
+msgstr "After confirmation, you will be able to:"
+
+msgid "видалити пости"
+msgstr "delete posts"
+
+msgid "або перенести їх на свій обліковий запис"
+msgstr "or transfer them to your account"
+
+msgid "Перейти в Telegram-бот"
+msgstr "Go to the Telegram bot"
+
+msgid "⚠️ Переконайтесь, що ви увійшли в правильний Telegram-акаунт"
+msgstr "⚠️ Make sure you are logged into the correct Telegram account"
+
+msgid "скарга на оголошення"
+msgstr "report an ad"
+
+msgid "Скарга"
+msgstr "Report"
+
+msgid "Подати скаргу"
+msgstr "Submit a report"
+
+msgid "Коротко опишіть проблему, щоб модерація могла її перевірити."
+msgstr "Briefly describe the issue so moderation can review it."
+
+msgid "Оголошення"
+msgstr "Listing"
+
+msgid "Назад"
+msgstr "Back"
+
+msgid "Надіслати"
+msgstr "Submit"
+
+msgid "дякуємо за ваш час!"
+msgstr "thank you for your time!"
+
+msgid "заявку надіслано"
+msgstr "request submitted"
+
+msgid "дякую! Ми отримали вашу заявку і незабаром зв'яжемося з вами."
+msgstr "Thank you! We have received your request and will contact you shortly."
+
+msgid "на головну"
+msgstr "go to homepage"
+
+msgid "веріфікація користувача"
+msgstr "user verification"
+
+msgid "верифікація користувача"
+msgstr "User Verification"
+
+msgid "що потрібно для успішної верифікації"
+msgstr "what is required for successful verification"
+
+msgid "підтверджена електронна пошта"
+msgstr "verified email address"
+
+msgid "Email має бути підтверджений у профілі"
+msgstr "Email must be verified in your profile"
+
+msgid "Мінімум 1 пост"
+msgstr "minimum 1 post"
+
+msgid "оголошення має бути опубліковане з вашим email"
+msgstr "the listing must be published with your email"
+
+msgid "як проходить перевірка"
+msgstr "how the verification works"
+
+msgid "1. ви надсилаєте заявку"
+msgstr "1. you submit a request"
+
+msgid "2. ми перевіряємо акаунт"
+msgstr "2. we review your account"
+
+msgid "3. отримуєте статус"
+msgstr "3. you receive a status"
+
+msgid "Я підтверджую, що я не робот"
+msgstr "I confirm that I am not a robot"
+
+msgid "надіслати заявку"
+msgstr "submit request"
+
+msgid "верифікація студента"
+msgstr "student verification"
+
+msgid ""
+"введіть свою студентську електронну пошту, щоб підтвердити статус студента."
+msgstr "enter your student email address to confirm your student status"
+
+msgid "відправити лист"
+msgstr "send email"
+
+msgid "профіль користувача"
+msgstr "user profile"
+
+msgid "на платформі з"
+msgstr "on the platform since"
+
+msgid "email веріфікован"
+msgstr "email verified"
+
+msgid "перевірений користувач"
+msgstr "verified user"
+
+msgid "перевірений студент"
+msgstr "verified student"
+
+msgid "перевірений роботодавець"
+msgstr "verified employer"
+
+msgid "поділитися профілем"
+msgstr "share profile"
+
+msgid "написати"
+msgstr "message"
+
+msgid "Прив'язка Telegram"
+msgstr "Telegram linking"
+
+msgid "скопіюйте цей код і відправте його боту в Telegram"
+msgstr "copy this code and send it to the bot in Telegram"
+
+msgid "код діє до"
+msgstr "code is valid until"
+
+msgid "відкрити Telegram-бота"
+msgstr "open Telegram bot"
+
+msgid "всі оголошення"
+msgstr "all listings"
+
+msgid "зібрано з Telegram"
+msgstr "collected from Telegram"
+
+msgid "У користувача немає оголошень"
+msgstr "The user has no listings"
+
+msgid "Ссылка скопирована!"
+msgstr "Link copied!"
+
+msgid "код прив'язки Telegram:"
+msgstr "Telegram linking code:"
+
+msgid "згенерувати заново"
+msgstr "regenerate"
+
+msgid "діє до:"
+msgstr "valid until:"
+
+msgid "вийти з аккаунту"
+msgstr "log out"
+
+msgid "Скопіюйте цей код і відправте його боту в Telegram:"
+msgstr "Copy this code and send it to the bot in Telegram:"
+
+msgid "Код діє до"
+msgstr "Code is valid until"
+
+msgid "Відкрити Telegram-бота"
+msgstr "Open Telegram bot"
+
+msgid "відновити оголошення за email"
+msgstr "restore listings by email"
+
+msgid "змінити профіль"
+msgstr "edit profile"
+
+msgid "пройти верифікацію"
+msgstr "complete verification"
+
+msgid "купити рекламу"
+msgstr "buy advertising"
+
+msgid "редагування профілю"
+msgstr "profile editing"
+
+msgid "оновіть основну інформацію вашого профілю"
+msgstr "update your profile's basic information"
+
+msgid "зберегти зміни"
+msgstr "save changes"
+
+msgid "Верифікація"
+msgstr "Verification"
+
+msgid "оберіть тип верифікації"
+msgstr "choose verification type"
+
+msgid "👤 користувач"
+msgstr "👤 user"
+
+msgid "підтвердження особистого профілю"
+msgstr "personal profile confirmation"
+
+msgid "пройти"
+msgstr "continue"
+
+msgid "🎓 студент"
+msgstr "🎓 student"
+
+msgid "підтвердження студентського статусу"
+msgstr "student status confirmation"
+
+msgid "💼 роботодавець"
+msgstr "💼 employer"
+
+msgid "підтвердження компанії або бізнесу"
+msgstr "company or business confirmation"
+
+msgid "Дякуємо за інтерес!"
+msgstr "Thank you for your interest!"
+
+msgid ""
+"Наразі функція придбання реклами тимчасово недоступна у зв’язку із запуском "
+"платформи."
+msgstr ""
+"The advertising purchase feature is currently temporarily unavailable due to "
+"the platform launch."
+
+msgid "Запуск очікується 15.04.2026."
+msgstr "Launch is expected on 15.04.2026."
+
+msgid "мої оголошення"
+msgstr "my listings"
+
+msgid "підняти"
+msgstr "promote"
+
+msgid "редагувати"
+msgstr "edit"
+
+msgid "Ви впевнені, що хочете видалити це оголошення?"
+msgstr "Are you sure you want to delete this listing?"
+
+msgid "Закрити"
+msgstr "Close"
+
+msgid "Просування оголошення"
+msgstr "Listing promotion"
+
+msgid ""
+"Оберіть тривалість підняття. Ваше оголошення отримає більше видимості у "
+"списку."
+msgstr ""
+"Choose the promotion duration. Your listing will get more visibility in the "
+"list."
+
+msgid "Старт"
+msgstr "Start"
+
+msgid "3 дні"
+msgstr "3 days"
+
+msgid "Швидке підняття оголошення для короткого просування."
+msgstr "Quick listing promotion for short-term visibility."
+
+msgid "Обрати"
+msgstr "Choose"
+
+msgid "Популярний"
+msgstr "Popular"
+
+msgid "7 днів"
+msgstr "7 days"
+
+msgid "Оптимальний варіант для більш стабільного просування."
+msgstr "The optimal option for more stable promotion."
+
+msgid "Максимум"
+msgstr "Maximum"
+
+msgid "14 днів"
+msgstr "14 days"
+
+msgid "Найкраще рішення для довшого та помітнішого розміщення."
+msgstr "The best solution for longer and more noticeable placement."
+
+msgid "у вас поки що немає оголошень"
+msgstr "you do not have any listings yet"
+
+msgid "Посилання скопійовано!"
+msgstr "Link copied!"
+
+msgid "Не вдалося визначити оголошення для просування."
+msgstr "Could not determine the listing for promotion."
+
+msgid "Помилка генерації коду"
+msgstr "Code generation error"
+
+msgid "Помилка мережі"
+msgstr "Network error"
+
+msgid "верифікація роботодавця"
+msgstr "employer verification"
+
+msgid "заповніть дані компанії, щоб підтвердити статус роботодавця."
+msgstr "fill in the company details to confirm your employer status"
+
+msgid "надіслати на перевірку"
+msgstr "send for review"
+
+msgid "зміна оголошення"
+msgstr "edit listing"
+
+msgid "редагування оголошення"
+msgstr "editing listing"
+
+msgid "поточні зображення"
+msgstr "current images"
+
+msgid "видалити"
+msgstr "delete"
+
+msgid "немає зображень"
+msgstr "no images"
+
+msgid "додати зображення"
+msgstr "add images"
+
+msgid "підняття оголошення в ТОП"
+msgstr "promote listing to TOP"
+
+msgid "Підняття оголошення в ТОП"
+msgstr "Promote Listing to TOP"
+
+msgid "Оплатіть послугу безпечно через Stripe"
+msgstr "Pay securely via Stripe"
+
+msgid "Оплата тимчасово доступна лише через банківський переказ"
+msgstr "Payment is temporarily available only by bank transfer"
+
+msgid "Розділ"
+msgstr "Section"
+
+msgid "речі"
+msgstr "things"
+
+msgid "Пост"
+msgstr "Post"
+
+msgid "Цей пост вже у TOP"
+msgstr "This post is already in TOP"
+
+msgid "Повторна оплата не потрібна."
+msgstr "No repeated payment is required."
+
+msgid "Повернутися в профіль"
+msgstr "Return to profile"
+
+msgid "Сума до оплати"
+msgstr "Amount to pay"
+
+msgid "Перепрошуємо за незручності"
+msgstr "We apologize for the inconvenience"
+
+msgid ""
+"Наразі онлайн-оплата тимчасово недоступна, тому просимо здійснити оплату "
+"банківським переказом. Функцію онлайн-оплати буде впроваджено до 20 травня "
+"включно."
+msgstr ""
+"Online payment is currently temporarily unavailable, so please make the "
+"payment by bank transfer. The online payment feature will be implemented by "
+"May 20 inclusive."
+
+msgid "Отримувач"
+msgstr "Recipient"
+
+msgid "Сума"
+msgstr "Amount"
+
+msgid ""
+"Після оплати, будь ласка, надішліть нам підтвердження в Telegram або "
+"напишіть на електронну пошту."
+msgstr ""
+"After payment, please send us confirmation in Telegram or write to us by "
+"email."
+
+msgid "Перейти в Telegram"
+msgstr "Go to Telegram"
+
+msgid "Написати на пошту"
+msgstr "Write by email"
+
+msgid "Дані картки"
+msgstr "Card details"
+
+msgid "Оплатити"
+msgstr "Pay"
+
+msgid ""
+"Натискаючи “Оплатити”, ви підтверджуєте платіж за підняття оголошення в ТОП."
+msgstr ""
+"By clicking “Pay”, you confirm the payment for promoting the listing to TOP."
+
+msgid "Платіж успішний"
+msgstr "Payment successful"
+
+msgid ""
+"Ваш платіж успішно оброблено. На вашу електронну пошту надіслано "
+"підтвердження покупки."
+msgstr ""
+"Your payment has been successfully processed. A purchase confirmation has "
+"been sent to your email."
+
+msgid "Ви можете продовжити роботу з оголошенням."
+msgstr "You can continue working with the listing."
+
+msgid "SELECT payment"
+msgstr "Select payment"
+
+msgid "Рекламный банер"
+msgstr "Advertising banner"
+
+msgid "Рекламный пост"
+msgstr "Advertising post"
+
+msgid "обери рекламу"
+msgstr "choose advertising"
+
+msgid "оберіть тривалість рекламного"
+msgstr "choose the duration of the advertising"
+
+msgid "поста"
+msgstr "post"
+
+msgid "банера"
+msgstr "banner"
+
+msgid "підвищена видимість"
+msgstr "increased visibility"
+
+msgid "швидкий запуск"
+msgstr "quick launch"
+
+msgid "обрати"
+msgstr "choose"
+
+msgid "30 днів"
+msgstr "30 days"
+
+msgid "більше переглядів"
+msgstr "more views"
+
+msgid "кращий результат"
+msgstr "better results"
+
+msgid "оптимальний варіант"
+msgstr "optimal option"
+
+msgid "90 днів"
+msgstr "90 days"
+
+msgid "максимальне охоплення"
+msgstr "maximum reach"
+
+msgid "довгий період"
+msgstr "long period"
+
+msgid "оплата реклами"
+msgstr "advertising payment"
+
+msgid "оплатити"
+msgstr "pay"
+
+msgid "Оплата авторизована (HOLD). Ожидает подтверждения админом."
+msgstr "Payment authorized (HOLD). Waiting for admin confirmation."
+
+msgid "Оплата завершена (succeeded)."
+msgstr "Payment completed (succeeded)."
+
+msgid "Платіж в обробці (processing). Статус оновиться після webhook."
+msgstr "Payment is processing. The status will update after the webhook."
+
+msgid "Потрібна додаткова дія (3DS). Дотримуйтесь інструкцій Stripe."
+msgstr "Additional action is required (3DS). Follow Stripe instructions."
+
+msgid "Платіж не підтверджено: потрібен інший спосіб оплати."
+msgstr "Payment was not confirmed: another payment method is required."
+
+msgid "Платіж створено. Stripe status:"
+msgstr "Payment created. Stripe status:"
+
+msgid "купівля банера"
+msgstr "banner purchase"
+
+msgid "купівля рекламного посту"
+msgstr "advertising post purchase"
+
+msgid "днів за"
+msgstr "days for"
+
+msgid "розміщення у стрічці оголошень"
+msgstr "placement in the listings feed"
+
+msgid "завантажте банер"
+msgstr "upload a banner"
+
+msgid "до 1MB"
+msgstr "up to 1MB"
+
+msgid "файл не обран"
+msgstr "no file selected"
+
+msgid "вибрати"
+msgstr "choose"
+
+msgid "Приклад у стрічці"
+msgstr "Example in the feed"
+
+msgid "Завантажте зображення посту"
+msgstr "Upload the post image"
+
+msgid "приклад"
+msgstr "example"
+
+msgid "Надіслати заявку"
+msgstr "Submit request"
+
+msgid "Заголовок объявления"
+msgstr "Listing title"
+
+msgid "мої обрані"
+msgstr "my favorites"
+
+msgid "збережені оголошення"
+msgstr "saved listings"
+
+msgid "завантаження…"
+msgstr "loading…"
+
+msgid "проживання"
+msgstr "housing"
+
+msgid "заванатження…"
+msgstr "loading…"
+
+msgid "💼 робота / працівники"
+msgstr "💼 jobs / workers"
+
+msgid "Поки нічого немає"
+msgstr "Nothing here yet"
+
+msgid "верифікований"
+msgstr "verified"
+
+msgid "студент"
+msgstr "student"
+
+msgid "роботодавець"
+msgstr "employer"
+
+msgid "Видалити з обраного"
+msgstr "Remove from favorites"
+
+msgid "Завантаження…"
+msgstr "Loading…"
+
+msgid "Не вдалося завантажити обране"
+msgstr "Failed to load favorites"
+
+msgid "продаж"
+msgstr "sell"
+
+msgid "купівля"
+msgstr "buy"
+
+msgid "безкоштовно"
+msgstr "free"
+
+msgid "всі міста"
+msgstr "all cities"
+
+msgid "ціна від"
+msgstr "price from"
+
+msgid "ціна до"
+msgstr "price to"
+
+msgid "всі джерела"
+msgstr "all sources"
+
+msgid "будь-який стан"
+msgstr "any condition"
+
+msgid "Все"
+msgstr "All"
+
+msgid "усі в категорії"
+msgstr "all in category"
+
+msgid "немає підкатегорій"
+msgstr "no subcategories"
+
+msgid "застосувати"
+msgstr "apply"
+
+msgid "скинути"
+msgstr "reset"
+
+msgid "Сортировка"
+msgstr "Sorting"
+
+msgid "Дате ↑"
+msgstr "Date ↑"
+
+msgid "Дате ↓"
+msgstr "Date ↓"
+
+msgid "Дате"
+msgstr "Date"
+
+msgid "Цене ↑"
+msgstr "Price ↑"
+
+msgid "Цене ↓"
+msgstr "Price ↓"
+
+msgid "Цене"
+msgstr "Price"
+
+msgid "додати оголошення"
+msgstr "add listing"
+
+msgid "знайдено"
+msgstr "found"
+
+msgid "оголошень"
+msgstr "listings"
+
+msgid "Активно"
+msgstr "Active"
+
+msgid "Закрыто"
+msgstr "Closed"
+
+msgid "Додати в обране"
+msgstr "Add to favorites"
+
+msgid "нове"
+msgstr "new"
+
+msgid "текста нажаль немає("
+msgstr "unfortunately, there is no text"
+
+msgid "Б/У або нові"
+msgstr "Used or new"
+
+msgid "купуй або продавай речі серед студентів"
+msgstr "buy or sell items among students"
+
+msgid "робота"
+msgstr "jobs"
+
+msgid "робота або працівники"
+msgstr "jobs or workers"
+
+msgid "студенти шукають роботу, а роботодавці — студентів"
+msgstr "students look for jobs, and employers look for students"
+
+msgid "сусіди"
+msgstr "housing"
+
+msgid "пошук сусідів та заміни в гуртожитку"
+msgstr "search for roommates and dorm replacements"
+
+msgid "за"
+msgstr "for"
+
+msgid "в"
+msgstr "in"
+
+msgid "Оголошення на pusto.sk — речі, робота, житло та сусіди в Словаччині."
+msgstr "Listing on pusto.sk — items, jobs, housing, and roommates in Slovakia."
+
+msgid "Фото"
+msgstr "Photo"
+
+msgid "Зібрано з Telegram"
+msgstr "Collected from Telegram"
+
+msgid "сусідів"
+msgstr "roommates"
+
+msgid "Я"
+msgstr "I am"
+
+msgid "чоловічої"
+msgstr "male"
+
+msgid "жіночої"
+msgstr "female"
+
+msgid "статі"
+msgstr "gender"
+
+msgid "Шукаю сусіда"
+msgstr "Looking for a roommate"
+
+msgid "чоловічої статі"
+msgstr "male"
+
+msgid "жіночої статі"
+msgstr "female"
+
+msgid "будь-якої статі"
+msgstr "any gender"
+
+msgid "шукаю"
+msgstr "looking for"
+
+msgid "бажаний вік сусіда(ів) від"
+msgstr "preferred roommate age from"
+
+msgid "до"
+msgstr "to"
+
+msgid "на"
+msgstr "for"
+
+msgid "перевірено адміном"
+msgstr "verified by admin"
+
+msgid "опису немає"
+msgstr "no description"
+
+msgid "Показать всё"
+msgstr "Show all"
+
+msgid "перейти в джерело"
+msgstr "go to source"
+
+msgid "Я вже в групі — перейти до оголошення"
+msgstr "I am already in the group — go to the listing"
+
+msgid "Зв’язатися з автором"
+msgstr "Contact the author"
+
+msgid "Повідомлення"
+msgstr "Message"
+
+msgid "Відправити"
+msgstr "Send"
+
+msgid "це моє оголошення?"
+msgstr "is this my listing?"
+
+msgid "скожі оголошення"
+msgstr "similar listings"
+
+msgid "поскаржитись на оголошення"
+msgstr "report listing"
+
+msgid "шукаю сусіда"
+msgstr "looking for a roommate"
+
+msgid "шукаю квартиру"
+msgstr "looking for an apartment"
+
+msgid "Всі міста"
+msgstr "All cities"
+
+msgid "Пошук"
+msgstr "Search"
+
+msgid "Бюджет від"
+msgstr "Budget from"
+
+msgid "Бюджет до"
+msgstr "Budget to"
+
+msgid "Всі джерела"
+msgstr "All sources"
+
+msgid "К-сть сусідів"
+msgstr "Number of roommates"
+
+msgid "Вік від"
+msgstr "Age from"
+
+msgid "Вік до"
+msgstr "Age to"
+
+msgid "будь-який період"
+msgstr "any period"
+
+msgid "будь-яке житло"
+msgstr "any housing"
+
+msgid "бюджет ↑"
+msgstr "budget ↑"
+
+msgid "бюджет ↓"
+msgstr "budget ↓"
+
+msgid "бюджет"
+msgstr "budget"
+
+msgid "Не вдалося змінити статус"
+msgstr "Failed to change status"
+
+msgid "шукаю роботу"
+msgstr "looking for a job"
+
+msgid "шукаю працівника"
+msgstr "looking for an employee"
+
+msgid "підробіток"
+msgstr "part-time work"
+
+msgid "Пошук вакансії"
+msgstr "Search job"
+
+msgid "Зарплата від"
+msgstr "Salary from"
+
+msgid "Зарплата до"
+msgstr "Salary to"
+
+msgid "будь-яка зайнятість"
+msgstr "any employment"
+
+msgid "сортування"
+msgstr "sorting"
+
+msgid "дате ↑"
+msgstr "date ↑"
+
+msgid "дате ↓"
+msgstr "date ↓"
+
+msgid "дате"
+msgstr "date"
+
+msgid "зарплата ↑"
+msgstr "salary ↑"
+
+msgid "зарплата ↓"
+msgstr "salary ↓"
+
+msgid "зарплата"
+msgstr "salary"
+
+msgid "зібрано з Facebook"
+msgstr "collected from Facebook"
+
+msgid "створити оголошення"
+msgstr "create listing"
+
+msgid "дані оголошення"
+msgstr "listing details"
+
+msgid "особисті дані"
+msgstr "personal details"
+
+msgid "основні параметри"
+msgstr "main parameters"
+
+msgid "про мене"
+msgstr "about me"
+
+msgid "мій стиль життя"
+msgstr "my lifestyle"
+
+msgid "кого шукаю"
+msgstr "who I am looking for"
+
+msgid "стиль життя сусіда"
+msgstr "roommate lifestyle"
+
+msgid "додати фото"
+msgstr "add photo"
+
+msgid "опублікувати"
+msgstr "publish"
+
+msgid "Опублікувати"
+msgstr "Publish"
+
+msgid "підкатегорії"
+msgstr "subcategories"
+
+msgid "Удалить"
+msgstr "Delete"
+
+msgid "реєстрація"
+msgstr "registration"
+
+msgid "створіть обліковий запис за хвилину"
+msgstr "create an account in a minute"
+
+msgid "війти"
+msgstr "log in"
+
+msgid "головна сторінка"
+msgstr "homepage"
+
+msgid "увійдіть, щоб керувати своїми оголошеннями"
+msgstr "log in to manage your listings"
+
+msgid "надіслати посилання повторно"
+msgstr "resend verification link"
+
+msgid "підтвердження електронної пошти"
+msgstr "email verification"
+
+msgid "Підтвердіть електронну пошту"
+msgstr "confirm your email"
+
+msgid "Ми надіслали лист на адресу"
+msgstr "we sent an email to"
+
+msgid ""
+"Перейдіть за посиланням у листі, щоб підтвердити пошту та опублікувати "
+"оголошення."
+msgstr ""
+"follow the link in the email to verify your address and publish your listing"
+
+msgid "Перейти на головну"
+msgstr "go to homepage"
+
+msgid "електронну пошту підтверджено"
+msgstr "email verified"
+
+msgid "перейти на сторінку входу"
+msgstr "go to login page"
+
+msgid "ваш email"
+msgstr "your email"
+
+msgid "тема (наприклад: Скарга на оголошення)"
+msgstr "subject (e.g. Complaint about listing)"
+
+msgid "опишіть проблему або поставте запитання"
+msgstr "describe the problem or ask a question"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Тема"
+msgstr "Subject"
+
+msgid "Сообщение"
+msgstr "Message"
+
+msgid "Причина"
+msgstr "Reason"
+
+msgid "Описание"
+msgstr "Description"
+
+msgid "Опишите проблему"
+msgstr "Describe the problem"
+
+msgid "IČO компанії"
+msgstr "Company ID (IČO)"
+
+msgid "Назва компанії"
+msgstr "Company name"
+
+msgid "оберіть місто"
+msgstr "select a city"
+
+msgid "заголовок"
+msgstr "title"
+
+msgid "опис"
+msgstr "description"
+
+msgid "заголовок который будет отображаться при наведении"
+msgstr "title displayed on hover"
+
+msgid "https://example.com"
+msgstr "https://example.com"
+
+msgid "Заголовок"
+msgstr "Title"
+
+msgid "Изображение"
+msgstr "Image"
+
+msgid "Ссылка"
+msgstr "Link"
+
+msgid "заголовок*"
+msgstr "title*"
+
+msgid "telegram"
+msgstr "telegram"
+
+msgid "email*"
+msgstr "email*"
+
+msgid "категорія"
+msgstr "category"
+
+msgid "підкатегорія"
+msgstr "subcategory"
+
+msgid "оберіть стан"
+msgstr "select condition"
+
+msgid "ціна(€)*"
+msgstr "price (€)*"
+
+msgid "зарплата від"
+msgstr "salary from"
+
+msgid "зарплата до"
+msgstr "salary to"
+
+msgid "назва компанії"
+msgstr "company name"
+
+msgid "Назва вакансії"
+msgstr "Job title"
+
+msgid "Опис"
+msgstr "Description"
+
+msgid "Місто"
+msgstr "City"
+
+msgid "Тип зайнятості"
+msgstr "Employment type"
+
+msgid "Період зарплати"
+msgstr "Salary period"
+
+msgid "Telegram"
+msgstr "Telegram"
+
+msgid "кількість сусідів"
+msgstr "number of roommates"
+
+msgid "мінімальний вік"
+msgstr "minimum age"
+
+msgid "максимальний вік"
+msgstr "maximum age"
+
+msgid "Кількість сусідів"
+msgstr "Number of roommates"
+
+msgid "Моя стать"
+msgstr "My gender"
+
+msgid "Стать сусіда"
+msgstr "Roommate gender"
+
+msgid "Мій вік"
+msgstr "My age"
+
+msgid "Мінімальний вік"
+msgstr "Minimum age"
+
+msgid "Максимальний вік"
+msgstr "Maximum age"
+
+msgid "Бюджет"
+msgstr "Budget"
+
+msgid "Період оренди"
+msgstr "Rental period"
+
+msgid "Мій стиль життя"
+msgstr "My lifestyle"
+
+msgid "Стиль життя сусіда"
+msgstr "Roommate lifestyle"
+
+msgid "Тип житла"
+msgstr "Housing type"
+
+msgid "Дата заселення"
+msgstr "Move-in date"
+
+msgid "будь-яке місто"
+msgstr "any city"
+
+msgid "бюджет (з людини € )"
+msgstr "budget (per person €)"
+
+msgid "пароль"
+msgstr "password"
+
+msgid "повторіть пароль"
+msgstr "repeat password"
+
+msgid "Пароль"
+msgstr "Password"
+
+msgid "Повторіть пароль"
+msgstr "Repeat password"
+
+msgid "email"
+msgstr "email"
+
+msgid "Ім'я"
+msgstr "First name"
+
+msgid "прізвище"
+msgstr "Last name"
+
+msgid "користувач із таким email вже існує"
+msgstr "a user with this email already exists"
+
+msgid "паролі не збігаються"
+msgstr "passwords do not match"
+
+msgid "Акція"
+msgstr "SPECIAL OFFER"
+
+msgid "1 пост = 1 книга безкоштовно"
+msgstr "1 post = 1 free book"
+
+msgid "Розмісти унікальне оголошення на pusto.sk та отримай книги. Кількість обмежена."
+msgstr "Post a unique ad on pusto.sk and get some books. Quantities are limited."
+
+msgid "Отримання локально в Прешові/Кошице"
+msgstr "Pick up locally in Prešov/Košice"
+
+msgid "книг залишилось"
+msgstr "books remaining"
+
+msgid "до кінця акції"
+msgstr "until the end of the promotion"
+
+msgid "розмістити пост"
+msgstr "post"
+
+msgid "я вже розмістив (забрати книгу)"
+msgstr "I've already posted it (pick up the book)"
+
+msgid "АКЦІЯ - БЕЗКОШТОВНА КНИГА"
+msgstr "PROMOTION - FREE BOOK"
+
+msgid "1 пост = 1 безкоштовна книга"
+msgstr "1 post = 1 free book"
+
+msgid "Розмісти якісне оголошення на pusto.sk та отримай книгу безкоштовно."
+msgstr "Post a quality listing on pusto.sk and get a book for free."
+
+msgid "Кількість книг обмежена."
+msgstr "The number of books is limited."
+
+msgid "Умови участі"
+msgstr "Participation Terms"
+
+msgid "Оголошення має бути повністю заповнене."
+msgstr "The listing must be fully completed."
+
+msgid "Обов’язково мають бути: заголовок, опис, ціна, категорія та фотографії."
+msgstr "The listing must include: title, description, price, category, and photos."
+
+msgid "Пост має бути унікальним і не скопійованим з інших сайтів або груп."
+msgstr "The post must be unique and not copied from other websites or groups."
+
+msgid "Унікальність і якість оголошення перевіряються вручну адміністрацією."
+msgstr "The uniqueness and quality of the listing are checked manually by the администрация."
+
+msgid "Один користувач може отримати одну книгу в межах акції."
+msgstr "One user can receive one book within the promotion."
+
+msgid "Акція діє лише за наявності книг."
+msgstr "The promotion is valid only while books are available."
+
+msgid "Отримання книги"
+msgstr "Receiving the Book"
+
+msgid "Книгу можна отримати локально в Пряшеві або Кошицях."
+msgstr "The book can be collected locally in Prešov or Košice."
+
+msgid "Час, місце та точну локацію видачі вказує адміністратор."
+msgstr "The time, place, and exact pickup location are specified by the administrator."
+
+msgid "Перед отриманням потрібно написати адміністратору в Telegram."
+msgstr "Before receiving, you need to contact the administrator on Telegram."
+
+msgid "Заборонено"
+msgstr "Prohibited"
+
+msgid "Публікувати фейкові, дубльовані або неповні оголошення."
+msgstr "Posting fake, duplicated, or incomplete listings."
+
+msgid "Додавати товари або послуги, заборонені правилами сайту чи законом."
+msgstr "Adding goods or services prohibited by the site rules or law."
+
+msgid "Використовувати чужі фото, тексти або вводити користувачів в оману."
+msgstr "Using чужие photos, texts, or misleading users."
+
+msgid "Створювати кілька акаунтів для повторної участі в акції."
+msgstr "Creating multiple accounts to participate in the promotion again."
+
+msgid "Адміністрація залишає за собою право відмовити у видачі книги, якщо оголошення не відповідає умовам акції."
+msgstr "The administration reserves the right to refuse to provide a book if the listing does not meet the promotion conditions."
+
+msgid "Написати адміністратору в Telegram"
+msgstr "Contact the administrator on Telegram"
+
+msgid "Без реєстрації та входу"
+msgstr "Without registration and login"
+
+msgid "Сусіди в Словаччині - оголошення"
+msgstr "Neighbors in Slovakia - ads"
+
+msgid "Шукаю сусіда в Словаччині"
+msgstr "Looking for a neighbor in Slovakia"
+
+msgid "Оренда житла в Словаччині - шукаю квартиру"
+msgstr "Renting a home in Slovakia - looking for an apartment"
+
+msgid "Продаж товарів в Словаччині - pusto.sk"
+msgstr "Selling goods in Slovakia - pusto.sk"
+
+msgid "Купівля товарів в Словаччині - pusto.sk"
+msgstr "Buying goods in Slovakia - pusto.sk"
+
+msgid "Безкоштовні оголошення в Словаччині - pusto.skтиру"
+msgstr "Free ads in Slovakia - pusto.sk"
+
+msgid "Оголошення в Словаччині - pusto.sk"
+msgstr "Classifieds in Slovakia - pusto.sk"
+
+msgid "Оголошення в Словаччині"
+msgstr "Ads in Slovakia"
+
+msgid "Оголошення про продаж товарів в Словаччині"
+msgstr "Advertisements for sale of goods in Slovakia"
+
+msgid "Оголошення про купівлю товарів в Словаччині"
+msgstr "Announcements about the purchase of goods in Slovakia"
+
+msgid "Сусіди в Словаччині"
+msgstr "Neighbors in Slovakia"
+
+msgid "Оренда житла в Словаччині"
+msgstr "Renting accommodation in Slovakia"
+
+msgid "Пошук сусіда в Словаччині"
+msgstr "Finding a neighbor in Slovakia"
+
+msgid "житло"
+msgstr "dwelling"
+
+msgid "сусіди та житло"
+msgstr "neighbors and housing"
+
+msgid "кількість кімнат"
+msgstr "number of rooms"
+
+
+
+

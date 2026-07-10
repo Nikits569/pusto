@@ -1,0 +1,806 @@
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Onest", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer input::placeholder,
+footer textarea::placeholder {
+    color: #B3B3B3;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+footer input:focus::placeholder,
+textarea:focus::placeholder {
+  opacity: 0;
+}
+
+footer input:focus,
+textarea:focus {
+  outline: none;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #F2F3F8;
+}
+
+main, header {
+  padding-inline: clamp(48px, 9vw, 96px);
+}
+
+a {
+  text-decoration: none;
+}
+
+/* ===== Header (air + dominant search) ===== */
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+
+  height: 88px;
+  background: transparent;
+  border-bottom: none;
+
+  margin-bottom: 10px;
+}
+
+/* logo */
+#logo {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+#logo img {
+  width: 136px;
+  height: auto;
+}
+
+/* center */
+header .centerBlock {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* search */
+.search {
+  position: relative;
+  width: min(830px, 100%);
+  display: flex;
+  align-items: center;
+}
+
+.search input {
+  width: 100%;
+  height: 52px;
+  border-radius: 9999px;
+
+  background: #ffffff;
+  border: 1px solid rgba(17, 24, 39, 0.10);
+
+  padding: 0 18px 0 46px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+
+  outline: none;
+  box-shadow:
+    0 1px 0 rgba(17,24,39,0.04),
+    0 12px 28px rgba(17,24,39,0.08);
+  transition: box-shadow 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+header .search input::placeholder {
+  color: rgba(17, 24, 39, 0.35);
+  text-transform: lowercase;
+  font-size: 15px;
+}
+
+.search input:focus {
+  border-color: rgba(17, 24, 39, 0.18);
+  box-shadow:
+    0 1px 0 rgba(17,24,39,0.04),
+    0 18px 40px rgba(17,24,39,0.12);
+  transform: translateY(-1px);
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(17, 24, 39, 0.45);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.search input:focus + .search-icon {
+  transform: translateY(-1px);
+}
+/* right: true vertical centering */
+header .rightBlock {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+
+  flex: 0 0 auto;
+  font-size: 20px;
+  color: rgba(17, 24, 39, 0.55);
+
+  line-height: 1;
+}
+
+/* force baseline issues away */
+header .rightBlock > * {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+/* normalize icon sizing/alignment */
+.rightBlock #favorites {
+  display: inline-flex;
+  align-items: center;
+  font-size: 33px;
+  line-height: 1;
+}
+
+header a {
+  color: rgba(17, 24, 39, 0.55);
+  transition: color 120ms ease;
+}
+
+header a:hover {
+  color: rgba(17, 24, 39, 0.85);
+}
+
+#login {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.rightBlock #lang-toggle {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+
+footer {
+    width: 100%;
+    height: 500px;
+    background: grey;
+    display: flex;
+    margin-top: 200px;
+}
+
+footer .leftBlock {
+    background-color: #EEEEEE;
+    width: 50%;
+}
+
+footer .rightBlock {
+    background-color: #E6E6E6;
+    width: 50%;
+}
+footer .leftBlock .allForm {
+    margin-left: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* вертикально */
+    align-items: stretch;    /* чтобы инпуты были на всю ширину */
+    width: 500px;
+    height: 500px;
+    gap: 10px;
+}
+footer .leftBlock .needHelp {
+    font-size: 35px;
+    opacity: 90%;
+    display: flex;
+    font-weight: 500;
+    flex-direction: column;
+}
+
+footer .leftBlock .needHelpSubtitle {
+    font-size: 15px;
+    opacity: 80%;
+    display: flex;
+    font-weight: 300;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+footer .leftBlock .firstType {
+    display: block;
+    width: 100%;
+    height: 42px;
+    padding: 0 14px;
+
+    border: none;
+    border-radius: 7px;
+    box-sizing: border-box;
+
+    font-size: 14px;
+    line-height: normal;
+    transition: all 0.2s ease;
+}
+
+
+footer .leftBlock .secondType {
+    display: block;
+    width: 100%;
+    height: 120px;
+    padding: 12px 14px;
+
+    border: none;
+    border-radius: 7px;
+    box-sizing: border-box;
+    resize: none;
+
+    font-size: 11px;
+}
+
+footer .leftBlock .sendForm {
+    cursor: pointer;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 10px;
+    height: 32px;
+    border: none;
+    background-color: #202B6C;
+    color: white;
+    font-size: 20px;
+
+}
+
+/* Правая часть футера */
+footer .rightBlock {
+    display: flex;
+    flex-direction: column;   /* друг за другом */
+
+}
+
+.rightBlock .footerCenter {
+    margin-top: 100px;
+}
+
+/* Колонки */
+.footerCols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 600px;
+  margin-left: 50px;
+  gap: 30px;
+}
+
+/* Каждый столбец */
+.footerCol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+}
+
+/* Заголовки колонок */
+.footerTitle {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 25px;
+  opacity: 90%;
+
+}
+
+/* Ссылки */
+.footerCol li {
+  margin-bottom: 15px;
+
+}
+
+.footerCol a {
+  font-size: 14px;
+  opacity: 80%;
+  color: #4B5563;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 300;
+}
+
+.footerCol a:hover {
+  color: #1E3A8A; /* твой акцентный */
+}
+
+/* Нижняя строка */
+.footerBottom {
+    margin-top: 30px;
+    padding-top: 16px;
+    display: flex;
+    font-size: 12px;
+    color: #6B7280;
+    gap: 50px;
+    width: 600px;
+    margin-left: 50px;
+    border-top: 1px solid #E5E7EB;
+}
+
+/* Языки */
+.lang {
+  text-decoration: none;
+  color: #6B7280;
+  margin-left: 12px;
+  transition: color 0.2s ease;
+}
+
+.lang:hover {
+  color: #111827;
+}
+
+.lang.isActive {
+  color: #1E3A8A;
+  font-weight: 600;
+}
+
+
+/* =========================
+   GLOBAL IMPROVEMENTS
+   ========================= */
+
+html, body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main, header {
+  padding-inline: clamp(16px, 4vw, 96px);
+}
+
+/* исправление focus только для footer */
+footer input:focus::placeholder,
+footer textarea:focus::placeholder {
+  opacity: 0;
+}
+
+footer input:focus,
+footer textarea:focus {
+  outline: none;
+}
+
+/* =========================
+   DESKTOP LARGE
+   ========================= */
+
+@media (max-width: 1200px) {
+  header {
+    gap: 20px;
+    height: auto;
+    min-height: 88px;
+    padding-block: 16px;
+  }
+
+  header .centerBlock {
+    gap: 18px;
+  }
+
+  .search {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  footer .leftBlock .allForm {
+    margin-left: 48px;
+    width: min(100%, 460px);
+  }
+
+  .footerCols,
+  .footerBottom {
+    width: auto;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+
+  .footerCols {
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+  }
+}
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media (max-width: 992px) {
+  header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    row-gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  #logo {
+    order: 1;
+  }
+
+  header .rightBlock {
+    order: 2;
+    gap: 20px;
+  }
+
+  header .centerBlock {
+    order: 3;
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .search {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .search input {
+    height: 48px;
+    font-size: 15px;
+    padding: 0 16px 0 44px;
+  }
+
+  .search-icon {
+    left: 14px;
+  }
+
+  #login,
+  .rightBlock #lang-toggle {
+    font-size: 16px;
+  }
+
+  .rightBlock #favorites {
+    font-size: 28px;
+  }
+
+  footer {
+    height: auto;
+    flex-direction: column;
+    margin-top: 120px;
+  }
+
+  footer .leftBlock,
+  footer .rightBlock {
+    width: 100%;
+  }
+
+  footer .leftBlock {
+    padding: 56px 24px;
+  }
+
+  footer .rightBlock {
+    padding: 48px 24px 40px;
+  }
+
+  footer .leftBlock .allForm {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  footer .rightBlock .footerCenter {
+    margin-top: 0;
+  }
+
+  .footerCols {
+    width: 100%;
+    margin-left: 0;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .footerBottom {
+    width: 100%;
+    margin-left: 0;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 768px) {
+  main, header {
+    padding-inline: 16px;
+  }
+
+  header {
+    gap: 14px;
+    padding-block: 14px;
+  }
+
+  #logo img {
+    width: 116px;
+  }
+
+  header .rightBlock {
+    gap: 14px;
+  }
+
+  .rightBlock #favorites {
+    font-size: 24px;
+  }
+
+  #login,
+  .rightBlock #lang-toggle {
+    font-size: 15px;
+  }
+
+  .search input {
+    height: 46px;
+    border-radius: 999px;
+    font-size: 14px;
+    padding: 0 14px 0 42px;
+  }
+
+  header .search input::placeholder {
+    font-size: 14px;
+  }
+
+  .search-icon {
+    left: 14px;
+  }
+
+  footer {
+    margin-top: 80px;
+  }
+
+  footer .leftBlock,
+  footer .rightBlock {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  footer .leftBlock .needHelp {
+    font-size: 28px;
+  }
+
+  footer .leftBlock .needHelpSubtitle {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+
+  footer .leftBlock .firstType {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  footer .leftBlock .secondType {
+    height: 110px;
+    font-size: 13px;
+  }
+
+  footer .leftBlock .sendForm {
+    height: 42px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+
+  .footerCols {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 18px;
+  }
+
+  .footerTitle {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .footerCol li {
+    margin-bottom: 10px;
+  }
+
+  .footerCol a {
+    font-size: 14px;
+  }
+
+  .footerBottom {
+    margin-top: 24px;
+    padding-top: 14px;
+    font-size: 12px;
+    gap: 12px 20px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+   ========================= */
+
+@media (max-width: 520px) {
+  header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #logo {
+    justify-content: center;
+  }
+
+  header .rightBlock {
+    justify-content: center;
+  }
+
+  header .centerBlock {
+    width: 100%;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .search input {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  footer .leftBlock {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  footer .rightBlock {
+    padding-top: 36px;
+    padding-bottom: 28px;
+  }
+
+  footer .leftBlock .needHelp {
+    font-size: 24px;
+  }
+
+  footer .leftBlock .needHelpSubtitle {
+    font-size: 13px;
+  }
+
+  .footerCols {
+    grid-template-columns: 1fr;
+  }
+
+  .footerBottom {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .lang {
+    margin-left: 8px;
+  }
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #ffffff;
+  margin: 15% auto;
+  padding: 28px 32px;
+  width: 420px;
+  max-width: 90%;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  position: relative;
+
+  animation: modalFade 0.25s ease;
+}
+
+/* Заголовок */
+.modal-content h2 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Текст */
+.modal-content p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+/* Email выделим */
+.modal-content h2 {
+  margin-bottom: 12px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: 0.3px;
+}
+
+.modal-content p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #444;
+}
+
+/* Делает текст более "воздушным" */
+.modal-content p {
+  max-width: 320px;
+}
+
+/* Email как ссылка */
+.modal-content a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.modal-content a:hover {
+  text-decoration: underline;
+}
+
+/* Крестик */
+.close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 22px;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.close:hover {
+  color: #111827;
+}
+
+/* Анимация */
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.setLanguage button {
+    background: none;
+    border: none;
+    color: rgba(17, 24, 39, 0.55);
+    font-size: 18px;
+    cursor: pointer;
+}

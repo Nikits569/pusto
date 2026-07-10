@@ -1,0 +1,46 @@
+.success-container {
+    max-width: 480px;
+    margin: 80px auto;
+    padding: 24px;
+    text-align: center;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.success-container h1 {
+    font-size: 26px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.user-name {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.message {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.sub-message {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 24px;
+}
+
+.btn-main {
+    display: inline-block;
+    padding: 10px 18px;
+    font-size: 14px;
+    text-decoration: none;
+    color: white;
+    background: #202B6C;
+    width: 100%;
+    border-radius: 18px;
+    border: none;
+}
+
+.btn-main:hover {
+    border-color: #000;
+}

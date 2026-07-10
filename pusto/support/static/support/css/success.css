@@ -1,0 +1,171 @@
+.success-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.success-card {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 40px 32px;
+  text-align: center;
+
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.25);
+}
+
+.success-icon svg {
+  width: 34px;
+  height: 34px;
+  color: white;
+}
+
+.success-title {
+  margin: 0 0 12px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.success-text {
+  margin: 0 0 24px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: #475569;
+}
+
+.success-email {
+  display: inline-block;
+  margin-bottom: 28px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  font-size: 15px;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.success-btn {
+  display: inline-block;
+  padding: 14px 24px;
+  border-radius: 14px;
+  background: #202B6C;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+
+@media (max-width: 768px) {
+  .success-page {
+    min-height: auto;
+    padding: 24px 14px;
+  }
+
+  .success-card {
+    border-radius: 20px;
+    padding: 32px 24px;
+  }
+
+  .success-title {
+    font-size: 28px;
+  }
+
+  .success-text {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .success-email {
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+}
+
+/* mobile */
+@media (max-width: 480px) {
+  .success-page {
+    padding: 16px 12px;
+  }
+
+  .success-card {
+    max-width: 100%;
+    border-radius: 18px;
+    padding: 24px 16px;
+  }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+  }
+
+  .success-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .success-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .success-text {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+
+  .success-email {
+    width: 100%;
+    padding: 11px 14px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+
+  .success-btn {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+}
+
+/* very small screens */
+@media (max-width: 360px) {
+  .success-card {
+    padding: 20px 14px;
+  }
+
+  .success-title {
+    font-size: 21px;
+  }
+
+  .success-text {
+    font-size: 14px;
+  }
+
+  .success-btn {
+    min-height: 48px;
+    font-size: 14px;
+  }
+}

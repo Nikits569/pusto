@@ -1,0 +1,38 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block login %}
+<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+<title>{% trans 'вхід' %}</title>
+<main class="auth">
+  <div class="login-page">
+    <h2>{% trans 'вхід' %}</h2>
+    <p class="auth-sub">{% trans 'увійдіть, щоб керувати своїми оголошеннями' %}</p>
+
+    <form class="auth-form" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn-primary">{% trans 'війти' %}</button>
+    </form>
+
+    {% if msg %}<p class="login-msg">{{ msg|safe }}</p>{% endif %}
+
+    {% if show_resend and user_obj %}
+    <form class="resend-form" method="post" action="{% url 'resend_verification' %}">
+      {% csrf_token %}
+      <input type="hidden" name="user_id" value="{{ user_obj.id }}">
+      <button type="submit" class="btn-ghost">
+        {% trans 'надіслати посилання повторно' %}
+      </button>
+    </form>
+    {% endif %}
+
+    <div class="login-links">
+      <a href="{% url 'register' %}">{% trans 'реєстрація' %}</a>
+      <span class="dot">•</span>
+      <a href="{% url 'ads:select' %}">{% trans 'на головну' %}</a>
+    </div>
+  </div>
+</main>
+{% endblock %}

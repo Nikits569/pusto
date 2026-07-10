@@ -1,0 +1,33 @@
+{% extends 'pusto/head.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block success %}
+<link type="text/css" href="{% static 'support/css/success.css' %}" rel="stylesheet" />
+<title>{% trans 'дякуємо за ваш час!' %}</title>
+<div class="success-page">
+  <div class="success-card">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+    </div>
+
+    <h1 class="success-title">{% trans 'заявку надіслано' %}</h1>
+    <p class="success-text">
+      {% trans "дякую! Ми отримали вашу заявку і незабаром зв'яжемося з вами." %}
+    </p>
+
+    <div class="success-email">
+      {{ user.email }}
+    </div>
+
+    <div>
+      <a class="success-btn" href="{% url 'ads:select' %}">
+       {% trans 'на головну' %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

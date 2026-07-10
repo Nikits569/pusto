@@ -1,0 +1,268 @@
+#selectPage {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 620px;
+}
+
+#selectPage a {
+    display: block;
+    color: inherit;
+}
+
+#selectPage .page {
+    position: relative;
+    min-height: 620px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 42px 34px 34px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    overflow: hidden;
+    background: #fff;
+}
+
+#selectPage .page:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    z-index: 2;
+}
+
+#selectPage #jobs {
+    position: relative;
+}
+
+#selectPage #jobs::before,
+#selectPage #jobs::after {
+    content: "";
+    position: absolute;
+    top: 24px;
+    bottom: 24px;
+    width: 1px;
+    background: #E6E6E6;
+}
+
+#selectPage #jobs::before {
+    left: 0;
+}
+
+#selectPage #jobs::after {
+    right: 0;
+}
+
+#selectPage .page .blockTop,
+#selectPage .page .blockBottom {
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    margin-left: 0;
+    height: auto;
+}
+
+#selectPage .page .blockTop {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 250px;
+}
+
+#selectPage .page .pageTitle {
+    position: absolute;
+    top: 34px;
+    left: 20px;
+    font-size: clamp(52px, 6vw, 92px);
+    font-weight: 600;
+    color: #2f3a8f;
+    opacity: 0.06;
+    user-select: none;
+    line-height: 0.95;
+    z-index: 1;
+    pointer-events: none;
+    margin-top: 0;
+}
+
+#selectPage .page .pageIMG {
+    width: clamp(64px, 7vw, 88px);
+    height: auto;
+    z-index: 2;
+    margin-left: 52px;
+    margin-top: 90px;
+}
+
+#selectPage .page .blockBottom {
+    margin-top: auto;
+}
+
+#selectPage .page .blockBottom h3 {
+    color: #111;
+    font-size: clamp(24px, 2vw, 32px);
+    font-weight: 500;
+    opacity: 0.95;
+    margin: 0 0 10px 0;
+    line-height: 1.15;
+}
+
+#selectPage .page .blockBottom h4 {
+    color: #111;
+    font-size: 14px;
+    font-weight: 300;
+    opacity: 0.65;
+    line-height: 1.45;
+    margin: 0;
+    max-width: 320px;
+}
+
+/* =========================
+   SELECT PAGE ADAPTIVE
+   ========================= */
+
+@media (max-width: 1200px) {
+    #selectPage {
+        min-height: 560px;
+    }
+
+    #selectPage .page {
+        min-height: 560px;
+        padding: 36px 26px 28px;
+    }
+
+    #selectPage .page .blockTop {
+        min-height: 220px;
+    }
+
+    #selectPage .page .pageIMG {
+        margin-left: 34px;
+        margin-top: 78px;
+    }
+
+    #selectPage .page .blockBottom h3 {
+        font-size: 22px;
+    }
+
+    #selectPage .page .blockBottom h4 {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 992px) {
+    #selectPage {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-height: auto;
+    }
+
+    #selectPage .page {
+        min-height: 460px;
+    }
+
+    /* убираем старые вертикальные линии у middle card */
+    #selectPage #jobs::before,
+    #selectPage #jobs::after {
+        display: none;
+    }
+
+    /* делаем общие границы для карточек */
+    #selectPage .page {
+        border-right: 1px solid #EAEAEA;
+        border-bottom: 1px solid #EAEAEA;
+    }
+
+    #selectPage .page:nth-child(2n) {
+        border-right: none;
+    }
+
+    #selectPage .page:last-child,
+    #selectPage .page:nth-last-child(2):nth-child(odd) {
+        border-bottom: none;
+    }
+
+    #selectPage .page .pageTitle {
+        top: 28px;
+        left: 18px;
+        font-size: clamp(46px, 8vw, 74px);
+    }
+
+    #selectPage .page .pageIMG {
+        width: 72px;
+        margin-left: 28px;
+        margin-top: 76px;
+    }
+}
+
+@media (max-width: 768px) {
+    #selectPage {
+        grid-template-columns: 1fr;
+        border-radius: 16px;
+    }
+
+    #selectPage .page {
+        min-height: 340px;
+        padding: 28px 22px 24px;
+        border-right: none;
+        border-bottom: 1px solid #EAEAEA;
+    }
+
+    #selectPage .page:last-child {
+        border-bottom: none;
+    }
+
+    #selectPage .page .blockTop {
+        min-height: 150px;
+    }
+
+    #selectPage .page .pageTitle {
+        top: 20px;
+        left: 16px;
+        font-size: clamp(42px, 12vw, 64px);
+    }
+
+    #selectPage .page .pageIMG {
+        width: 62px;
+        margin-left: 14px;
+        margin-top: 54px;
+    }
+
+    #selectPage .page .blockBottom h3 {
+        font-size: 22px;
+        margin-bottom: 8px;
+    }
+
+    #selectPage .page .blockBottom h4 {
+        font-size: 13px;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    #selectPage .page {
+        min-height: 300px;
+        padding: 22px 18px 20px;
+    }
+
+    #selectPage .page .blockTop {
+        min-height: 120px;
+    }
+
+    #selectPage .page .pageTitle {
+        font-size: 48px;
+        top: 18px;
+        left: 14px;
+    }
+
+    #selectPage .page .pageIMG {
+        width: 56px;
+        margin-left: 10px;
+        margin-top: 46px;
+    }
+
+    #selectPage .page .blockBottom h3 {
+        font-size: 20px;
+    }
+
+    #selectPage .page .blockBottom h4 {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+}

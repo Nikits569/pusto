@@ -1,0 +1,35 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block confirmation %}
+<link rel="stylesheet" href="{% static 'support/css/confirmation.css' %}">
+<title>{% trans 'підтвердження володіння постами' %}</title>
+<div class="confirmation-container">
+    <div class="confirmation-card">
+        <h1>{% trans 'Підтвердження володіння постами' %}</h1>
+
+        <p class="description">
+            {% trans 'Щоб підтвердити, що ці пости належать вам, перейдіть у Telegram-бота з того акаунта, з якого вони були опубліковані.' %}
+        </p>
+
+        <p class="steps">
+            {% trans 'Після підтвердження ви зможете:' %}
+        </p>
+
+        <ul class="actions-list">
+            <li>{% trans 'видалити пости' %}</li>
+            <li>{% trans 'або перенести їх на свій обліковий запис' %}</li>
+        </ul>
+
+        <a href="https://t.me/pustoSK_bot" target="_blank" class="tg-btn">
+            {% trans 'Перейти в Telegram-бот' %}
+        </a>
+
+        <p class="note">
+            {% trans '⚠️ Переконайтесь, що ви увійшли в правильний Telegram-акаунт' %}
+        </p>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block select_payment_time %}
+
+<link type="text/css" href="{% static 'payments/css/advDuration.css' %}" rel="stylesheet" />
+
+<div class="pricing-wrap">
+  <div class="titleMain">{% trans 'обери рекламу' %}</div>
+  {% if ad_type == 'post' %}
+    <div class="title">
+      {% trans 'оберіть тривалість рекламного' %} <span>{% trans 'поста' %}</span>
+    </div>
+
+  {% elif ad_type == 'banner' %}
+    <div class="title">
+      {% trans 'оберіть тривалість рекламного' %} <span>{% trans 'банера' %}</span>
+    </div>
+  {% endif %}
+
+
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="grid">
+
+      <!-- 7 днів -->
+      <div class="card">
+        <div class="price">3 €</div>
+        <div class="duration">{% trans '7 днів' %}</div>
+
+
+        <ul class="features">
+          <li>{% trans 'підвищена видимість' %}</li>
+          <li>{% trans 'швидкий запуск' %}</li>
+        </ul>
+
+        <button type="submit" name="duration" value="7" class="btn light">
+          {% trans 'обрати' %}
+        </button>
+      </div>
+
+      <!-- 30 днів -->
+      <div class="card popular">
+        <div class="price">9 €</div>
+        <div class="duration">{% trans '30 днів' %}</div>
+
+
+        <ul class="features">
+          <li>{% trans 'більше переглядів' %}</li>
+          <li>{% trans 'кращий результат' %}</li>
+          <li>{% trans 'оптимальний варіант' %}</li>
+        </ul>
+
+        <button type="submit" name="duration" value="30" class="btn primary">
+          {% trans 'обрати' %}
+        </button>
+      </div>
+
+      <!-- 90 днів -->
+      <div class="card">
+        <div class="price">19 €</div>
+        <div class="duration">{% trans '90 днів' %}</div>
+
+
+        <ul class="features">
+          <li>{% trans 'максимальне охоплення' %}</li>
+          <li>{% trans 'довгий період' %}</li>
+        </ul>
+
+        <button type="submit" name="duration" value="90" class="btn light">
+          {% trans 'обрати' %}
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+{% endblock %}

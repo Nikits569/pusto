@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /payments/
+Disallow: /support/
+Disallow: /search/
+
+Sitemap: https://pusto.sk/sitemap.xml

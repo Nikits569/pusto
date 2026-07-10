@@ -1,0 +1,153 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load currency %}
+{% load i18n %}
+
+{% block top_payment %}
+<link type="text/css" href="{% static 'payments/css/top_payment.css' %}" rel="stylesheet" />
+<title>{% trans 'підняття оголошення в ТОП' %}</title>
+<div class="payment-page">
+    <div class="payment-card">
+        <div class="payment-card__header">
+            <h1 class="payment-title">{% trans 'Підняття оголошення в ТОП' %}</h1>
+
+            <!-- <p class="payment-subtitle">{% trans 'Оплатіть послугу безпечно через Stripe' %}</p> -->
+            <p class="payment-subtitle">{% trans 'Оплата тимчасово доступна лише через банківський переказ' %}</p>
+        </div>
+
+        <div class="payment-info">
+            <div class="info-row">
+                <span class="info-label">{% trans 'Розділ' %}</span>
+                <span class="info-value">
+                    {% if section|title == 'Things' %}
+                        {% trans 'речі' %}
+                    {% elif section|title == 'Jobs' %}
+                        {% trans 'робота' %}
+                    {% elif section|title == 'Neighbors' %}
+                        {% trans 'сусіди' %}
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">{% trans 'Пост' %}</span>
+                <span class="info-value">{{ post.title }}</span>
+            </div>
+
+            {% if active_top %}
+                <div class="status-box status-box--success">
+                    <span class="status-icon">✓</span>
+                    <div>
+                        <strong>{% trans 'Цей пост вже у TOP' %}</strong>
+                        <p>{% trans 'Повторна оплата не потрібна.' %}</p>
+                    </div>
+                </div>
+
+                <div class="payment-actions">
+                    <a href="{% url 'profiles:MyProfile' %}" class="btn btn--secondary">
+                        {% trans 'Повернутися в профіль' %}
+                    </a>
+                </div>
+            {% else %}
+                <div class="price-box">
+                    <span class="price-box__label">{% trans 'Сума до оплати' %}</span>
+                    <span class="price-box__value">{{ price|euro }} €</span>
+                </div>
+
+                <div class="status-box" style="margin-top: 16px; margin-bottom: 16px;">
+                    <div>
+                        <strong>{% trans 'Перепрошуємо за незручності' %}</strong>
+                        <p style="margin: 8px 0 0 0;">
+                            {% trans 'Наразі онлайн-оплата тимчасово недоступна, тому просимо здійснити оплату банківським переказом. Функцію онлайн-оплати буде впроваджено до 20 травня включно.' %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="payment-manual-box">
+                    <div class="info-row">
+                        <span class="info-label">{% trans 'Отримувач' %}</span>
+                        <span class="info-value">Mykyta Pustovoitov</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">IBAN</span>
+                        <span class="info-value">SK60 1100 0000 0029 3690 6351</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">{% trans 'Сума' %}</span>
+                        <span class="info-value">{{ price|euro }} €</span>
+                    </div>
+                </div>
+
+                <div class="payment-note">
+                    {% trans 'Після оплати, будь ласка, надішліть нам підтвердження в Telegram або напишіть на електронну пошту.' %}
+                </div>
+
+                <div class="payment-actions">
+                    <a href="https://t.me/your_telegram_username" target="_blank" class="btn btn--primary">
+                        {% trans 'Перейти в Telegram' %}
+                    </a>
+
+                    <!-- <a href="mailto:your@email.com" class="btn btn--secondary">
+                        {% trans 'Написати на пошту' %}
+                    </a> -->
+                </div>
+
+                <!-- STRIPE FORM -->
+                <!--
+                <form id="payment-form" class="payment-form">
+                    <label class="form-label" for="card-element">{% trans 'Дані картки' %}</label>
+                    <div id="card-element" class="stripe-card"></div>
+                    <div id="card-errors" class="form-error" role="alert"></div>
+
+                    <button id="pay-button" type="submit" class="btn btn--primary">
+                        <span class="btn-text">{% trans 'Оплатити' %}</span>
+                        <span class="btn-loader hidden"></span>
+                    </button>
+                </form>
+
+                <div class="payment-note">
+                    {% trans 'Натискаючи “Оплатити”, ви підтверджуєте платіж за підняття оголошення в ТОП.' %}
+                </div>
+                -->
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if not active_top %}
+<!-- STRIPE SCRIPT -->
+<!--
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+    const elements = stripe.elements();
+
+    const card = elements.create("card");
+    card.mount("#card-element");
+
+    const form = document.getElementById("payment-form");
+
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const { paymentIntent, error } = await stripe.confirmCardPayment(
+            "{{ client_secret }}",
+            {
+                payment_method: {
+                    card: card
+                }
+            }
+        );
+
+        if (error) {
+            console.error(error);
+        } else if (paymentIntent.status === "succeeded") {
+            window.location.href = "{% url 'payment_success' %}";
+        }
+    });
+</script>
+-->
+{% endif %}
+{% endblock %}

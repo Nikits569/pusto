@@ -1,0 +1,11 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block select_payment %}
+<title>{% trans 'SELECT payment' %}</title>
+
+<a href="{% url 'select_adv_duration' 'banner' %}"><h1>{% trans 'Рекламный банер' %}</h1></a>
+<a href="{% url 'select_adv_duration' 'post' %}"><h1>{% trans 'Рекламный пост' %}</h1></a>
+
+{% endblock %}

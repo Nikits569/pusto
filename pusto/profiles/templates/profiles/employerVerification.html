@@ -1,0 +1,47 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block employerVerification %}
+<link rel="stylesheet" href="{% static 'profiles/css/employerVerification.css' %}">
+<title>{% trans 'верифікація роботодавця' %}</title>
+<section class="employer-verification">
+    <div class="employer-card">
+        <div class="employer-card__icon">🏢</div>
+
+        <h1 class="employer-card__title">{% trans 'верифікація роботодавця' %}</h1>
+
+        <p class="employer-card__text">
+            {% trans 'заповніть дані компанії, щоб підтвердити статус роботодавця.' %}
+        </p>
+
+        <form method="post" class="employer-form">
+            {% csrf_token %}
+
+            <div class="employer-form__group">
+                {{ form.ico }}
+                {% if form.ico.errors %}
+                    <div class="employer-form__error">{{ form.ico.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="employer-form__group">
+                {{ form.company_name }}
+                {% if form.company_name.errors %}
+                    <div class="employer-form__error">{{ form.company_name.errors }}</div>
+                {% endif %}
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="employer-form__error employer-form__error--main">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="employer-form__button">
+                {% trans 'надіслати на перевірку' %}
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

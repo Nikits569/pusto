@@ -1,0 +1,302 @@
+pricing-wrap {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 0 16px;
+}
+
+.titleMain {
+  font-size: 28px;
+  font-weight: 600;
+  display: flex;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.title span {
+    font-size: 33px;
+    font-weight: 700;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 28px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 22px;
+  background: #fff;
+  transition: 0.25s;
+
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+}
+
+.card.popular {
+  border: 2px solid #2b3674;
+}
+
+.badge {
+  font-size: 12px;
+  background: #2b3674;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.duration {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.top {
+  margin-bottom: 10px;
+}
+
+.price {
+    font-size: 37px;
+    font-weight: 800;
+    margin: 8px 0 14px;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+
+    flex-grow: 1;               /* РАСТЯГИВАЕТ */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;    /* ЦЕНТРИРУЕТ */
+    gap: 10px;
+}
+.features li {
+  position: relative;
+  padding-left: 26px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #374151;
+}
+
+.features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #eef2ff;
+  color: #2b3674;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  width: 100%;
+  height: 46px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-top: auto;
+}
+
+.btn.primary {
+  background: #2b3674;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #1f2858;
+}
+
+.btn.light {
+  background: #f3f4f6;
+  color: #111;
+}
+
+.btn.light:hover {
+  background: #e5e7eb;
+}
+
+.error {
+  color: red;
+  margin-bottom: 16px;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 1024px) {
+  .pricing-wrap {
+    max-width: 900px;
+    margin: 40px auto;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .card {
+    height: auto;
+    min-height: 380px;
+  }
+
+  .titleMain,
+  .title {
+    font-size: 26px;
+  }
+
+  .title span {
+    font-size: 30px;
+  }
+
+  .price {
+    font-size: 34px;
+  }
+}
+
+@media (max-width: 768px) {
+  .pricing-wrap {
+    margin: 32px auto;
+    padding: 0 14px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .card {
+    padding: 20px;
+    border-radius: 16px;
+    min-height: auto;
+    height: auto;
+  }
+
+  .titleMain,
+  .title {
+    font-size: 24px;
+    line-height: 1.25;
+    flex-wrap: wrap;
+  }
+
+  .title span {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+
+  .duration {
+    font-size: 18px;
+  }
+
+  .price {
+    font-size: 32px;
+    margin: 6px 0 12px;
+  }
+
+  .features {
+    margin: 14px 0 18px;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  .features li {
+    font-size: 15px;
+    padding-left: 24px;
+    margin-bottom: 8px;
+  }
+
+  .btn {
+    height: 44px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pricing-wrap {
+    margin: 24px auto;
+    padding: 0 12px;
+  }
+
+  .titleMain,
+  .title {
+    font-size: 21px;
+  }
+
+  .title span {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    margin-bottom: 18px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+  }
+
+  .duration {
+    font-size: 17px;
+  }
+
+  .price {
+    font-size: 28px;
+  }
+
+  .features li {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .features li::before {
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+  }
+
+  .btn {
+    height: 42px;
+    font-size: 14px;
+  }
+}

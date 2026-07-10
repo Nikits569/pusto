@@ -1,0 +1,19 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+<title>вхід або реєстрація</title>
+{% block relog %}
+    <link type="text/css" href="{% static 'pusto/css/relog.css' %}" rel="stylesheet" />
+
+    <div class="auth-container">
+        <div class="auth-box">
+            <h1>{% trans 'Будь ласка, увійдіть до облікового запису або зареєструйтесь' %}</h1>
+
+            <div class="auth-buttons">
+                <a href="{% url 'login' %}" class="auth-btn login-btn">{% trans 'вхід' %}</a>
+                <a href="{% url 'register' %}" class="auth-btn register-btn">{% trans 'реєстрація' %}</a>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

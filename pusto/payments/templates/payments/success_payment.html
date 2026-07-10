@@ -1,0 +1,26 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block success_payment %}
+<link type="text/css" href="{% static 'payments/css/success_payment.css' %}" rel="stylesheet" />
+
+<div class="success-container">
+    <h1>{% trans 'Платіж успішний' %}</h1>
+
+    <p class="user-name">
+        {{ first_name }} {{ last_name }}
+    </p>
+
+    <p class="message">
+        {% trans 'Ваш платіж успішно оброблено. На вашу електронну пошту надіслано підтвердження покупки.' %}
+    </p>
+
+    <p class="sub-message">
+        {% trans 'Ви можете продовжити роботу з оголошенням.' %}
+    </p>
+
+    <a href="/" class="btn-main">{% trans 'на головну' %}</a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,382 @@
+#SEO {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+#SEO h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 24px 0 16px;
+    color: #111827;
+}
+
+#SEO h2 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 32px 0 14px;
+    color: #1f2937;
+}
+
+#SEO h3 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 24px 0 12px;
+    color: #374151;
+}
+
+#SEO p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 0 0 16px;
+    color: #4b5563;
+}
+
+#SEO ul {
+    margin: 0 0 20px 24px;
+    padding: 0;
+}
+
+#SEO li {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 8px;
+    color: #4b5563;
+}
+
+#SEO a {
+    color: #2563eb;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+#SEO a:hover {
+    text-decoration: underline;
+}
+
+#SEO strong {
+    font-weight: 600;
+    color: #111827;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   Track
+========================= */
+.catalogFavorite{
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 15px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  height: auto;
+}
+
+.catalogFavorite::-webkit-scrollbar{
+  display: none;
+}
+
+.catalogFavorite--center{
+  overflow-x: hidden;
+}
+
+/* =========================
+   Slider wrapper
+========================= */
+.fav-slider{
+  display: block;
+  position: relative;
+  margin: 0;
+  min-height: 0;
+  height: auto;
+  margin-left: 260px;
+  margin-top: 30px;
+}
+
+/* =========================
+   Card link
+========================= */
+.card-link{
+  display: block;
+  flex: 0 0 226px;
+  width: 226px;
+  margin: 0;
+  min-height: 0;
+  height: auto;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  align-self: flex-start;
+}
+
+/* =========================
+   Card
+========================= */
+.pages{
+  width: 226px;
+  margin: 0;
+  min-height: 0;
+  height: auto;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 4px;
+
+  color: #181D3B;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.pages:hover{
+  transform: translateY(-2px);
+}
+
+/* =========================
+   Media
+========================= */
+.card-media{
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 10px;
+  flex: 0 0 auto;
+}
+
+.card-media::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0)
+  );
+  z-index: 1;
+}
+
+/* =========================
+   Image
+========================= */
+.image{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  background: rgba(0,0,0,.03);
+}
+
+/* =========================
+   Text blocks
+========================= */
+.price-wrap{
+  min-height: 34px;
+  display: flex;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+.price{
+  margin: 0;
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.2;
+  min-height: 34px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title{
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.25;
+  font-weight: 400;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.title.True{
+  font-weight: 500;
+}
+
+.info{
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 500;
+  color: rgba(0,0,0,.65);
+  min-height: 24px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.info.True{
+  font-weight: 500;
+}
+
+/* =========================
+   Overlay
+========================= */
+.card-overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: block;
+}
+
+
+/* =========================
+   Badges
+========================= */
+.badge-top-left{
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+}
+
+.badge-bottom-left{
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+
+  max-width: calc(100% - 24px);
+}
+
+.badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 600;
+  white-space: nowrap;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
+}
+
+.badge-dot{
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #229ED9;
+  flex: 0 0 auto;
+}
+
+.badge-icon{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  min-width: 14px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.badge-telegram,
+.badge-warning,
+.badge-verified,
+.badge-student,
+.badge-employer{
+  color: #dadada;
+}
+
+/* =========================
+   Favorite button
+========================= */
+.favorite-btn{
+  position: absolute;
+  bottom: 125px;
+  right: 12px;
+  z-index: 11;
+
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+}
+
+.favorite-btn:hover{
+  transform: scale(1.06);
+}
+
+.favorite-icon{
+  font-size: 20px;
+  line-height: 1;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+
+.favorite-btn.is-active .favorite-icon{
+  color: #e53935;
+}
+
+.seeAll {
+    display: flex;
+    color: black;
+    font-weight: 600;
+    font-size: 30px;
+   justify-content: center;
+    margin-top: 40px;
+
+}

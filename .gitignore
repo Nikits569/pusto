@@ -1,0 +1,63 @@
+cat > .gitignore << 'EOF'
+# секреты
+.env
+*.env
+!.env.example
+
+# telegram сессии — эквивалент пароля
+*.session
+*.session-journal
+
+# виртуальные окружения (любая глубина)
+venv/
+.venv/
+**/venv/
+**/.venv/
+
+# логи
+*.log
+gunicorn.log
+
+# Python
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.idea/
+
+# Django
+staticfiles/
+media/
+**/media/
+db.sqlite3
+*.sql
+
+# ML модели / веса / кэши — слишком тяжёлые для git
+models/
+**/models/
+**/.locks/
+*.pt
+*.pth
+*.onnx
+*.bin
+*.h5
+*.safetensors
+
+# скачанные фото/датасеты скраперов
+photos/
+**/photos/
+filter/
+cat_filter/
+**/filter/
+**/cat_filter/
+
+# OS
+.DS_Store
+EOF
+
+postWorker/Документы/
+**/cache/
+EOF*.mwb
+*.mwb.bak

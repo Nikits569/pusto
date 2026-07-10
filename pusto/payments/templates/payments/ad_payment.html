@@ -1,0 +1,173 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block advertisement_payment %}
+<link type="text/css" href="{% static 'payments/css/ad_payment.css' %}" rel="stylesheet" />
+
+<div class="adpay">
+
+    <div class="titles_adv">
+        <h2 class="title_adv">
+            {% if slug == "banner" %}
+                {% trans 'купівля банера' %}
+            {% elif slug == "post" %}
+                {% trans 'купівля рекламного посту' %}
+            {% endif %}
+        </h2>
+        <h3 class="subprice_adv">{{ duration }} {% trans 'днів за' %} {{ price }} €</h3>
+        <h4 class="subtitle_adv">
+            {% trans 'розміщення у стрічці оголошень' %}
+        </h4>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="adpay__form">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <!-- Title -->
+        <div class="field">
+            {{ form.title.errors }}
+            {{ form.title }}
+        </div>
+
+        <!-- Link -->
+        <div class="field">
+            {{ form.link.errors }}
+            {{ form.link }}
+        </div>
+
+        <!-- Image Upload -->
+        {% if slug == "banner" %}
+          <div class="field uploadField uploadField--banner">
+            {{ form.image.errors }}
+
+            <div class="upload upload--banner">
+              <input type="file" name="image" id="id_image" accept="image/*">
+
+              <label for="id_image" class="upload__area" id="uploadArea">
+                <div class="upload__text">
+                  <div class="upload__title">{% trans 'завантажте банер' %}</div>
+                  <div class="upload__hint">1920×180 · JPG/WEBP · {% trans 'до 1MB' %}</div>
+                </div>
+
+                <div class="upload__meta">
+                  <span class="upload__filename" id="uploadName">{% trans 'файл не обран' %}</span>
+                  <span class="upload__btn">{% trans 'вибрати' %}</span>
+                </div>
+              </label>
+
+              <div class="previewBlock" id="previewBlock" style="display:none;">
+                <div class="previewHead">
+                  <span class="example_adv">{% trans 'Приклад у стрічці' %}</span>
+                  <span class="previewSize">1920×180</span>
+                </div>
+
+                <div class="uploadPreview">
+                  <img id="imgPreview" alt="Preview">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {% elif slug == "post" %}
+          <div class="field uploadField uploadField--post">
+            {{ form.image.errors }}
+
+            <div class="upload upload--post">
+              <input type="file" name="image" id="id_image" accept="image/*">
+
+              <label for="id_image" class="upload__area upload__area--compact" id="uploadArea">
+                <div class="upload__text">
+                  <div class="upload__title">{% trans 'Завантажте зображення посту' %}</div>
+                  <div class="upload__hint">500×500 · JPG/WEBP · {% trans 'до 1MB' %}</div>
+                </div>
+
+                <div class="upload__meta">
+                  <span class="upload__filename" id="uploadName">{% trans 'файл не обран' %}</span>
+                  <span class="upload__btn">{% trans 'вибрати' %}</span>
+                </div>
+              </label>
+
+              {# Другая структура превью: маленькое окошко справа/ниже #}
+              <div class="postPreviewRow" id="previewBlock" style="display:none;">
+                    <div class="postPrviewExample">
+                        <img class="imgPreviewExample" alt="Preview" src="{% static 'ads/images/stub.png' %}">
+                        <p class="postPreviewTitle">100 €</p>
+                        <p class="postPreviewPrice">{% trans 'приклад' %}</p>
+                    </div>
+                    <div class="postPreviewBox">
+                        <img id="imgPreview" alt="Preview">
+                        <div class="postPreviewContent">
+                            <p id="previewTitle" class="postPreviewTitle adv"></p>
+                        </div>
+                    </div>
+                    <div class="postPrviewExample">
+                         <img class="imgPreviewExample" alt="Preview" src="{% static 'ads/images/stub.jpg' %}">
+                        <p class="postPreviewTitle">100 €</p>
+                         <p class="postPreviewPrice">{% trans 'приклад' %}</p>
+
+                    </div>
+                    <div class="postPrviewExample">
+                        <img class="imgPreviewExample" alt="Preview" src="{% static 'ads/images/stub.jpg' %}">
+                        <p class="postPreviewTitle">100 €</p>
+                        <p class="postPreviewPrice">{% trans 'приклад' %}</p>
+                    </div>
+
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Submit -->
+        <button type="submit" class="send_ad">
+            {% trans 'Надіслати заявку' %}
+        </button>
+
+    </form>
+</div>
+
+<script>
+    const input = document.getElementById('id_image');
+    const img = document.getElementById('imgPreview');
+    const previewBlock = document.getElementById('previewBlock');
+    const uploadArea = document.getElementById('uploadArea');
+    const uploadName = document.getElementById('uploadName');
+    const uploadField = document.querySelector('.uploadField');
+
+    input.addEventListener('change', () => {
+        const file = input.files && input.files[0];
+        if (!file) return;
+
+        uploadName.textContent = file.name;
+        uploadArea.classList.add('is-selected');
+
+        img.src = URL.createObjectURL(file);
+
+        // Проверяем тип
+        if (uploadField.classList.contains('uploadField--post')) {
+            previewBlock.style.display = 'flex';
+        } else {
+            previewBlock.style.display = 'block';
+        }
+    });
+</script>
+
+<script>
+    const titleInput = document.getElementById('id_title');
+    const previewTitle = document.getElementById('previewTitle');
+    const defaultText = '{% trans "Заголовок объявления" %}';
+
+    function updatePreviewTitle() {
+        const value = titleInput.value.trim();
+        previewTitle.textContent = value !== '' ? value : defaultText;
+    }
+
+    // при вводе
+    titleInput.addEventListener('input', updatePreviewTitle);
+
+    // при загрузке страницы (если поле уже заполнено)
+    updatePreviewTitle();
+</script>
+{% endblock %}

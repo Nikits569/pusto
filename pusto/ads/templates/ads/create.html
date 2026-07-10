@@ -1,0 +1,536 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+id_subcategory
+{% block createAds %}
+<link rel="stylesheet" href="{% static 'ads/css/create.css' %}">
+<title>{% trans 'створити оголошення' %}</title>
+<div class="createForm">
+    {% if formType == 'things' %}
+        <div class="ads-type-switch">
+            <a href="{% url 'ads:things_add' 'sell' %}"
+               class="ads-type-link {% if slug == 'sell' %}is-active{% endif %}">
+                {% trans 'продаж' %}
+            </a>
+
+            <a href="{% url 'ads:things_add' 'buy' %}"
+               class="ads-type-link {% if slug == 'buy' %}is-active{% endif %}">
+                {% trans 'купівля' %}
+            </a>
+
+            <a href="{% url 'ads:things_add' 'free' %}"
+               class="ads-type-link {% if slug == 'free' %}is-active{% endif %}">
+                {% trans 'безкоштовно' %}
+            </a>
+        </div>
+    {% elif formType == 'jobs' %}
+        <div class="ads-type-switch">
+            <a href="{% url 'ads:job_add' 'findJob' %}"
+               class="ads-type-link {% if slug == 'findJob' %}is-active{% endif %}">
+                {% trans 'шукаю роботу' %}
+            </a>
+
+            <a href="{% url 'ads:job_add' 'giveJob' %}"
+               class="ads-type-link {% if slug == 'giveJob' %}is-active{% endif %}">
+                {% trans 'шукаю працівника' %}
+            </a>
+        </div>
+    {% elif formType == 'neighbors' %}
+        <div class="ads-type-switch">
+            <a href="{% url 'ads:neighbor_add' 'findNeighbor' %}"
+               class="ads-type-link {% if slug == 'findNeighbor' %}is-active{% endif %}">
+                {% trans 'шукаю сусіда' %}
+            </a>
+        </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="post-form">
+        {% csrf_token %}
+
+        {% if formType == 'neighbors' %}
+            <div class="neighbors-form">
+                <div class="form-grid">
+                    <div class="column-title">{% trans 'дані оголошення' %}</div>
+                    <div class="column-title">{% trans 'особисті дані' %}</div>
+
+                    <div class="left-column">
+                        {% if form.title %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.title }}</div>
+                                {% if form.title.errors %}<div class="form-error">{{ form.title.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.text %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.text }}</div>
+                                {% if form.text.errors %}<div class="form-error">{{ form.text.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="right-column">
+                        {% if form.email %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.email }}</div>
+                                {% if form.email.errors %}<div class="form-error">{{ form.email.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.phone %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.phone }}</div>
+                                {% if form.phone.errors %}<div class="form-error">{{ form.phone.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.telegram_username %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.telegram_username }}</div>
+                                {% if form.telegram_username.errors %}<div class="form-error">{{ form.telegram_username.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="neighbors-section">
+                    <div class="neighbors-section__title">{% trans 'основні параметри' %}</div>
+
+                    <div class="neighbors-row neighbors-row--3">
+                        {% if form.city %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.city }}</div>
+                                {% if form.city.errors %}<div class="form-error">{{ form.city.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.count_neighbors %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.count_neighbors }}</div>
+                                {% if form.count_neighbors.errors %}<div class="form-error">{{ form.count_neighbors.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.budget %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.budget }}</div>
+                                {% if form.budget.errors %}<div class="form-error">{{ form.budget.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="neighbors-row neighbors-row--3">
+                        {% if form.rent_period %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.rent_period }}</div>
+                                {% if form.rent_period.errors %}<div class="form-error">{{ form.rent_period.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.housing_type %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.housing_type }}</div>
+                                {% if form.housing_type.errors %}<div class="form-error">{{ form.housing_type.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.move_in_date %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.move_in_date }}</div>
+                                {% if form.move_in_date.errors %}<div class="form-error">{{ form.move_in_date.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="neighbors-section">
+                    <div class="neighbors-section__title">{% trans 'про мене' %}</div>
+
+                    <div class="neighbors-row neighbors-row--2 neighbors-row--top">
+                        {% if form.my_gender %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.my_gender }}</div>
+                                {% if form.my_gender.errors %}<div class="form-error">{{ form.my_gender.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.my_age %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.my_age }}</div>
+                                {% if form.my_age.errors %}<div class="form-error">{{ form.my_age.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.my_lifestyles %}
+                        <div class="neighbors-row">
+                            <div class="form-group">
+                                <div class="checkbox-card">
+                                    <div class="checkbox-card__title">{% trans 'мій стиль життя' %}</div>
+                                    <div class="checkbox-tags">
+                                        {% for checkbox in form.my_lifestyles %}
+                                            <label class="tag-check">
+                                                {{ checkbox.tag }}
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% if form.my_lifestyles.errors %}<div class="form-error">{{ form.my_lifestyles.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="neighbors-section">
+                    <div class="neighbors-section__title">{% trans 'кого шукаю' %}</div>
+
+                    <div class="neighbors-row neighbors-row--3">
+                        {% if form.neighbor_gender %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.neighbor_gender }}</div>
+                                {% if form.neighbor_gender.errors %}<div class="form-error">{{ form.neighbor_gender.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.min_age %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.min_age }}</div>
+                                {% if form.min_age.errors %}<div class="form-error">{{ form.min_age.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.max_age %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.max_age }}</div>
+                                {% if form.max_age.errors %}<div class="form-error">{{ form.max_age.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if form.neighbor_lifestyles %}
+                        <div class="neighbors-row">
+                            <div class="form-group">
+                                <div class="checkbox-card">
+                                    <div class="checkbox-card__title">{% trans 'стиль життя сусіда' %}</div>
+                                    <div class="checkbox-tags">
+                                        {% for checkbox in form.neighbor_lifestyles %}
+                                            <label class="tag-check">
+                                                {{ checkbox.tag }}
+                                                <span>{{ checkbox.choice_label }}</span>
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% if form.neighbor_lifestyles.errors %}<div class="form-error">{{ form.neighbor_lifestyles.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="bottom-full">
+                    {% if formset %}
+                        <div class="bottom-actions">
+                            <div class="upload-row">
+                                <div id="formset-container" class="formset-container">
+                                    {{ formset.management_form }}
+
+                                    {% for f in formset %}
+                                        <div class="formset-row {% if forloop.first %}is-first{% endif %}">
+                                            <div class="formset-file">
+                                                {{ f.image }}
+                                                {% if f.image.errors %}
+                                                    <div class="form-error">{{ f.image.errors }}</div>
+                                                {% endif %}
+                                            </div>
+
+                                            {% if not forloop.first %}
+                                                <label class="formset-delete">
+                                                    {{ f.DELETE }}
+                                                    <span>{% trans 'видалити' %}</span>
+                                                </label>
+                                            {% endif %}
+
+                                            {% for hidden in f.hidden_fields %}
+                                                {{ hidden }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <button type="button" id="add-photo" class="btn-add-photo">
+                                    {% trans 'додати фото' %}
+                                </button>
+                            </div>
+
+                            <button type="submit" class="btn-submit">
+                                {% trans 'опублікувати' %}
+                            </button>
+                        </div>
+                    {% else %}
+                        <button type="submit" class="btn-submit btn-submit--single">
+                            {% trans 'опублікувати' %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+
+        {% else %}
+            <div class="form-grid">
+                <div class="column-title">{% trans 'дані оголошення' %}</div>
+                <div class="column-title">{% trans 'особисті дані' %}</div>
+
+                <div class="left-column">
+                    {% if form.title %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">{{ form.title }}</div>
+                            {% if form.title.errors %}<div class="form-error">{{ form.title.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.text %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">
+                                {{ form.text }}
+                            </div>
+                            {% if form.text.errors %}
+                                <div class="form-error">{{ form.text.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.price %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">{{ form.price }}</div>
+                            {% if form.price.errors %}<div class="form-error">{{ form.price.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.description %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">{{ form.description }}</div>
+                            {% if form.description.errors %}<div class="form-error">{{ form.description.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+
+                    <div class="salary-row">
+                        {% if form.salary_from %}
+                            <div class="salary-col salary-col--from">
+                                <div class="form-input-wrapper">
+                                    {{ form.salary_from }}
+                                </div>
+                                {% if form.salary_from.errors %}
+                                    <div class="form-error">{{ form.salary_from.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.salary_to %}
+                            <div class="salary-col salary-col--to">
+                                <div class="form-input-wrapper">
+                                    {{ form.salary_to }}
+                                </div>
+                                {% if form.salary_to.errors %}
+                                    <div class="form-error">{{ form.salary_to.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.salary_period %}
+                            <div class="salary-col salary-col--period">
+                                <div class="form-input-wrapper">
+                                    {{ form.salary_period }}
+                                </div>
+                                {% if form.salary_period.errors %}
+                                    <div class="form-error">{{ form.salary_period.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="city-condition-row">
+                        {% if form.city %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.city }}</div>
+                                {% if form.city.errors %}<div class="form-error">{{ form.city.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.condition %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.condition }}</div>
+                                {% if form.condition.errors %}<div class="form-error">{{ form.condition.errors }}</div>{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if form.employment_type %}
+                            <div class="form-group">
+                                <div class="form-input-wrapper">{{ form.employment_type }}</div>
+                                {% if form.employment_type.errors %}
+                                    <div class="form-error">{{ form.employment_type.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    {% if form.email %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">{{ form.email }}</div>
+                            {% if form.email.errors %}<div class="form-error">{{ form.email.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.telegram %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">{{ form.telegram }}</div>
+                            {% if form.telegram.errors %}<div class="form-error">{{ form.telegram.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.telegram_username %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">{{ form.telegram_username }}</div>
+                            {% if form.telegram_username.errors %}<div class="form-error">{{ form.telegram_username.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="bottom-full">
+                    {% if form.category %}
+                        <div class="form-group form-group-category">
+                            <div class="form-input-wrapper">{{ form.category }}</div>
+                            {% if form.category.errors %}<div class="form-error">{{ form.category.errors }}</div>{% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if formset %}
+                        <div class="bottom-actions">
+                            <div class="upload-row">
+                                <div id="formset-container" class="formset-container">
+                                    {{ formset.management_form }}
+
+                                    {% for f in formset %}
+                                        <div class="formset-row {% if forloop.first %}is-first{% endif %}">
+                                            <div class="formset-file">
+                                                {{ f.image }}
+                                                {% if f.image.errors %}
+                                                    <div class="form-error">{{ f.image.errors }}</div>
+                                                {% endif %}
+                                            </div>
+
+                                            {% if not forloop.first %}
+                                                <label class="formset-delete">
+                                                    {{ f.DELETE }}
+                                                    <span>{% trans 'видалити' %}</span>
+                                                </label>
+                                            {% endif %}
+
+                                            {% for hidden in f.hidden_fields %}
+                                                {{ hidden }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                                <button type="button" id="add-photo" class="btn-add-photo">
+                                    {% trans 'додати фото' %}
+                                </button>
+                            </div>
+
+                            <button type="submit" class="btn-submit">
+                                {% trans 'Опублікувати' %}
+                            </button>
+                        </div>
+                    {% else %}
+                        <button type="submit" class="btn-submit btn-submit--single">
+                            {% trans 'Опублікувати' %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </form>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function setSelectedState(name) {
+        document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+            const label = input.closest("label");
+            if (label) {
+                label.classList.toggle("selected", input.checked);
+            }
+        });
+    }
+
+    document.addEventListener("change", function (e) {
+        if (e.target.matches('input[type="radio"]')) {
+            setSelectedState(e.target.name);
+        }
+
+        if (e.target.matches('.tag-check input[type="checkbox"]')) {
+            const label = e.target.closest(".tag-check");
+            if (label) {
+                label.classList.toggle("selected", e.target.checked);
+            }
+        }
+
+    });
+
+    const addButton = document.getElementById("add-photo");
+    const formsetContainer = document.getElementById("formset-container");
+    const totalForms = document.querySelector("#id_images-TOTAL_FORMS");
+
+    if (addButton && formsetContainer && totalForms) {
+        addButton.addEventListener("click", function () {
+            const currentCount = parseInt(totalForms.value, 10);
+
+            const newRow = document.createElement("div");
+            newRow.className = "formset-row";
+
+            newRow.innerHTML = `
+                <div class="formset-file">
+                    <input type="file" name="images-${currentCount}-image" id="id_images-${currentCount}-image">
+                </div>
+
+                <label class="formset-delete">
+                    <input type="checkbox" name="images-${currentCount}-DELETE" id="id_images-${currentCount}-DELETE">
+                    <span>{% trans 'Удалить' %}</span>
+                </label>
+
+                <input type="hidden" name="images-${currentCount}-id" id="id_images-${currentCount}-id">
+            `;
+
+            formsetContainer.appendChild(newRow);
+            totalForms.value = currentCount + 1;
+        });
+    }
+
+    setSelectedState("category");
+
+    document.querySelectorAll('.tag-check input[type="checkbox"]').forEach(input => {
+        const label = input.closest(".tag-check");
+        if (label) {
+            label.classList.toggle("selected", input.checked);
+        }
+    });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.querySelector(".post-form");
+    const submitBtn = form?.querySelector('button[type="submit"]');
+
+    if (form && submitBtn) {
+        form.addEventListener("submit", function () {
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Публикация...";
+        });
+    }
+
+});
+</script>
+{% endblock %}

@@ -1,0 +1,548 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<!--<div class="promo-bar"> -->
+<!--  <div class="promo-content"> -->
+<!--    <div class="promo-text"> -->
+<!--      <span class="promo-badge">{% trans 'АКЦІЯ' %} </span> -->
+<!--      <h3>{% trans '1 пост = 1 книга безкоштовно' %} </h3> -->
+<!--      <p>{% trans 'Розмісти унікальне оголошення на pusto.sk та отримай книги. Кількість обмежена.' %} </p> -->
+<!--      <p>{% trans 'Отримання локально в Прешові/Кошице' %} </p> -->
+<!--    </div> -->
+<!-- -->
+<!--    <div class="promo-stats"> -->
+<!--      <div> -->
+<!--        <strong id="booksLeft">15</strong> -->
+<!--        <span>{% trans 'книг залишилось' %} </span> -->
+<!--      </div> -->
+<!-- -->
+<!--      <div> -->
+<!--        <strong id="promoTimer">00:00:00</strong> -->
+<!--        <span>{% trans 'до кінця акції' %} </span> -->
+<!--      </div> -->
+<!--    </div> -->
+<!-- -->
+<!--    <div class="promo-actions"> -->
+<!--      <a href="/uk/things-add/sell" class="promo-btn"> -->
+<!--        {% trans 'розмістити пост' %} -->
+<!--      </a> -->
+<!-- -->
+<!--      <a href="{% url 'promotion' %}" class="promo-btn"> -->
+<!--        {% trans 'я вже розмістив (забрати книгу)' %} -->
+<!--      </a> -->
+<!--    </div> -->
+<!--  </div> -->
+<!--</div> -->
+
+<head>
+
+    <!-- Favicon (главное) -->
+    <link rel="icon" href="{% static 'icon48.png' %}" sizes="any">
+    <link rel="icon" href="{% static 'ads/images/icon48.png' %}">
+    <link rel="shortcut icon" href="{% static 'ads/images/icon48.png' %}">
+
+    <!-- PNG fallback -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'ads/images/icon32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'ads/images/icon16.png' %}">
+    <link rel="icon" type="image/png" sizes="48x48" href="{% static 'ads/images/icon48.png' %}">
+
+    <!-- Apple -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'ads/images/icon180.png' %}">
+
+    <!-- Google tag -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGCR6PDLJ3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+    
+      gtag('js', new Date());
+      gtag('config', 'G-L5GMV6FG4J');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="stylesheet" href="{% static 'pusto/css/head.css' %}">
+</head>
+
+
+
+<body>
+<div id="cookie-banner" style="
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #111;
+  color: white;
+  padding: 15px;
+  display: none;
+  z-index: 9999;
+">
+  <span>
+    We use cookies to improve your experience. Analytics cookies are used only with your consent.
+  </span>
+  <button onclick="acceptCookies()">Accept</button>
+  <button onclick="rejectCookies()">Reject</button>
+</div>
+    <header>
+        <div class="leftBlock">
+            <a href="{% url 'ads:select' %}" id="logo"><img src="{% static 'ads/images/logo.png' %}"></a>
+        </div>
+
+        <div class="centerBlock">
+            <form class="search" action="{% url 'ads:global_search' %}" method="get" onsubmit="return trackSearch(this)">
+                <span class="search-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18">
+                        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </span>
+                <input type="text" name="q" placeholder="{% trans 'пошук' %}" value="{{ request.GET.q }}">
+            </form>
+
+        </div>
+
+        <div class="rightBlock">
+            {% if user.is_authenticated %}
+                <a href="{% url 'profiles:MyProfile' %}" id="myprofile">{% trans "мій профіль" %}</a>
+            {% else %}
+                <a href="{% url 'register' %}" id="login">{% trans "реєстрація" %}</a>
+            {% endif %}
+
+            {% get_current_language as LANGUAGE_CODE %}
+
+            <form action="/i18n/setlang/" method="post" class="setLanguage">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path|slice:'3:' }}">
+
+                {% if LANGUAGE_CODE == "uk" %}
+                    <input type="hidden" name="language" value="en">
+                    <button type="submit" class="lang-btn">EN</button>
+
+                {% elif LANGUAGE_CODE == "en" %}
+                    <input type="hidden" name="language" value="sk">
+                    <button type="submit" class="lang-btn">SK</button>
+
+                {% elif LANGUAGE_CODE == "sk" %}
+                    <input type="hidden" name="language" value="uk">
+                    <button type="submit" class="lang-btn">UA</button>
+                {% endif %}
+            </form>
+
+            <form id="lang-form" action="/i18n/setlang/" method="post" style="display:none;">
+                {% csrf_token %}
+                <input type="hidden" name="language" id="lang-input">
+                <input type="hidden" name="next" value="{{ request.path }}">
+            </form>
+            <a href="{% url 'favorites' %}" id="favorites">♡</a>
+        </div>
+    </header>
+
+    <main>
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="container">
+           {% block index %}
+            {% endblock %}
+            {% block selectAds %}
+            {% endblock %}
+            {% block neighbors %}
+            {% endblock %}
+            {% block jobs %}
+            {% endblock %}
+            {% block things %}
+            {% endblock %}
+            {% block emailVerified %}
+            {% endblock %}
+            {% block register %}
+            {% endblock %}
+            {% block login %}
+            {% endblock %}
+            {% block editProfile %}
+            {% endblock %}
+            {% block employerVerification %}
+            {% endblock %}
+            {% block myProfile %}
+            {% endblock %}
+            {% block otherProfile %}
+            {% endblock %}
+            {% block selectVerification %}
+            {% endblock %}
+            {% block waitPage %}
+            {% endblock %}
+            {% block createAds %}
+            {% endblock %}
+            {% block favorites %}
+            {% endblock %}
+            {% block support %}
+            {% endblock %}
+            {% block success %}
+            {% endblock %}
+            {% block page %}
+            {% endblock %}
+            {% block confirmation %}
+            {% endblock %}
+            {% block typeThings %}
+            {% endblock %}
+            {% block typeJob %}
+            {% endblock %}
+            {% block typeNeighbor %}
+            {% endblock %}
+            {% block relog %}
+            {% endblock %}
+            {% block studentVerification %}
+            {% endblock %}
+            {% block userVerification %}
+            {% endblock %}
+            {% block create_claim %}
+            {% endblock %}
+            {% block top_payment %}
+            {% endblock %}
+            {% block advertisement_payment %}
+            {% endblock %}
+            {% block select_payment %}
+            {% endblock %}
+            {% block pay %}
+            {% endblock %}
+            {% block edit_post %}
+            {% endblock %}
+            {% block select_top_payment %}
+            {% endblock %}
+            {% block select_payment_time %}
+            {% endblock %}
+            {% block createAdsNoUser %}
+            {% endblock %}
+            {% block success_payment %}
+            {% endblock %}
+            {% block privacy %}
+            {% endblock %}
+            {% block terms %}
+            {% endblock %}
+            {% block cookies %}
+            {% endblock %}
+            {% block impressum %}
+            {% endblock %}
+            {% block community %}
+            {% endblock %}
+            {% block paid_features %}
+            {% endblock %}
+            {% block takedown %}
+            {% endblock %}
+            {% block promotion %}
+            {% endblock %}
+            {% block rent_SEO %}
+            {% endblock %}
+            {% block things_SEO %}
+            {% endblock %}
+        </div>
+    </main>
+    <footer>
+      <div class="leftBlock">
+            <form method="post" action="{% url 'support_submit' %}">
+              {% csrf_token %}
+              <div class="allForm">
+                <span class="needHelp">{% trans 'потрібна допомога?' %}</span>
+                <span class="needHelpSubtitle">{% trans 'відповімо протягом 24 годин.' %}</span>
+
+                {{ support_form.email }}
+                {{ support_form.subject }}
+                {{ support_form.message }}
+
+                <button class="sendForm" type="submit">{% trans 'надіслати' %}</button>
+              </div>
+            </form>
+      </div>
+
+      <div class="rightBlock">
+        <div class="footerCenter">
+            <div class="footerCols">
+              <ul class="footerCol">
+                <span class="footerTitle">{% trans 'користувачам' %}</span>
+                <li><a href="{% url 'ads:select' %}">{% trans 'Усі оголошення' %}</a></li>
+                {% comment %}
+                    <li><a href="{% url 'ads:jobs' 'all' %}">{% trans 'Робота' %}</a></li>
+                {% endcomment %}
+                <li><a href="{% url 'ads:neighbors' 'all' %}">{% trans 'Житло' %}</a></li>
+                <li><a href="{% url 'ads:things' 'all' %}">{% trans 'Речі' %}</a></li>
+                <li><a href="{% url 'favorites' %}">{% trans 'Обране' %}</a></li>
+              </ul>
+
+              <ul class="footerCol">
+                <span class="footerTitle">{% trans 'компанія' %}</span>
+                <!-- <li><a href="/about">Про нас</a></li> -->
+                <!-- <li><a href="/contacts">Контакти</a></li> -->
+                <!--<li><a href="/support">Підтримка</a></li> -->
+
+                <li><a href="#" class="openModal" data-type="ads">{% trans 'реклама на сайті' %}</a></li>
+                <li><a href="#" class="openModal" data-type="partners">{% trans 'партнерство' %}</a></li>
+
+                  <li><a href="{% url 'rent_seo' 'Presov' %}" data-type="partners">{% trans 'Квартири в Пряшівові' %}</a></li>
+                  <li><a href="{% url 'rent_seo' 'Kosice' %}" data-type="partners">{% trans 'Квартири в Кошицях' %}</a></li>
+                  <li><a href="{% url 'rent_seo' 'Bratislava' %}" data-type="partners">{% trans 'Квартири в Братиславі' %}</a></li>
+
+                  <li><a href="{% url 'things_seo' 'Presov' %}" data-type="partners">{% trans 'Речі в Пряшівові' %}</a></li>
+                  <li><a href="{% url 'things_seo' 'Kosice' %}" data-type="partners">{% trans 'Речі в Кошицях' %}</a></li>
+                  <li><a href="{% url 'things_seo' 'Bratislava' %}" data-type="partners">{% trans 'Речі в Братиславі' %}</a></li>
+              </ul>
+
+              <ul class="footerCol">
+                <span class="footerTitle">{% trans 'правова інформація' %}</span>
+                    <li><a href="/terms">{% trans 'умови користування' %}</a></li>
+                    <li><a href="/privacy">{% trans 'політика конфіденційності' %}</a></li>
+                    <li><a href="/cookies">{% trans 'політика cookies' %}</a></li>
+                    <li><a href="/community">{% trans 'правила спільноти' %}</a></li>
+                    <li><a href="/takedown">{% trans 'скарги та видалення контенту' %}</a></li>
+                    <li><a href="/paid_features">{% trans 'платні полсуги' %}</a></li>
+                    <li><a href="/impressum">{% trans 'правова інформація' %}</a></li>
+              </ul>
+            </div>
+        </div>
+        <div class="footerBottom">
+          <span class="copyright">© 2026 pusto.sk</span>
+          <!--
+            <div class="langs">
+             <a href="?lang=ua" class="lang isActive">UA</a>
+             <a href="?lang=sk" class="lang">SK</a>
+            </div>
+           --!>
+
+        </div>
+
+      </div>
+        <!--<p> -->
+        <!--  Ви можете написати в формі "потрібна допомога", вказавши тему "партнерство", -->
+        <!--  або звернутися напряму на нашу електронну адресу -->
+        <!--  <a href="mailto:pusto.sk.com@gmail.com">pusto.sk.com@gmail.com</a>. -->
+        <!--</p> -->
+      <!-- Нижняя строка -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalText"></p>
+      </div>
+    </div>
+    </footer>
+</body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("initSourceTracking started");
+
+  const links = document.querySelectorAll(".js-track-source-link");
+  console.log("source links found:", links.length);
+
+  links.forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      console.log("source link clicked");
+      e.preventDefault();
+
+      trackEvent("click_source_link", {
+        button_name: "go_to_source",
+        source_platform: "telegram"
+      });
+
+      setTimeout(function () {
+        window.open(link.href, "_blank");
+      }, 500);
+    });
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const langToggle = document.getElementById('lang-toggle');
+
+  if (langToggle) {
+    langToggle.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const currentLang = "{{ CURRENT_LANG }}";
+      const input = document.getElementById('lang-input');
+      const langForm = document.getElementById('lang-form');
+
+      if (!input || !langForm) return;
+
+      input.value = currentLang === "uk" ? "sk" : "uk";
+      langForm.submit();
+    });
+  }
+
+  const alerts = document.querySelectorAll('.alert');
+  alerts.forEach(alert => {
+    setTimeout(() => {
+      alert.classList.remove('show');
+      alert.classList.add('hide');
+      setTimeout(() => alert.remove(), 500);
+    }, 5000);
+  });
+
+  const modal = document.getElementById("modal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalText = document.getElementById("modalText");
+  const closeBtn = modal ? modal.querySelector(".close") : null;
+
+  const content = {
+    partners: {
+      title: "Партнерство",
+      text: `Ви можете написати в формі "потрібна допомога", вказавши тему "партнерство",
+             або звернутися напряму на нашу електронну адресу
+             <a href="mailto:pusto.sk.com@gmail.com">pusto.sk.com@gmail.com</a>.`
+    },
+    ads: {
+      title: "Реклама на сайті",
+      text: `Розміщення реклами на сайті тимчасово недоступне до 15.04.2026 у зв’язку із запуском платформи.
+        За додатковою інформацією, будь ласка, звертайтеся до служби підтримки.`
+    }
+  };
+
+  if (modal && modalTitle && modalText && closeBtn) {
+    document.querySelectorAll(".openModal").forEach(btn => {
+      btn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const type = this.dataset.type;
+        if (!content[type]) return;
+
+        modalTitle.textContent = content[type].title;
+        modalText.innerHTML = content[type].text;
+        modal.style.display = "block";
+      });
+    });
+
+    closeBtn.addEventListener("click", function() {
+      modal.style.display = "none";
+    });
+
+    window.addEventListener("click", function(e) {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  }
+});
+</script>
+<script>
+  window.acceptCookies = function () {
+    localStorage.setItem("cookie_consent", "accepted");
+
+    if (typeof gtag === "function") {
+      gtag('consent', 'update', {
+        analytics_storage: 'granted',
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted'
+      });
+
+      gtag('config', 'G-L5GMV6FG4J');
+      gtag('config', 'AW-18116621891');
+    }
+
+    const banner = document.getElementById("cookie-banner");
+    if (banner) {
+      banner.style.display = "none";
+    }
+  };
+
+  window.rejectCookies = function () {
+    localStorage.setItem("cookie_consent", "rejected");
+
+    if (typeof gtag === "function") {
+      gtag('consent', 'update', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+    }
+
+    const banner = document.getElementById("cookie-banner");
+    if (banner) {
+      banner.style.display = "none";
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const consent = localStorage.getItem("cookie_consent");
+    const banner = document.getElementById("cookie-banner");
+
+    if (!banner) return;
+
+    if (consent === "accepted" || consent === "rejected") {
+      banner.style.display = "none";
+    } else {
+      banner.style.display = "block";
+    }
+  });
+</script>
+<script>
+(function() {
+  // включаем dev-режим через URL или вручную
+  if (window.location.search.includes('dev=true')) {
+    localStorage.setItem('is_dev', 'true');
+  }
+
+  // если dev включен — помечаем пользователя
+  if (localStorage.getItem('is_dev') === 'true') {
+    gtag('set', 'user_properties', {
+      is_dev: 'true'
+    });
+  }
+})();
+</script>
+
+<script>
+  const promoEndDate = new Date("2026-05-16T23:59:59").getTime();
+
+  function updatePromoTimer() {
+    const now = new Date().getTime();
+    const distance = promoEndDate - now;
+
+    if (distance <= 0) {
+      document.getElementById("promoTimer").textContent = "Акция завершена";
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+    const seconds = Math.floor((distance / 1000) % 60);
+
+    document.getElementById("promoTimer").textContent =
+      `${days}д ${hours}ч ${minutes}м ${seconds}с`;
+  }
+
+  updatePromoTimer();
+  setInterval(updatePromoTimer, 1000);
+</script>
+<script>
+  function trackEvent(eventName, params = {}) {
+    if (typeof gtag === "function") {
+      gtag("event", eventName, params);
+    }
+  }
+
+  function trackSearch(form) {
+    const input = form.querySelector('input[name="q"]');
+    const query = input ? input.value.trim() : "";
+
+    trackEvent("search", {
+      search_term: query
+    });
+
+    return true;
+  }
+</script>
+</html>

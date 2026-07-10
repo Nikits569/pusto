@@ -1,0 +1,364 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load querystring %}
+{% load i18n %}
+
+{% block jobs %}
+
+<link type="text/css" href="{% static 'ads/css/catalogStyle.css' %}" rel="stylesheet" />
+<link type="text/css" href="{% static 'ads/css/filterSortingStyle.css' %}" rel="stylesheet" />
+<title>
+    {% trans 'робота' %}
+    {% if type_slug == 'findJob' %} - {% trans 'шукаю роботу' %}{% endif %}
+    {% if type_slug == 'giveJob' %} - {% trans 'шукаю працівника' %}{% endif %}
+    {% if type_slug == 'partTime' %} - {% trans 'підробіток' %}{% endif %}
+</title>
+
+<div id="chooseType" class="tabs">
+    <a class="{% if type_slug == 'all' %}is-active{% endif %}"
+       href="{% url 'ads:jobs' 'all' %}">
+        {% trans 'всі оголошення' %}
+    </a>
+
+    <a class="{% if type_slug == 'findJob' %}is-active{% endif %}"
+       href="{% url 'ads:jobs' 'findJob' %}">
+        {% trans 'шукаю роботу' %}
+    </a>
+
+    <a class="{% if type_slug == 'giveJob' %}is-active{% endif %}"
+       href="{% url 'ads:jobs' 'giveJob' %}">
+        {% trans 'шукаю працівника' %}
+    </a>
+
+    <a class="{% if type_slug == 'partTime' %}is-active{% endif %}"
+       href="{% url 'ads:jobs' 'partTime' %}">
+        {% trans 'підробіток' %}
+    </a>
+</div>
+
+<form method="get" id="filters" class="filters job">
+    <input type="hidden" name="sort" value="{{ current_sort }}">
+    <input type="hidden" name="order" value="{{ current_order }}">
+    <input type="hidden" name="page" value="1">
+
+    <div class="filters-top">
+        <select name="city" class="ui-field type2">
+            <option value="">{% trans 'всі міста' %}</option>
+            {% for c in cities %}
+                <option value="{{ c }}" {% if filter_city == c %}selected{% endif %}>
+                    {{ c }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <input type="text"
+               name="search"
+               class="ui-field type1"
+               placeholder="{% trans 'Пошук вакансії' %}"
+               value="{{ filter_search }}">
+
+        <div class="price-group">
+            <input type="number"
+                   name="salary_from"
+                   class="ui-field type1"
+                   placeholder="{% trans 'Зарплата від' %}"
+                   value="{{ filter_salary_from }}">
+
+            <input type="number"
+                   name="salary_to"
+                   class="ui-field type1"
+                   placeholder="{% trans 'Зарплата до' %}"
+                   value="{{ filter_salary_to }}">
+        </div>
+
+        <div class="ui-field type2">
+            <select name="source_telegram" class="custom-select">
+                <option value="" {% if not source_telegram %}selected{% endif %}>
+                    {% trans 'всі джерела' %}
+                </option>
+                <option value="0" {% if source_telegram == '0' %}selected{% endif %}>
+                    Pusto.sk
+                </option>
+                <option value="1" {% if source_telegram == '1' %}selected{% endif %}>
+                    Telegram
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="filters-bottom">
+        <select name="employment_type" class="ui-field type2">
+            <option value="">{% trans 'будь-яка зайнятість' %}</option>
+            {% for value, label in employment_types %}
+                <option value="{{ value }}"
+                        {% if filter_employment_type == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="salary_period" class="ui-field type2">
+            <option value="">{% trans 'будь-який період' %}</option>
+            {% for value, label in salary_periods %}
+                <option value="{{ value }}"
+                        {% if filter_salary_period == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        {% trans 'застосувати' %}
+    </button>
+
+    <a href="{% url 'ads:jobs' 'all' %}" class="btn btn-ghost">
+        {% trans 'скинути' %}
+    </a>
+</form>
+
+<div id="sorting" class="sorting">
+    <span class="sorting__label">{% trans 'сортування' %}</span>
+
+    <div class="sorting__links">
+        {% if current_sort == 'date' and current_order == 'asc' %}
+            <a href="?{% query_transform request sort='date' order='desc' %}" class="active">
+                {% trans 'дате ↑' %}
+            </a>
+        {% elif current_sort == 'date' and current_order == 'desc' %}
+            <a href="?{% query_transform request sort='date' order='asc' %}" class="active">
+                {% trans 'дате ↓' %}
+            </a>
+        {% else %}
+            <a href="?{% query_transform request sort='date' order='desc' %}">
+                {% trans 'дате' %}
+            </a>
+        {% endif %}
+        |
+
+        {% if current_sort == 'salary_to' and current_order == 'asc' %}
+            <a href="?{% query_transform request sort='salary_to' order='desc' %}" class="active">
+                {% trans 'зарплата ↑' %}
+            </a>
+        {% elif current_sort == 'salary_to' and current_order == 'desc' %}
+            <a href="?{% query_transform request sort='salary_to' order='asc' %}" class="active">
+                {% trans 'зарплата ↓' %}
+            </a>
+        {% else %}
+            <a href="?{% query_transform request sort='salary_to' order='desc' %}">
+                {% trans 'зарплата' %}
+            </a>
+        {% endif %}
+    </div>
+
+    <a href="{% if type_slug == 'all' %}
+                {% url 'ads:job_add' 'findJob' %}
+             {% else %}
+                {% url 'ads:job_add' type_slug %}
+             {% endif %}"
+       class="addPageBtn addPageBtn--primary">
+        <span class="addPageBtn__icon">+</span>
+        <span>{% trans 'додати оголошення' %}</span>
+    </a>
+    <p class="count">{% trans 'знайдено' %} {{ count }} {% trans 'оголошень' %}</p>
+</div>
+
+<div id="catalog">
+    {% for i in base %}
+      {% if i.status == 'active' or user.is_staff %}
+        <div class="card-box">
+          {% if user.is_staff %}
+            <div class="admin-status-bar">
+              <select
+                class="status-select"
+                data-id="{{ i.id }}"
+                data-type="jobs"
+              >
+                <option value="active" {% if i.status == "active" %}selected{% endif %}>
+                  {% trans 'Активно' %}
+                </option>
+                <option value="closed" {% if i.status == "closed" %}selected{% endif %}>
+                  {% trans 'Закрыто' %}
+                </option>
+              </select>
+            </div>
+          {% endif %}
+
+          <a class="card-link"
+             href="{% url 'ads:page' 'jobs' i.slug_title i.id %}">
+
+            <div class="pages"
+                 {% if not i.images.first and i.photo_preview %}
+                   data-cover-url="{{ MEDIA_URL }}{{ i.photo_preview }}"
+                 {% endif %}>
+
+              <button
+                type="button"
+                class="favorite-btn js-fav-btn"
+                data-content-type="JobPost"
+                data-object-id="{{ i.id }}"
+                aria-label="{% trans 'Додати в обране' %}">
+                <span class="favorite-icon">♡</span>
+              </button>
+
+              <div class="card-media">
+                {% if i.private_status == 'top' %}
+                  <div class="badge badge-warning badge-top-left">
+                    <span class="badge-icon">★</span>
+                    <span>TOP</span>
+                  </div>
+                {% endif %}
+
+                {% if i.source_telegram %}
+                  <div class="badge-top-left">
+                    <div class="badge badge-telegram">
+                      <span class="badge-dot"></span>
+                      <span>{% trans 'зібрано з Telegram' %}</span>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if i.source_facebook %}
+                  <div class="badge-top-left">
+                    <div class="badge badge-telegram">
+                      <span class="badge-dot"></span>
+                      <span>{% trans 'зібрано з Facebook' %}</span>
+                    </div>
+                  </div>
+                {% endif %}
+
+                <div class="badge-bottom-left">
+                  {% if i.is_verified %}
+                    <div class="badge badge-verified">
+                      <span class="badge-icon">✓</span>
+                      <span>{% trans 'верифікований' %}</span>
+                    </div>
+                  {% endif %}
+
+                  {% if i.author_status == 'student' %}
+                    <div class="badge badge-student">
+                      <span class="badge-icon">🎓</span>
+                      <span>{% trans 'студент' %}</span>
+                    </div>
+                  {% endif %}
+
+                  {% if i.author_status == 'employer' %}
+                    <div class="badge badge-employer">
+                      <span class="badge-icon">💼</span>
+                      <span>{% trans 'роботодавець' %}</span>
+                    </div>
+                  {% endif %}
+                    {% if i.created_at.date == today %}
+                        <div class="badge badge-hot">
+                          <span class="badge-icon">🔥</span>
+                          <span>{% trans 'нове' %}</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if i.first_image %}
+                  <img src="{{ i.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
+                {% elif i.preview_image %}
+                  <img src="/media/{{ i.preview_image }}" alt="" class="image" loading="lazy" decoding="async">
+                {% else %}
+                  <img src="{% static 'ads/images/stub.png' %}" alt="" class="image" loading="lazy" decoding="async">
+                {% endif %}
+              </div>
+
+              {% if i.salary_from != None %}
+                <h3 class="price">{{ i.salary_from }} €</h3>
+                <h3 class="title False">
+                  {% if i.title == '<без текста>' %}
+                    {% trans 'текста нажаль немає(' %}
+                  {% else %}
+                    {{ i.title }}
+                  {% endif %}
+                </h3>
+              {% else %}
+                <h3 class="title {{ i.source_telegram }}">
+                  {% if i.title == '<без текста>' %}
+                    {% trans 'текста нажаль немає(' %}
+                  {% else %}
+                    {{ i.title }}
+                  {% endif %}
+                </h3>
+              {% endif %}
+
+              <h5 class="info {{ i.source_telegram }}">
+                {{ i.city }}{% if i.employment_type %} • {{ i.employment_type }}{% endif %} - {{ i.created_at }}
+              </h5>
+            </div>
+          </a>
+        </div>
+      {% endif %}
+    {% endfor %}
+</div>
+
+{% if base.paginator.num_pages > 1 %}
+<div class="pagination">
+
+    {% for num in page_numbers %}
+        {% if num == base.number %}
+            <span class="current">{{ num }}</span>
+        {% else %}
+            <a href="?{% query_transform request page=num %}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+    ...
+
+</div>
+{% endif %}
+
+<script src="{% static 'ads/js/ClearNoneAdv.js' %}"></script>
+<script src="{% static 'ads/js/jobs.js' %}"></script>
+<script>
+document.addEventListener("change", function(e) {
+  if (!e.target.classList.contains("status-select")) return;
+
+  const select = e.target;
+  const postId = select.dataset.id;
+  const adType = select.dataset.type;
+  const newStatus = select.value;
+
+  fetch(`/ads/update-status/${adType}/${postId}/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken"),
+    },
+    body: JSON.stringify({
+      status: newStatus
+    })
+  })
+  .then(async res => {
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "Request failed");
+    }
+    return data;
+  })
+  .then(data => {
+    console.log("updated", data);
+  })
+  .catch(err => {
+    console.error("status update error:", err);
+  });
+});
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + "=")) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+
+{% endblock %}

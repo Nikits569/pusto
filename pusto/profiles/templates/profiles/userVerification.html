@@ -1,0 +1,52 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block userVerification %}
+<link rel="stylesheet" href="{% static 'profiles/css/userVerification.css' %}">
+<title>{% trans 'веріфікація користувача' %}</title>
+<section class="verify">
+    <div class="verify-container">
+
+        <h1>{% trans 'верифікація користувача' %}</h1>
+
+        <div class="verify-info">
+            <h3>{% trans 'що потрібно для успішної верифікації' %}</h3>
+
+            <ul class="requirements">
+                <li>
+                    <strong>{% trans 'підтверджена електронна пошта' %}</strong>
+                    <span>{% trans 'Email має бути підтверджений у профілі' %}</span>
+                </li>
+                <li>
+                    <strong>{% trans 'Мінімум 1 пост' %}</strong>
+                    <span>{% trans 'оголошення має бути опубліковане з вашим email' %}</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="verify-steps">
+            <h3>{% trans 'як проходить перевірка' %}</h3>
+
+            <div class="steps">
+                <div class="step">{% trans '1. ви надсилаєте заявку' %}</div>
+                <div class="step">{% trans '2. ми перевіряємо акаунт' %}</div>
+                <div class="step">{% trans '3. отримуєте статус' %}</div>
+            </div>
+        </div>
+
+        <form method="post" class="verify-form">
+            {% csrf_token %}
+
+            <label class="check">
+                <input type="checkbox" name="human_check" value="yes" required>
+                <span>{% trans 'Я підтверджую, що я не робот' %}</span>
+            </label>
+
+            <button type="submit">{% trans 'надіслати заявку' %}</button>
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

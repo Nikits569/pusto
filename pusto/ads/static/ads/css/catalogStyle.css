@@ -1,0 +1,571 @@
+h1 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+#catalog{
+  display:flex;
+  flex-wrap:wrap;
+  gap:25px;
+}
+
+#catalog > .card-link{
+  flex:0 0 calc((100% - 3*25px)/4);
+  display:block;
+  text-decoration:none;
+  color:inherit;
+}
+
+.pages{
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    color: #181D3B;
+    height:410px;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.pages:hover{
+    transform: translateY(-2px);
+}
+
+.image{
+  width:100%;
+  height: 300px;
+  object-fit:cover;
+  border-radius: 0px;
+}
+
+.banerAdv {
+    width: 100%;
+    height: 180px;
+    border-radius: 14px;
+    background: #181D3B;
+}
+
+
+.pagination {
+    margin-left: 40vw;
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+}
+
+.pagination a {
+    color: black;
+}
+
+.current {
+    font-size: 3vw;
+}
+
+
+
+.price{
+  margin: 20px 0px 0px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.title{
+    margin: 0px 0px 3px;
+    font-size: 19px;
+    line-height: 1.2;
+    font-weight: 400;
+}
+
+
+.title.True {
+    margin: 20px 0px 0px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.info{
+  margin: 0 0px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0,0,0,.65);
+}
+
+.info.True {
+    margin: 5px 0 8px;
+}
+
+
+.pages .takeTelegram {
+    margin: 10px;
+    position: absolute;
+
+
+    text-align: center;
+    width: 150px;
+    height: 20px;
+    border-radius: 20px;
+    background: white;
+    opacity: 70%;
+}
+
+.pages .takeTelegram p {
+    font-size: 13px;
+    font-weight: 300;
+
+}
+
+
+.pages {
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  color: #181D3B;
+  height: 410px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pages:hover {
+  transform: translateY(-2px);
+}
+
+.card-media {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+/* затемнение снизу */
+.card-media::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65),
+    rgba(0, 0, 0, 0.0)
+  );
+
+  z-index: 1;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Верхний левый бейдж */
+.badge-top-left {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+}
+
+/* Нижние левые бейджи */
+.badge-bottom-left {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+
+  max-width: calc(100% - 24px);
+}
+
+/* Общий стиль */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 999px;
+
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #229ED9;
+  flex: 0 0 auto;
+}
+
+.badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  min-width: 14px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* Цвета */
+.badge-telegram, .badge-warning, .badge-verified, .badge-student, .badge-employer {
+
+  color: #dadada;
+
+}
+
+.pages {
+  position: relative;
+}
+
+.favorite-btn {
+  position: absolute;
+  bottom: 125px;   /* ↓ вниз */
+  right: 12px;    /* → вправо */
+  z-index: 4;     /* выше градиента (.card-media::after = z-index:1) */
+
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.25); /* полупрозрачный круг */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.06);
+}
+
+.favorite-icon {
+  font-size: 20px;
+  line-height: 1;
+  color: white; /* белое по умолчанию */
+  text-shadow: 0 1px 3px rgba(0,0,0,.4); /* читаемость */
+}
+
+.favorite-btn.is-active .favorite-icon {
+  color: #e53935;
+}
+
+/* =========================
+   CATALOG ADAPTIVE
+   ========================= */
+
+/* large tablet */
+@media (max-width: 1180px) {
+  #catalog {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .price {
+    font-size: 21px;
+  }
+
+  .title.True {
+    font-size: 20px;
+  }
+}
+
+/* tablet / phones */
+@media (max-width: 768px) {
+  #catalog {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    overflow: visible;
+    height: auto;
+    min-height: unset;
+  }
+
+  .card-media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .badge {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .favorite-btn {
+    width: 38px;
+    height: 38px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .favorite-icon {
+    font-size: 18px;
+  }
+
+  .price {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .title {
+    font-size: 14px;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .title.True {
+    font-size: 17px;
+  }
+
+  .info {
+    font-size: 12px;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+}
+
+/* very small phones */
+@media (max-width: 560px) {
+  #catalog {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .pages {
+    border-radius: 12px;
+  }
+
+  .card {
+    overflow: visible;
+    height: auto;
+  }
+
+  .card-media {
+    border-radius: 12px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .badge-top-left {
+    top: 10px;
+    left: 10px;
+  }
+
+  .badge-bottom-left {
+    left: 10px;
+    bottom: 10px;
+    max-width: calc(100% - 20px);
+  }
+
+  .price {
+    font-size: 19px;
+  }
+
+  .title {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .title.True {
+    font-size: 17px;
+  }
+
+  .info {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .pagination {
+    gap: 8px;
+    margin: 28px 0 36px;
+  }
+
+  .pagination a,
+  .pagination span {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 14px;
+  }
+}
+
+
+/* =========================
+   FILTERS ADAPTIVE
+   ========================= */
+
+#filters .filters-top,
+#filters .filters-secondary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px 20px;
+  align-items: end;
+}
+
+#filters .ui-field.type1,
+#filters.filters.job .ui-field.type1,
+#filters .ui-field.type2 {
+  width: 100%;
+}
+
+.price-group {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.filters-bottom {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+  align-items: end;
+}
+
+/* БАЗА */
+#catalog {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+
+#catalog > .card-link {
+  flex: 0 0 calc((100% - 3 * 25px) / 4);
+}
+
+/* tablet */
+@media (max-width: 1180px) {
+  #catalog {
+    gap: 20px;
+  }
+
+  #catalog > .card-link {
+    flex: 0 0 calc((100% - 20px) / 2);
+  }
+}
+
+/* phones */
+@media (max-width: 768px) {
+  #catalog {
+    gap: 14px;
+  }
+
+  #catalog > .card-link {
+    flex: 0 0 calc((100% - 14px) / 2);
+  }
+
+  .pages {
+    height: auto;
+    min-height: unset;
+    overflow: visible;
+  }
+
+  .card-media {
+    height: 220px;
+  }
+
+  .price {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .title {
+    font-size: 14px;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .title.True {
+    font-size: 17px;
+  }
+
+  .info {
+    font-size: 12px;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+}
+
+/* very small phones */
+@media (max-width: 560px) {
+  #catalog {
+    gap: 16px;
+  }
+
+  #catalog > .card-link {
+    flex: 0 0 100%;
+  }
+
+  .pages {
+    height: auto;
+    overflow: visible;
+    border-radius: 12px;
+  }
+
+  .card-media {
+    height: 240px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .price {
+    font-size: 19px;
+  }
+
+  .title {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .title.True {
+    font-size: 17px;
+  }
+
+  .info {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+}
+
+.breadcrumbs{
+    margin:20px 0;
+    font-size:14px;
+    color:black;
+    opacity: 60%;
+}
+
+.breadcrumbs a{
+    color:black;
+    opacity: 60%;
+    text-decoration:none;
+}
+
+.breadcrumbs span{
+    margin:0 6px;
+}

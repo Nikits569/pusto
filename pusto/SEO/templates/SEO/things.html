@@ -1,0 +1,103 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block things_SEO %}
+
+<title>Квартири в {{ city }} - оренда та пошук житла</title>
+<link type="text/css" href="{% static 'SEO/css/SEO.css' %}" rel="stylesheet" />
+
+
+<section id="SEO" aria-labelledby="seo-title">
+
+    <h1 id="seo-title">Купівля та продаж речей в {{ city }}</h1>
+
+    <h2>Шукаєте де купити або продати речі в {{ city }}?</h2>
+
+    <p>
+        На платформі pusto.sk ви можете швидко знайти оголошення про продаж та купівлю речей у {{ city }}.
+        Користувачі публікують актуальні пропозиції з різних категорій: електроніка, меблі,
+        одяг, техніка, товари для дому, велосипеди, аксесуари та багато іншого.
+    </p>
+
+    <p>
+        Сервіс допомагає легко купувати та продавати речі без посередників.
+        Ви можете переглядати фотографії, опис товарів, ціни та напряму зв’язуватись із продавцями.
+    </p>
+
+    <h3>У каталозі доступні:</h3>
+
+    <ul>
+        <li>електроніка та гаджети;</li>
+        <li>меблі та товари для дому;</li>
+        <li>одяг та взуття;</li>
+        <li>велосипеди та спорттовари;</li>
+        <li>побутова техніка;</li>
+        <li>дитячі товари;</li>
+        <li>аксесуари та інші речі.</li>
+    </ul>
+
+    <p>
+        На pusto.sk можна знайти як нові, так і вживані речі за доступними цінами.
+        Оголошення регулярно оновлюються, тому користувачі швидко знаходять потрібні товари у {{ city }}.
+    </p>
+
+    <p>
+        Якщо ви хочете купити або продати речі в {{ city }}, переглядайте актуальні оголошення,
+        публікуйте власні пропозиції та знаходьте вигідні покупки поруч.
+    </p>
+
+</section>
+
+<section class="fav-section" data-section="NeighborPost">
+      {% if neighbor_favorites %}
+        <div class="fav-slider">
+          <div class="catalogFavorite {% if neighbor_favorites|length <= 5 %}catalogFavorite--center{% endif %}">
+            {% for item in neighbor_favorites %}
+              <a class="card-link" href="{% url 'ads:page' 'things' item.slug_title item.id %}">
+                <div class="pages" data-content-type="NeighborPost" data-object-id="{{ item.id }}">
+
+                  <div class="card-media">
+                    {% if item.source_telegram %}
+                      <div class="badge-top-left">
+                        <div class="badge badge-telegram">
+                          <span class="badge-dot"></span>
+                          <span>зібрано з Telegram</span>
+                        </div>
+                      </div>
+                    {% endif %}
+
+                    {% if item.first_image %}
+                      <img src="{{ item.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
+                    {% elif item.preview_image %}
+                      <img src="/media/{{ item.preview_image }}" alt="" class="image" loading="lazy" decoding="async">
+                    {% else %}
+                      <img src="{% static 'ads/images/stub.png' %}" alt="" class="image" loading="lazy" decoding="async">
+                    {% endif %}
+                  </div>
+
+                  <div class="price-wrap">
+                    {% if not item.source_telegram and item.price %}
+                      <h3 class="price">{{ item.price }} €</h3>
+                    {% endif %}
+                  </div>
+
+                  <h3 class="title{% if item.source_telegram %} True{% endif %}">
+                    {{ item.title }}
+                  </h3>
+
+                  <h5 class="info{% if item.source_telegram %} True{% endif %}">
+                    {{ item.city }}{% if item.city and item.created_at %} - {% endif %}{{ item.created_at }}
+                  </h5>
+
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <div class="fav-empty">Поки нічого немає</div>
+      {% endif %}
+</section>
+<a href="https://pusto.sk/uk/things/all/" class="seeAll">переглянути всі речі</a>
+{% endblock %}

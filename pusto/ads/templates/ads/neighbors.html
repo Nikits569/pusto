@@ -1,0 +1,483 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load querystring %}
+{% load i18n %}
+
+{% block neighbors %}
+
+<link type="text/css" href="{% static 'ads/css/catalogStyle.css' %}" rel="stylesheet" />
+<link type="text/css" href="{% static 'ads/css/filterSortingStyle.css' %}" rel="stylesheet" />
+<title>
+    {% if type_slug == 'all' %}
+        {% trans 'Сусіди в Словаччині - оголошення' %}
+    {% elif type_slug == 'findNeighbor' %}
+        {% trans 'Шукаю сусіда в Словаччині' %}
+    {% elif type_slug == 'rent' %}
+        {% trans 'Оренда житла в Словаччині - шукаю квартиру' %}
+    {% else %}
+        {% trans 'Сусіди в Словаччині' %}
+    {% endif %}
+</title>
+<div id="chooseType" class="tabs">
+    <a class="{% if type_slug == 'all' %}is-active{% endif %}"
+       href="{% url 'ads:neighbors' 'all' %}">
+        {% trans 'всі оголошення' %}
+    </a>
+
+    <a class="{% if type_slug == 'findNeighbor' %}is-active{% endif %}"
+       href="{% url 'ads:neighbors' 'findNeighbor' %}">
+        {% trans 'шукаю сусіда' %}
+    </a>
+
+    <a class="{% if type_slug == 'rent' %}is-active{% endif %}"
+       href="{% url 'ads:neighbors' 'rent' %}">
+        {% trans 'шукаю квартиру' %}
+    </a>
+</div>
+<!-- Event snippet for Просмотр страницы conversion page -->
+<h1 class="seoH1">
+    {% if type_slug == 'all' %}
+        {% trans 'Сусіди в Словаччині' %}
+    {% elif type_slug == 'findNeighbor' %}
+        {% trans 'Пошук сусіда в Словаччині' %}
+    {% elif type_slug == 'rent' %}
+        {% trans 'Оренда житла в Словаччині' %}
+    {% else %}
+        {% trans 'Сусіди в Словаччині' %}
+    {% endif %}
+</h1>
+<button type="button" id="toggleFiltersBtn" class="toggle-filters-btn">
+    {% trans 'Відкрити фільтри' %}
+</button>
+<form method="get" id="filters" class="filters">
+    <input type="hidden" name="sort" value="{{ current_sort }}">
+    <input type="hidden" name="order" value="{{ current_order }}">
+    <input type="hidden" name="page" value="1">
+
+    <div class="filters-top">
+        <select name="city" class="ui-field type2">
+            <option value="">{% trans 'Всі міста' %}</option>
+            {% for c in cities %}
+                <option value="{{ c }}" {% if filter_city == c %}selected{% endif %}>
+                    {{ c }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <input type="text"
+               name="search"
+               class="ui-field type1"
+               placeholder="{% trans 'Пошук' %}"
+               value="{{ filter_search }}">
+
+        <input type="number"
+               name="rooms"
+               class="ui-field type1"
+               placeholder="{% trans 'кількість кімнат' %}"
+               value="{{ filter_rooms }}">
+
+        <div class="price-group">
+            <input type="number"
+                   name="budget_from"
+                   class="ui-field type1"
+                   placeholder="{% trans 'Бюджет від' %}"
+                   value="{{ filter_budget_from }}">
+
+            <input type="number"
+                   name="budget_to"
+                   class="ui-field type1"
+                   placeholder="{% trans 'Бюджет до' %}"
+                   value="{{ filter_budget_to }}">
+        </div>
+
+        <div class="ui-field type2">
+            <select name="source" class="custom-select">
+                <option value="" {% if not source %}selected{% endif %}>
+                    Всі джерела
+                </option>
+
+                <option value="pusto.sk" {% if source == 'pusto.sk' %}selected{% endif %}>
+                    Pusto.sk
+                </option>
+
+                <option value="telegram" {% if source == 'telegram' %}selected{% endif %}>
+                    Telegram
+                </option>
+
+                <option value="bazos" {% if source == 'bazos' %}selected{% endif %}>
+                    Bazos
+                </option>
+                <option value="reality.sk" {% if source == 'reality.sk' %}selected{% endif %}>
+                    Reality
+                </option>
+                <option value="topReality" {% if source == 'topreality' %}selected{% endif %}>
+                    TopReality
+                </option>
+            </select>
+        </div>
+        <!--
+        <input type="date"
+               name="move_in_date"
+               class="ui-field type2"
+               value="{{ filter_move_in_date }}">
+        -->
+    </div>
+<!--
+    <div class="filters-bottom">
+        <input type="number"
+               name="count_neighbors"
+               class="ui-field type2"
+               placeholder="{% trans 'К-сть сусідів' %}"
+               value="{{ filter_count_neighbors }}">
+
+        <div class="price-group">
+            <input type="number"
+                   name="min_age"
+                   class="ui-field type2"
+                   placeholder="{% trans 'Вік від' %}"
+                   value="{{ filter_min_age }}">
+
+            <input type="number"
+                   name="max_age"
+                   class="ui-field type2"
+                   placeholder="{% trans 'Вік до' %}"
+                   value="{{ filter_max_age }}">
+        </div>
+
+        <select name="rent_period" class="ui-field type2">
+            <option value="">{% trans 'будь-який період' %}</option>
+            {% for value, label in rent_periods %}
+                <option value="{{ value }}" {% if filter_rent_period == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="housing_type" class="ui-field type2">
+            <option value="">{% trans 'будь-яке житло' %}</option>
+            {% for value, label in housing_types %}
+                <option value="{{ value }}" {% if filter_housing_type == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <select name="neighbor_gender" class="ui-field type2">
+            {% for value, label in genders %}
+                <option value="{{ value }}"
+                    {% if filter_neighbor_gender == value|stringformat:"s" %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+-->
+    <button type="submit" class="btn btn-primary">
+        {% trans 'застосувати' %}
+    </button>
+
+    <a href="{% url 'ads:neighbors' 'all' %}" class="btn btn-ghost">
+        {% trans 'скинути' %}
+    </a>
+</form>
+
+<div id="sorting" class="sorting">
+  <span class="sorting__label">{% trans 'Сортировка' %}</span>
+  <div class="sorting__links">
+
+    {# --- ДАТА --- #}
+    {% if current_sort == 'date' and current_order == 'asc' %}
+        <a href="?{% query_transform request sort='date' order='desc' %}" class="active">
+            {% trans 'Дате ↑' %}
+        </a>
+    {% elif current_sort == 'date' and current_order == 'desc' %}
+        <a href="?{% query_transform request sort='date' order='asc' %}" class="active">
+            {% trans 'Дате ↓' %}
+        </a>
+    {% else %}
+        <a href="?{% query_transform request sort='date' order='desc' %}">
+            {% trans 'Дате' %}
+        </a>
+    {% endif %}
+    |
+
+    {# --- бюджет --- #}
+    {% if current_sort == 'budget' and current_order == 'asc' %}
+        <a href="?{% query_transform request sort='budget' order='desc' %}" class="active">
+            {% trans 'бюджет ↑' %}
+        </a>
+    {% elif current_sort == 'budget' and current_order == 'desc' %}
+        <a href="?{% query_transform request sort='budget' order='asc' %}" class="active">
+            {% trans 'бюджет ↓' %}
+        </a>
+    {% else %}
+        <a href="?{% query_transform request sort='budget' order='desc' %}">
+            {% trans 'бюджет' %}
+        </a>
+    {% endif %}
+
+  </div>
+    <a href="{% if type_slug == 'all' %}
+                {% url 'ads:neighbor_add' 'findNeighbor' %}
+             {% else %}
+                {% url 'ads:neighbor_add' type_slug|default_if_none:'findNeighbor' %}
+             {% endif %}"
+       class="addPageBtn addPageBtn--primary">
+        <span>+ {% trans 'додати оголошення' %}</span>
+        <span class="addPageBtn__under">{% trans 'Без реєстрації та входу' %}</span>
+    </a>
+    <p class="count">{% trans 'знайдено' %} {{ count }} {% trans 'оголошень' %}</p>
+</div>
+
+<div id="catalog">
+    {% for i in base %}
+    {% if i.status == 'active' or user.is_staff %}
+    {% if i.caseType != 'other' %}
+        <div class="card-box">
+            {% if user.is_staff %}
+                <div class="admin-status-bar">
+                    <select class="status-select" data-id="{{ i.id }}" data-type="neighbors">
+                        <option value="active" {% if i.status == "active" %}selected{% endif %}>
+                            {% trans 'Активно' %}
+                        </option>
+                        <option value="closed" {% if i.status == "closed" %}selected{% endif %}>
+                            {% trans 'Закрыто' %}
+                        </option>
+                    </select>
+                </div>
+            {% endif %}
+
+            <a class="card-link"
+               href="{% url 'ads:page' 'neighbors' i.slug_title i.id %}">
+
+                <div class="pages">
+
+                    <button
+                      type="button"
+                      class="favorite-btn js-fav-btn"
+                      data-content-type="NeighborPost"
+                      data-object-id="{{ i.id }}"
+                      aria-label="{% trans 'Додати в обране' %}">
+                      <span class="favorite-icon">♡</span>
+                    </button>
+
+                    <div class="card-media">
+                        {% if i.private_status == 'top' %}
+                            <div class="badge badge-warning badge-top-left">
+                                <span class="badge-icon">★</span>
+                                <span>TOP</span>
+                            </div>
+                        {% endif %}
+
+                        {% if i.source %}
+                          <div class="badge-top-left">
+                            <div class="badge badge-{{ i.source }}">
+                              <span class="badge-dot"></span>
+                              <span class="badge">{% trans 'Зібрано з ' %} {{ i.source }}</span>
+                            </div>
+                          </div>
+                        {% endif %}
+
+
+                        <div class="badge-bottom-left">
+                            {% if i.is_verified %}
+                                <div class="badge badge-verified">
+                                    <span class="badge-icon">✓</span>
+                                    <span>{% trans 'верифікований' %}</span>
+                                </div>
+                            {% endif %}
+
+                            {% if i.author_status == 'student' %}
+                                <div class="badge badge-student">
+                                    <span class="badge-icon">🎓</span>
+                                    <span>{% trans 'студент' %}</span>
+                                </div>
+                            {% endif %}
+
+                            {% if i.author_status == 'employer' %}
+                                <div class="badge badge-employer">
+                                    <span class="badge-icon">💼</span>
+                                    <span>{% trans 'роботодавець' %}</span>
+                                </div>
+                            {% endif %}
+                            {% if i.rooms %}
+                                <div class="badge badge-hot">
+                                    <span class="badge-icon">🚪</span>
+                                  <span>{% trans 'кімнат' %} {{ i.rooms|floatformat:0 }}</span>
+                                </div>
+                            {% endif %}
+                            {% if i.deposit %}
+                                <div class="badge badge-hot">
+                                    <span class="badge-icon">💰</span>
+                                  <span>{% trans 'депозит' %} {{ i.deposit }}</span>
+                                </div>
+                            {% endif %}
+
+                            {% if i.housing_type != 'any' %}
+                              <div class="badge badge-housing_type">
+                                  <span class="badge-icon">🏠</span>
+                                  <span>{{ i.housing_type }}</span>
+                              </div>
+                            {% endif %}
+
+                            {% if i.created_at.date == today %}
+                                <div class="badge badge-hot">
+                                  <span class="badge-icon">🔥</span>
+                                  <span>{% trans 'нове' %}</span>
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        {% if i.img_bazos %}
+                            <img src="{{ i.img_bazos }}"alt="" class="image" loading="lazy" decoding="async">
+                        {% elif i.first_image %}
+                            <img src="{{ i.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
+                        {% elif i.preview_image %}
+                            <img src="/media/{{ i.preview_image }}" alt="" class="image" loading="lazy" decoding="async">
+                        {% else %}
+                            <img src="{% static 'ads/images/stub.png' %}" alt="" class="image" loading="lazy" decoding="async">
+                        {% endif %}
+                    </div>
+
+                    {% if i.budget != None %}
+                        <h3 class="price">{{ i.budget }} €</h3>
+                        <h3 class="title False">
+                          {% if i.title == '<без текста>' %}
+                            {% trans 'текста нажаль немає(' %}
+                          {% else %}
+                            {% if LANGUAGE_CODE == 'sk' %}
+                              {{ i.title_sk|default:i.title }}
+                            {% elif LANGUAGE_CODE|slice:":2" == "en" %}
+                              {{ i.title_en|default:i.title }}
+                            {% else %}
+                              {{ i.title }}
+                            {% endif %}
+                          {% endif %}
+                        </h3>
+                    {% else %}
+                        <h3 class="title {{ i.budget }}">
+                            {% if i.title == '<без текста>' %}
+                              {% trans 'текста нажаль немає(' %}
+                            {% else %}
+                              {% if LANGUAGE_CODE|slice:":2" == 'en' %}
+                                {{ i.title_en|default:i.title }}
+                              {% elif LANGUAGE_CODE|slice:":2" == 'sk' %}
+                                {{ i.title_sk|default:i.title }}
+                              {% else %}
+                                {{ i.title }}
+                              {% endif %}
+                            {% endif %}
+                        </h3>
+                    {% endif %}
+
+                    <h5 class="info {{ i.budget }}">
+                      {{ i.city }} - {{ i.created_at }}
+                    </h5>
+                </div>
+            </a>
+        </div>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% if base.paginator.num_pages > 1 %}
+<div class="pagination">
+
+    {% for num in page_numbers %}
+        {% if num == base.number %}
+            <span class="current">{{ num }}</span>
+        {% else %}
+            <a href="?{% query_transform request page=num %}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+    ...
+
+</div>
+{% endif %}
+<script src="{% static 'ads/js/ClearNoneAdv.js' %}"></script>
+<script src="{% static 'ads/js/neighbors.js' %}"></script>
+<script>
+const UPDATE_STATUS_BASE_URL = "{% url 'ads:update_ad_status' 'neighbors' 0 %}";
+
+document.addEventListener("change", function(e) {
+  if (!e.target.classList.contains("status-select")) return;
+
+  const select = e.target;
+  const postId = select.dataset.id;
+  const adType = select.dataset.type;
+  const newStatus = select.value;
+
+  // формируем URL: заменяем /things/0/ на нужный type/id
+  const url = UPDATE_STATUS_BASE_URL.replace(
+    "/neighbors/0/",
+    `/${adType}/${postId}/`
+  );
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken"),
+    },
+    body: JSON.stringify({
+      status: newStatus
+    })
+  })
+  .then(async res => {
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "Request failed");
+    }
+    return data;
+  })
+  .then(data => {
+    console.log("updated:", data);
+
+    // визуально помечаем закрытое
+    const card = select.closest(".card-box");
+
+    if (newStatus === "closed") {
+      card.classList.add("is-closed");
+    } else {
+      card.classList.remove("is-closed");
+    }
+  })
+  .catch(err => {
+    console.error("status update error:", err);
+  });
+});
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.startsWith(name + "=")) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("toggleFiltersBtn");
+    const filtersForm = document.getElementById("filters");
+
+    if (!toggleBtn || !filtersForm) return;
+
+    const openText = "{% trans 'Відкрити фільтри' %}";
+    const closeText = "{% trans 'Сховати фільтри' %}";
+
+    toggleBtn.addEventListener("click", () => {
+        const isOpen = filtersForm.classList.toggle("filters-open");
+        toggleBtn.textContent = isOpen ? closeText : openText;
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block selectAds %}
+<link type="text/css" href="{% static 'ads/css/selectAds.css' %}" rel="stylesheet" />
+<title>Речі та сусіди - оголошення Pusto.sk</title>
+<h1>Купівля, продаж та пошук сусідів у Словаччині</h1>
+<div id="selectPage">
+
+    <a href="{% url 'ads:things' 'all' %}">
+        <div id="things" class="page">
+            <div class="blockTop">
+                <h2 class="pageTitle">{% trans 'речі' %}</h2>
+                <img src="{% static 'ads/images/thing.png' %}" class="pageIMG">
+            </div>
+            <div class="blockBottom">
+                <h3>{% trans 'Б/У або нові' %}</h3>
+                <h4>{% trans 'купуй або продавай речі серед студентів' %}</h4>
+            </div>
+        </div>
+    </a>
+    {% comment %}
+        <!--<a href="{% url 'ads:jobs' 'all' %}"> -->
+        <!--    <div id="jobs" class="page"> -->
+        <!--        <div class="blockTop"> -->
+        <!--            <h2 class="pageTitle">{% trans 'робота' %}</h2> -->
+        <!--            <img src="{% static 'ads/images/job.png' %}" class="pageIMG"> -->
+        <!--        </div> -->
+        <!--        <div class="blockBottom"> -->
+        <!--            <h3>{% trans 'робота або працівники' %}</h3> -->
+        <!--            <h4>{% trans 'студенти шукають роботу, а роботодавці — студентів' %}</h4> -->
+        <!--        </div> -->
+        <!--    </div> -->
+        <!--</a> -->
+    {% endcomment %}
+    <a href="{% url 'ads:neighbors' 'all' %}">
+        <div id="neighbors" class="page">
+            <div class="blockTop">
+                <h2 class="pageTitle">{% trans 'житло' %}</h2>
+                <img src="{% static 'ads/images/neighbor.png' %}" class="pageIMG">
+            </div>
+            <div class="blockBottom">
+                <h3>{% trans 'сусіди та житло' %}</h3>
+                <h4>{% trans 'пошук житла та сусідів' %}</h4>
+            </div>
+        </div>
+    </a>
+
+</div>
+
+
+
+{% endblock %}

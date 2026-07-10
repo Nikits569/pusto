@@ -1,0 +1,334 @@
+:root{
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #667085;
+  --line: rgba(15, 23, 42, .10);
+  --line-strong: rgba(15, 23, 42, .20);
+  --btn: #111827;
+  --btn-hover: #0b1220;
+  --radius: 16px;
+  --w: 520px;
+}
+
+/* base */
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* layout */
+.auth{
+  display: grid;
+  place-items: center;
+  padding: 30px 0px;
+}
+
+.auth-shell{
+  width: 100%;
+  max-width: var(--w);
+}
+
+/* карточка — БЕЗ теней */
+.auth-card{
+  padding: 28px;
+}
+
+
+/* header */
+.auth-card h2{
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  text-align: center; /* как во Входе */
+}
+
+.auth-sub{
+  margin: 10px 0 22px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* form */
+.auth-form{
+  display: grid;
+  gap: 16px;
+}
+
+/* Django form.as_p -> p */
+.auth-form p{
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+/* labels (делаем спокойными и унифицированными) */
+.auth-form label {
+  display: none;
+}
+
+/* inputs (как во Входе: белые, мягкий бордер, без теней) */
+.auth-form input,
+.auth-form select,
+.auth-form textarea{
+  width: 100%;
+  height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #fff;
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.auth-form textarea{ height: auto; min-height: 96px; padding-top: 12px; }
+
+.auth-form input::placeholder{ color: rgba(102,112,133,.60); }
+
+
+/* Chrome autofill */
+input:-webkit-autofill{
+  -webkit-text-fill-color: var(--text);
+  transition: background-color 9999s ease-in-out 0s;
+  box-shadow: 0 0 0px 1000px #fff inset;
+}
+
+/* errors */
+.auth-form .errorlist{
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  color: #d92d20;
+  font-size: 12px;
+}
+.auth-form .helptext{
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(102,112,133,.85);
+}
+
+/* CTA button (как во Входе) */
+.btn-primary{
+  margin-top: 6px;
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 16px;
+  background: #202B6C;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background .15s ease, transform .06s ease;
+}
+
+
+/* links */
+.auth-links{
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.auth-links a{
+  color: var(--text);
+  text-decoration: none;
+  opacity: .85;
+}
+.auth-links a:hover{
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dot{ opacity: .35; }
+
+/* =========================================================
+   Adaptive
+   добавить в конец файла
+   ========================================================= */
+
+/* tablet */
+@media (max-width: 768px){
+  :root{
+    --w: 100%;
+    --radius: 14px;
+  }
+
+  .auth{
+    padding: 24px 16px;
+  }
+
+  .auth-shell{
+    max-width: 460px;
+  }
+
+  .auth-card{
+    padding: 24px 20px;
+  }
+
+  .auth-card h2{
+    font-size: 28px;
+    line-height: 1.15;
+  }
+
+  .auth-sub{
+    margin: 8px 0 20px;
+    font-size: 13px;
+  }
+
+  .auth-form{
+    gap: 14px;
+  }
+
+  .auth-form p{
+    gap: 6px;
+  }
+
+  .auth-form input,
+  .auth-form select,
+  .auth-form textarea{
+    height: 46px;
+    padding: 11px 13px;
+    font-size: 16px; /* чтобы iPhone не зумил */
+    border-radius: 12px;
+  }
+
+  .auth-form textarea{
+    min-height: 92px;
+    height: auto;
+  }
+
+  .btn-primary{
+    height: 48px;
+    border-radius: 14px;
+    font-size: 15px;
+  }
+
+  .auth-links{
+    margin-top: 16px;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+}
+
+/* mobile */
+@media (max-width: 480px){
+  :root{
+    --radius: 12px;
+  }
+
+  .auth{
+    padding: 18px 12px 24px;
+  }
+
+  .auth-shell{
+    max-width: 100%;
+  }
+
+  .auth-card{
+    padding: 18px 14px;
+  }
+
+  .auth-card h2{
+    font-size: 24px;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+  }
+
+  .auth-sub{
+    margin: 8px 0 16px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .auth-form{
+    gap: 12px;
+  }
+
+  .auth-form input,
+  .auth-form select,
+  .auth-form textarea{
+    height: 44px;
+    padding: 10px 12px;
+    font-size: 16px;
+    border-radius: 12px;
+  }
+
+  .auth-form textarea{
+    min-height: 88px;
+  }
+
+  .auth-form .errorlist{
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .auth-form .helptext{
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .btn-primary{
+    margin-top: 4px;
+    height: 46px;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+
+  .auth-links{
+    margin-top: 14px;
+    gap: 6px 10px;
+    font-size: 12px;
+  }
+
+  .dot{
+    display: none;
+  }
+}
+
+/* very small phones */
+@media (max-width: 360px){
+  .auth{
+    padding: 14px 10px 20px;
+  }
+
+  .auth-card{
+    padding: 16px 12px;
+  }
+
+  .auth-card h2{
+    font-size: 22px;
+  }
+
+  .auth-sub{
+    font-size: 12px;
+  }
+
+  .auth-form input,
+  .auth-form select,
+  .auth-form textarea{
+    height: 42px;
+    font-size: 16px;
+  }
+
+  .btn-primary{
+    height: 44px;
+    font-size: 14px;
+  }
+}

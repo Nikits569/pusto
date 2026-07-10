@@ -1,0 +1,30 @@
+{# templates/accounts/register.html #}
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block register %}
+<link rel="stylesheet" href="{% static 'accounts/css/register.css' %}"/>
+<title>{% trans 'реєстрація' %}</title>
+<div class="auth">
+  <div class="auth-shell">
+    <div class="auth-card">
+      <h2>{% trans 'реєстрація' %}</h2>
+      <p class="auth-sub">{% trans 'створіть обліковий запис за хвилину' %}</p>
+      <form class="auth-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn-primary" type="submit">{% trans 'реєстрація' %}</button>
+      </form>
+
+      {% if msg %}<p class="login-msg">{{ msg|safe }}</p>{% endif %}
+
+      <div class="auth-links">
+        <a href="{% url 'login' %}">{% trans 'війти' %}</a>
+        <span class="dot">•</span>
+        <a href="{% url 'ads:select' %}">{% trans 'головна сторінка' %}</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

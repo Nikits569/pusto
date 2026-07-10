@@ -1,0 +1,34 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+
+{% block cookies %}
+<link type="text/css" href="{% static 'pusto/css/generalDocuments.css' %}" rel="stylesheet" />
+<title>політика cookies</title>
+<h1>COOKIE AND LOCAL STORAGE POLICY</h1>
+<h4>Last updated: 6 April 2026.</h4>
+
+<h2>1. What this policy covers</h2>
+<h3>This policy explains how the Platform uses cookies, local storage, pixels, SDKs, and similar technologies that store information on, or access information from, a user’s device. Where consent is required under applicable ePrivacy rules, non-essential technologies will be activated only after the user has granted consent. Strictly necessary technologies do not require consent where they are genuinely required to provide or secure the requested service.</h3>
+
+<h2>2. Categories of technologies</h2>
+<h3>Strictly necessary: technologies required for login sessions, security, load balancing, fraud prevention, consent storage, core user preferences, and technical service delivery. Functional / preference technologies: technologies that remember language, display settings, or saved non-essential user preferences. Depending on implementation, these may require consent if not strictly necessary. Analytics: technologies used to understand traffic, performance, and product usage. These should be disabled until consent is collected unless the implementation qualifies as strictly necessary under applicable law, which is uncommon. Advertising or profiling: if deployed in the future, these technologies must remain off until explicit consent is obtained and the policy must be updated before rollout.</h3>
+
+<h2>3. Local storage for favorites and guest functions</h2>
+<h3>The Platform may store selected listings, consent choices, and similar interface data in browser local storage. For example, guest favorites may remain on the user’s device and be associated with that device or browser until the user clears them or they are overwritten. If local storage is used for analytics or tracking rather than for the specific functionality requested by the user, consent should be collected before activation.</h3>
+
+<h2>4. Consent management</h2>
+<h3>Users should be able to accept, reject, or customize non-essential technologies through a consent banner or preferences centre. The Platform should keep a record of the user’s consent choice and provide an easy way to change that choice later. Withdrawal of consent must be as easy as giving it. Changing browser settings alone is not always sufficient to meet this requirement.</h3>
+
+<h2>5. Retention and inventory</h2>
+<h3>Each cookie or similar identifier should have a defined lifespan. Session technologies should expire when the session ends unless a longer duration is necessary and justified. Persistent technologies should use proportionate expiry periods. The Platform uses the following technologies: Session cookies for authentication and security (session duration). Consent cookie to store user preferences (up to 12 months). Google Analytics cookies (only after user consent, duration varies up to 24 months). Local storage for favorites (until cleared by user).</h3>
+
+<h2>6. Third-party technologies</h2>
+<h3>If third-party analytics, embedded media, payment widgets, maps, or anti-abuse tools place or read identifiers on the user’s device, those technologies must be reflected in this policy and, where required, blocked until consent is obtained.</h3>
+
+<h2>7. How users can control technologies</h2>
+<h3>In addition to the Platform’s consent settings, users may delete stored identifiers through browser settings. Doing so may log the user out or remove saved preferences and guest favorites.</h3>
+
+<h2>8. Contact</h2>
+<h3>Questions about cookies, device storage, and consent may be sent to pusto.sk.com@gmail.com.</h3>
+
+{% endblock %}

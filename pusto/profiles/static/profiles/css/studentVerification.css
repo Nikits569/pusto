@@ -1,0 +1,212 @@
+/* === Общий контейнер === */
+.student-verification {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+/* === Карточка === */
+.student-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px 32px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+}
+
+/* === Иконка === */
+.student-card__icon {
+    font-size: 42px;
+    margin-bottom: 16px;
+}
+
+/* === Заголовок === */
+.student-card__title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    text-transform: lowercase;
+}
+
+/* === Текст === */
+.student-card__text {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 28px;
+}
+
+/* === Форма === */
+.student-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* === Группа поля === */
+.student-form__group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* === Инпуты === */
+.student-form input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.student-form input:focus {
+    border-color: #4f46e5;
+    outline: none;
+
+}
+
+/* === Ошибки === */
+.student-form__error {
+    font-size: 12px;
+    color: #e53935;
+    text-align: left;
+}
+
+.student-form__error--main {
+    text-align: center;
+}
+
+/* === Кнопка === */
+.student-form__button {
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: #202B6C;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+
+@media (max-width: 992px) {
+    .student-verification {
+        min-height: auto;
+        padding: 28px 16px;
+    }
+
+    .student-card {
+        max-width: 380px;
+        padding: 34px 26px;
+        border-radius: 18px;
+    }
+
+    .student-card__title {
+        font-size: 22px;
+    }
+
+    .student-card__text {
+        font-size: 13px;
+        margin-bottom: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .student-verification {
+        padding: 24px 12px;
+        align-items: flex-start;
+    }
+
+    .student-card {
+        max-width: 100%;
+        padding: 28px 20px;
+        border-radius: 16px;
+    }
+
+    .student-card__icon {
+        font-size: 36px;
+        margin-bottom: 14px;
+    }
+
+    .student-card__title {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .student-card__text {
+        font-size: 13px;
+        margin-bottom: 22px;
+        line-height: 1.4;
+    }
+
+    .student-form {
+        gap: 14px;
+    }
+
+    .student-form input {
+        font-size: 13px;
+        padding: 11px 12px;
+        border-radius: 9px;
+    }
+
+    .student-form__error {
+        font-size: 11px;
+    }
+
+    .student-form__button {
+        font-size: 13px;
+        padding: 11px;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .student-verification {
+        padding: 18px 10px;
+    }
+
+    .student-card {
+        padding: 22px 16px;
+        border-radius: 14px;
+    }
+
+    .student-card__icon {
+        font-size: 30px;
+        margin-bottom: 12px;
+    }
+
+    .student-card__title {
+        font-size: 18px;
+    }
+
+    .student-card__text {
+        font-size: 12px;
+        margin-bottom: 18px;
+    }
+
+    .student-form {
+        gap: 12px;
+    }
+
+    .student-form input {
+        font-size: 12px;
+        padding: 10px 11px;
+    }
+
+    .student-form__error {
+        font-size: 10px;
+    }
+
+    .student-form__button {
+        width: 100%;
+        font-size: 12px;
+        padding: 10px;
+        border-radius: 9px;
+    }
+}

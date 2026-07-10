@@ -1,0 +1,180 @@
+/* Общий контейнер */
+.confirmation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+
+}
+
+/* Карточка */
+.confirmation-card {
+    background: #ffffff;
+    padding: 40px 30px;
+    max-width: 520px;
+    width: 100%;
+    border-radius: 16px;
+
+    text-align: center;
+}
+
+/* Заголовок */
+.confirmation-card h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+/* Текст */
+.description {
+    font-size: 15px;
+    color: #4b5563;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.steps {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Список */
+.actions-list {
+    margin: 10px 0 25px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.actions-list li {
+    margin: 6px 0;
+    color: #374151;
+}
+
+/* Кнопка */
+.tg-btn {
+    display: inline-block;
+    padding: 14px 24px;
+    background: #229ED9;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.tg-btn:hover {
+    background: #1b8cc2;
+    transform: translateY(-1px);
+}
+
+/* Примечание */
+.note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Планшеты */
+@media (max-width: 768px) {
+    .confirmation-container {
+        min-height: auto;
+        padding: 24px 16px;
+        align-items: flex-start;
+    }
+
+    .confirmation-card {
+        padding: 32px 24px;
+        border-radius: 14px;
+    }
+
+    .confirmation-card h1 {
+        font-size: 22px;
+        margin-bottom: 16px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .actions-list {
+        margin: 10px 0 22px;
+    }
+
+    .tg-btn {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 15px;
+        text-align: center;
+    }
+}
+
+/* Мобильные */
+@media (max-width: 480px) {
+    .confirmation-container {
+        padding: 16px 12px;
+    }
+
+    .confirmation-card {
+        padding: 24px 18px;
+        border-radius: 12px;
+    }
+
+    .confirmation-card h1 {
+        font-size: 20px;
+        margin-bottom: 14px;
+    }
+
+    .description {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .steps {
+        font-size: 14px;
+    }
+
+    .actions-list li {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    .tg-btn {
+        width: 100%;
+        padding: 13px 16px;
+        font-size: 14px;
+        border-radius: 8px;
+    }
+
+    .note {
+        font-size: 12px;
+        margin-top: 16px;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+    .confirmation-card {
+        padding: 20px 14px;
+    }
+
+    .confirmation-card h1 {
+        font-size: 18px;
+    }
+
+    .description,
+    .actions-list li,
+    .steps {
+        font-size: 13px;
+    }
+
+    .tg-btn {
+        font-size: 13px;
+        padding: 12px 14px;
+    }
+
+    .note {
+        font-size: 11px;
+    }
+}

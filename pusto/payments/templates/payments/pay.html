@@ -1,0 +1,93 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block pay %}
+<h2>{% trans 'оплата реклами' %}</h2>
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<div id="payment-element"></div>
+
+<button id="pay-btn" type="button">{% trans 'оплатити' %}</button>
+<div id="err" style="margin-top:12px;color:#b00;"></div>
+<script>
+  const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+  const clientSecret = "{{ client_secret }}";
+
+  const elements = stripe.elements({
+    clientSecret,
+    appearance: { theme: "flat" },
+  });
+
+  elements.create("payment").mount("#payment-element");
+
+  const btn = document.getElementById("pay-btn");
+  const errBox = document.getElementById("err");
+
+  btn.addEventListener("click", async () => {
+    errBox.style.color = "#b00";
+    errBox.textContent = "";
+    btn.disabled = true;
+
+    // confirmPayment вернёт paymentIntent если redirect не нужен
+    const result = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: window.location.origin + "/MyProfile/",
+      },
+      redirect: "if_required",
+    });
+
+    if (result.error) {
+      errBox.textContent = result.error.message || String(result.error);
+      btn.disabled = false;
+      return;
+    }
+
+    const pi = result.paymentIntent; // может быть undefined, если Stripe решил редиректить (но redirect=if_required)
+
+    // Показываем реальный статус, а не "всё ок"
+    const status = pi?.status || "unknown";
+
+    errBox.style.color = "green";
+
+    if (status === "requires_capture") {
+      errBox.textContent =
+        "{% trans 'Оплата авторизована (HOLD). Ожидает подтверждения админом.' %}";
+      // можно сразу редиректнуть
+      // window.location.href = "/MyProfile/";
+      return;
+    }
+
+    if (status === "succeeded") {
+      errBox.textContent = "{% trans 'Оплата завершена (succeeded).' %}";
+      return;
+    }
+
+    if (status === "processing") {
+      errBox.textContent =
+        "{% trans 'Платіж в обробці (processing). Статус оновиться після webhook.' %}";
+      return;
+    }
+
+    if (status === "requires_action") {
+      errBox.textContent =
+        "{% trans 'Потрібна додаткова дія (3DS). Дотримуйтесь інструкцій Stripe.' %}";
+      btn.disabled = false;
+      return;
+    }
+
+    if (status === "requires_payment_method") {
+      errBox.style.color = "#b00";
+      errBox.textContent =
+        "{% trans 'Платіж не підтверджено: потрібен інший спосіб оплати.' %}";
+      btn.disabled = false;
+      return;
+    }
+
+    // fallback
+    errBox.textContent = `{% trans 'Платіж створено. Stripe status:' %} ${status}.`;
+  });
+</script>
+{% endblock %}

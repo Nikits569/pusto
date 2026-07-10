@@ -1,0 +1,597 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load querystring %}
+{% load i18n %}
+
+{% block things %}
+
+<link type="text/css" href="{% static 'ads/css/catalogStyle.css' %}" rel="stylesheet" />
+<link type="text/css" href="{% static 'ads/css/filterSortingStyle.css' %}" rel="stylesheet" />
+<title>
+    {% if type_slug == 'sell' %}
+        {% trans 'Продаж товарів в Словаччині - pusto.sk' %}
+    {% elif type_slug == 'buy' %}
+        {% trans 'Купівля товарів в Словаччині - pusto.sk' %}
+    {% elif type_slug == 'free' %}
+        {% trans 'Безкоштовні оголошення в Словаччині - pusto.sk' %}
+    {% else %}
+        {% trans 'Оголошення в Словаччині - pusto.sk' %}
+    {% endif %}
+</title>
+<!--<nav class="breadcrumbs" aria-label="Breadcrumb"> -->
+<!--    <a href="{% url 'ads:select' %}">{% trans "Головна" %}</a> -->
+<!-- -->
+<!--    <span>›</span> -->
+<!-- -->
+<!--    <a href="{% url 'ads:things_all' %}"> -->
+<!--        {% trans "Речі" %} -->
+<!--    </a> -->
+<!-- -->
+<!--    {% if filter_city %} -->
+<!--        <span>›</span> -->
+<!--        <span>{{ filter_city }}</span> -->
+<!--    {% endif %} -->
+<!--</nav> -->
+<div id="chooseType" class="tabs">
+    <a class="{% if type_slug == 'all' %}is-active{% endif %}"
+       href="{% url 'ads:things' 'all' %}?{% query_transform request %}">
+        {% trans 'всі оголошення' %}
+    </a>
+
+    <a class="{% if type_slug == 'sell' %}is-active{% endif %}"
+       href="{% url 'ads:things' 'sell' %}?{% query_transform request %}">
+        {% trans 'продаж' %}
+    </a>
+
+    <a class="{% if type_slug == 'buy' %}is-active{% endif %}"
+       href="{% url 'ads:things' 'buy' %}?{% query_transform request %}">
+        {% trans 'купівля' %}
+    </a>
+</div>
+<h1>
+    {% if type_slug == 'all' %}
+        {% trans 'Оголошення в Словаччині' %}
+    {% elif type_slug == 'sell' %}
+        {% trans 'Оголошення про продаж товарів в Словаччині' %}
+    {% elif type_slug == 'buy' %}
+        {% trans 'Оголошення про купівлю товарів в Словаччині' %}
+    {% endif %}
+</h1>
+
+<button type="button" id="toggleFiltersBtn" class="toggle-filters-btn">
+    {% trans 'Відкрити фільтри' %}
+</button>
+
+<form method="get" id="filters" class="filters">
+
+    <input type="hidden" name="sort" value="{{ current_sort }}">
+    <input type="hidden" name="order" value="{{ current_order }}">
+    <input type="hidden" name="page" value="1">
+
+    <div class="filters-top">
+        <select name="city" class="ui-field type2">
+            <option value="">{% trans 'всі міста' %}</option>
+            {% for c in cities %}
+                <option value="{{ c }}" {% if filter_city == c %}selected{% endif %}>
+                    {{ c }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <input type="text"
+               name="search"
+               class="ui-field type1"
+               placeholder="{% trans 'пошук' %}"
+               value="{{ filter_search }}">
+
+        <div class="price-group">
+            <input type="number"
+                   name="price_from"
+                   class="ui-field type1"
+                   placeholder="{% trans 'ціна від' %}"
+                   value="{{ filter_price_from }}">
+
+            <input type="number"
+                   name="price_to"
+                   class="ui-field type1"
+                   placeholder="{% trans 'ціна до' %}"
+                   value="{{ filter_price_to }}">
+        </div>
+
+        <div class="ui-field type2">
+            <select name="source" class="custom-select">
+                <option value="" {% if not source %}selected{% endif %}>
+                    Всі джерела
+                </option>
+
+                <option value="pusto.sk" {% if source == 'pusto.sk' %}selected{% endif %}>
+                    pusto.sk
+                </option>
+
+                <option value="telegram" {% if source == 'telegram' %}selected{% endif %}>
+                    Telegram
+                </option>
+
+                <option value="bazos" {% if source == 'bazos' %}selected{% endif %}>
+                    Bazos
+                </option>
+            </select>
+        </div>
+        <!--
+        <select name="condition" class="ui-field type2">
+            <option value="">{% trans 'будь-який стан' %}</option>
+            {% for value, label in conditions %}
+                <option value="{{ value }}"
+                    {% if filter_condition == value %}selected{% endif %}>
+                    {{ label }}
+                </option>
+            {% endfor %}
+        </select>
+        --!>
+    </div>
+
+    <div class="category-badges">
+
+    <a href="?{% query_transform request category='' page=1 %}"
+       class="badge {% if not filter_category %}active{% endif %}">
+        {% trans 'Все' %}
+    </a>
+
+    {% for cat in categories %}
+        <a href="?{% query_transform request category=cat.slug page=1 %}"
+           class="badge {% if filter_category == cat.slug %}active{% endif %} {% if forloop.counter > 10 %}hidden-category{% endif %}">
+            {% if LANGUAGE_CODE == 'en' %}
+                {{ cat.title_en }}
+            {% elif LANGUAGE_CODE == 'sk' %}
+                {{ cat.title_sk }}
+            {% else %}
+                {{ cat.title_uk }}
+            {% endif %}
+        </a>
+    {% endfor %}
+
+    {% if categories|length > 10 %}
+        <button type="button" id="showAllCategories" class="badge">
+            Показать все
+        </button>
+    {% endif %}
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        {% trans 'застосувати' %}
+    </button>
+
+    <a href="{% url 'ads:things' 'all' %}" class="btn btn-ghost">
+        {% trans 'скинути' %}
+    </a>
+
+
+</form>
+
+<div id="sorting" class="sorting">
+  <span class="sorting__label">{% trans 'Сортировка' %}</span>
+  <div class="sorting__links">
+
+    {% if current_sort == 'date' and current_order == 'asc' %}
+        <a href="?{% query_transform request sort='date' order='desc' %}" class="active">
+            {% trans 'Дате ↑' %}
+        </a>
+    {% elif current_sort == 'date' and current_order == 'desc' %}
+        <a href="?{% query_transform request sort='date' order='asc' %}" class="active">
+            {% trans 'Дате ↓' %}
+        </a>
+    {% else %}
+        <a href="?{% query_transform request sort='date' order='desc' %}">
+            {% trans 'Дате' %}
+        </a>
+    {% endif %}
+    |
+
+    {% if current_sort == 'price' and current_order == 'asc' %}
+        <a href="?{% query_transform request sort='price' order='desc' %}" class="active">
+            {% trans 'Цене ↑' %}
+        </a>
+    {% elif current_sort == 'price' and current_order == 'desc' %}
+        <a href="?{% query_transform request sort='price' order='asc' %}" class="active">
+            {% trans 'Цене ↓' %}
+        </a>
+    {% else %}
+        <a href="?{% query_transform request sort='price' order='desc' %}">
+            {% trans 'Цене' %}
+        </a>
+    {% endif %}
+
+  </div>
+    <a href="{% if type_slug == 'all' %}
+                  {% url 'ads:things_add' 'sell' %}
+               {% else %}
+                  {% url 'ads:things_add' type_slug|default_if_none:'sell' %}
+               {% endif %}"
+         class="addPageBtn addPageBtn--primary">
+
+        <span>+ {% trans 'додати оголошення' %}</span>
+        <span class="addPageBtn__under">{% trans 'Без реєстрації та входу' %}</span>
+    </a>
+    <p class="count">{% trans 'знайдено' %} {{ count }} {% trans 'оголошень' %}</p>
+</div>
+
+<div id="catalog">
+    {% for i in base %}
+    {% if i.status == 'active' or user.is_staff %}
+    {% if i.caseType != 'other' %}
+        <div class="card-box">
+            {% if user.is_staff %}
+                <div class="admin-status-bar">
+                    <select class="status-select" data-id="{{ i.id }}" data-type="things">
+                        <option value="active" {% if i.status == "active" %}selected{% endif %}>
+                            {% trans 'Активно' %}
+                        </option>
+                        <option value="closed" {% if i.status == "closed" %}selected{% endif %}>
+                            {% trans 'Закрыто' %}
+                        </option>
+                    </select>
+                </div>
+            <div class="admin-category-bar">
+
+                <select
+                    class="admin-category-select"
+                    data-id="{{ i.id }}"
+                    data-type="things"
+                >
+                    <option value="">Категория</option>
+
+                    {% for cat in admin_categories %}
+                        <option
+                            value="{{ cat.id }}"
+                            {% if i.category_id == cat.id %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ cat.title_uk }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+            </div>
+    {% endif %}
+
+            <a class="card-link"
+                href="{% url 'ads:page' 'things' i.slug_title|default:'item' i.id %}">
+
+          <div class="pages">
+            <button
+              type="button"
+              class="favorite-btn js-fav-btn"
+              data-content-type="ThingsPost"
+              data-object-id="{{ i.id }}"
+              aria-label="{% trans 'Додати в обране' %}">
+              <span class="favorite-icon">♡</span>
+            </button>
+
+            <div class="card-media">
+              {% if i.private_status == 'top' %}
+                <div class="badge badge-warning badge-top-left">
+                  <span class="badge-icon">★</span>
+                  <span>TOP</span>
+                </div>
+              {% endif %}
+
+              {% if i.source %}
+                <div class="badge-top-left">
+                  <div class="badge badge-{{ i.source }}">
+                    <span class="badge-dot"></span>
+                    <span class="badge">{% trans 'Зібрано з ' %} {{ i.source }}</span>
+                  </div>
+                </div>
+              {% endif %}
+
+              <div class="badge-bottom-left">
+                  {% if i.user.verification_user %}
+                    <div class="badge badge-verified">
+                      <span class="badge-icon">✓</span>
+                      <span>{% trans 'верифікований' %}</span>
+                    </div>
+                  {% endif %}
+
+                  {% if i.user.verification_student %}
+                    <div class="badge badge-student">
+                      <span class="badge-icon">🎓</span>
+                      <span>{% trans 'студент' %}</span>
+                    </div>
+                  {% endif %}
+
+                  {% if i.condition %}
+                    <div class="badge badge-condition">
+                        <span class="badge-icon">✨</span>
+                        <span>стан {{ i.condition }}</span>
+                    </div>
+                  {% endif %}
+
+                  {% if i.user.verification_employer %}
+                    <div class="badge badge-employer">
+                      <span class="badge-icon">💼</span>
+                      <span>{% trans 'роботодавець' %}</span>
+                    </div>
+                  {% endif %}
+                  {% if i.created_at.date == today %}
+                      <div class="badge badge-hot">
+                        <span class="badge-icon">🔥</span>
+                        <span>{% trans 'нове' %}</span>
+                      </div>
+                  {% endif %}
+              </div>
+              {% if i.img_bazos %}
+                <img src="{{ i.img_bazos }}"alt="" class="image" loading="lazy" decoding="async">
+              {% elif i.first_image %}
+                <img src="{{ i.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
+              {% elif i.preview_image %}
+                <img src="/media/{{ i.preview_image }}" alt="" class="image" loading="lazy" decoding="async">
+              {% else %}
+                <img src="{% static 'ads/images/stub.png' %}" alt="" class="image" loading="lazy" decoding="async">
+              {% endif %}
+            </div>
+              {% get_current_language as LANGUAGE_CODE %}
+
+              {% if i.price != None %}
+                <h3 class="price">{{ i.price }} €</h3>
+
+                <h3 class="title False {{ LANGUAGE_CODE }}">
+                  {% if i.title == '<без текста>' %}
+                    {% trans 'текста нажаль немає(' %}
+                  {% else %}
+                    {% if LANGUAGE_CODE == 'sk' %}
+                      {{ i.title_sk|default:i.title }}
+                    {% elif LANGUAGE_CODE|slice:":2" == "en" %}
+                      {{ i.title_en|default:i.title }}
+                    {% else %}
+                      {{ i.title }}
+                    {% endif %}
+                  {% endif %}
+                </h3>
+
+              {% else %}
+
+                <h3 class="title {{ i.price }} {{ LANGUAGE_CODE }}">
+                  {% if i.title == '<без текста>' %}
+                    {% trans 'текста нажаль немає(' %}
+                  {% else %}
+                    {% if LANGUAGE_CODE == 'sk' %}
+                      {{ i.title_sk|default:i.title }}
+                    {% elif LANGUAGE_CODE|slice:":2" == "en" %}
+                      {{ i.title_en|default:i.title }}
+                    {% else %}
+                      {{ i.title }}
+                    {% endif %}
+                  {% endif %}
+                </h3>
+
+              {% endif %}
+
+              <h5 class="info {{ i.source }}">
+                {{ i.city }} - {{ i.created_at|date:"d F Y р. H:i" }}
+                <span class="freshness-dot" data-created="{{ i.created_at|date:'c' }}" title=""></span>
+              </h5>
+          </div>
+        </a>
+        </div>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+</div>
+
+{% if base.paginator.num_pages > 1 %}
+<div class="pagination">
+    {% for num in page_numbers %}
+        {% if num == base.number %}
+            <span class="current">{{ num }}</span>
+        {% else %}
+            <a href="?{% query_transform request page=num %}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+    ...
+</div>
+{% endif %}
+<script src="{% static 'ads/js/ClearNoneAdv.js' %}"></script>
+<script src="{% static 'ads/js/things.js' %}"></script>
+<script>
+const UPDATE_STATUS_BASE_URL = "{% url 'ads:update_ad_status' 'things' 0 %}";
+
+document.addEventListener("change", function(e) {
+    if (!e.target.classList.contains("status-select")) return;
+
+    const select = e.target;
+    const postId = select.dataset.id;
+    const adType = select.dataset.type;
+    const newStatus = select.value;
+
+    const url = UPDATE_STATUS_BASE_URL.replace(
+        "/things/0/",
+        `/${adType}/${postId}/`
+    );
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({
+            status: newStatus
+        })
+    })
+    .then(async res => {
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.error || "Request failed");
+        }
+
+        return data;
+    })
+    .then(data => {
+        console.log("updated:", data);
+
+        const card = select.closest(".card-box");
+
+        if (newStatus === "closed") {
+            card.classList.add("is-closed");
+        } else {
+            card.classList.remove("is-closed");
+        }
+    })
+    .catch(err => {
+        console.error("status update error:", err);
+    });
+});
+
+function getCookie(name) {
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(
+                    cookie.substring(name.length + 1)
+                );
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
+}
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("showAllCategories");
+
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".hidden-category").forEach(el => {
+            el.style.display = "inline-flex";
+        });
+
+        btn.remove();
+    });
+});
+
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {
+      "@type":"ListItem",
+      "position":1,
+      "name":"Головна",
+      "item":"https://pusto.sk/"
+    },
+    {
+      "@type":"ListItem",
+      "position":2,
+      "name":"Речі",
+      "item":"https://pusto.sk/{{ LANGUAGE_CODE }}/things/all/"
+    }
+
+    {% if filter_city %}
+    ,
+    {
+      "@type":"ListItem",
+      "position":3,
+      "name":"{{ filter_city }}",
+      "item":"{{ request.build_absolute_uri }}"
+    }
+    {% endif %}
+  ]
+}
+</script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("toggleFiltersBtn");
+    const filtersForm = document.getElementById("filters");
+
+    if (!toggleBtn || !filtersForm) return;
+
+    const openText = "{% trans 'Відкрити фільтри' %}";
+    const closeText = "{% trans 'Сховати фільтри' %}";
+
+    toggleBtn.addEventListener("click", () => {
+        const isOpen = filtersForm.classList.toggle("filters-open");
+        toggleBtn.textContent = isOpen ? closeText : openText;
+    });
+});
+</script>
+
+<script>
+function pluralize(n, one, few, many) {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod100 > 10 && mod100 < 20) return many;
+  if (mod10 === 1) return one;
+  if (mod10 > 1 && mod10 < 5) return few;
+  return many;
+}
+
+function formatFreshness(diffMin) {
+  if (diffMin < 1) return 'щойно';
+
+  if (diffMin < 60) {
+    const m = Math.floor(diffMin);
+    return `${m} ${pluralize(m, 'хвилину', 'хвилини', 'хвилин')} тому`;
+  }
+
+  if (diffMin < 1440) {
+    const h = Math.floor(diffMin / 60);
+    const m = Math.floor(diffMin % 60);
+    let str = `${h} ${pluralize(h, 'годину', 'години', 'годин')}`;
+    if (m > 0) str += ` ${m} ${pluralize(m, 'хвилину', 'хвилини', 'хвилин')}`;
+    return str + ' тому';
+  }
+
+  const d = Math.floor(diffMin / 1440);
+  const h = Math.floor((diffMin % 1440) / 60);
+  let str = `${d} ${pluralize(d, 'день', 'дні', 'днів')}`;
+  if (h > 0) str += ` ${h} ${pluralize(h, 'годину', 'години', 'годин')}`;
+  return str + ' тому';
+}
+
+function getFreshnessColor(diffMin) {
+  const hours = diffMin / 60;
+  const days = hours / 24;
+
+  if (hours < 1)  return '#97C459';
+  if (hours < 6)  return '#639922';
+  if (hours < 24) return '#3B6D11';
+  if (days < 3)   return '#FAC775';
+  if (days < 7)   return '#EF9F27';
+  if (days < 14)  return '#E24B4A';
+  return '#791F1F';
+}
+
+function applyFreshness() {
+  document.querySelectorAll('.freshness-dot').forEach(dot => {
+    const created = new Date(dot.dataset.created);
+
+    if (isNaN(created.getTime())) {
+      dot.style.background = '#791F1F';
+      dot.title = 'Дата невідома';
+      return;
+    }
+
+    const diffMin = (Date.now() - created.getTime()) / 60000;
+    dot.style.background = getFreshnessColor(diffMin);
+    dot.title = 'Опубліковано ' + formatFreshness(diffMin);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', applyFreshness);
+</script>
+{% endblock %}

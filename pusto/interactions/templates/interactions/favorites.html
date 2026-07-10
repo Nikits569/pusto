@@ -1,0 +1,505 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block favorites %}
+<title>{% trans 'мої обрані' %}</title>
+<link rel="stylesheet" href="{% static 'interactions/css/favorites.css' %}">
+
+<h1 class="fav-title">{% trans 'збережені оголошення' %}</h1>
+
+<div class="fav-page">
+
+  <!-- ===================== Речі ===================== -->
+  <section class="fav-section" data-section="ThingsPost">
+    <div class="fav-header">
+      <h2 class="fav-h2">{% trans 'речі' %}<span class="fav-count" data-count>(0)</span></h2>
+    </div>
+
+    <div class="fav-empty" data-empty>{% trans 'завантаження…' %}</div>
+
+    <div class="fav-slider" data-slider hidden>
+      <button class="fav-arrow fav-arrow--left" type="button" data-prev aria-label="Prev" style="display:none">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <div class="catalogFavorite catalogFavorite--center" data-track></div>
+
+      <button class="fav-arrow fav-arrow--right" type="button" data-next aria-label="Next" style="display:none">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path d="M9 6l6 6-6 6"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ===================== Проживання ===================== -->
+  <section class="fav-section" data-section="NeighborPost">
+    <div class="fav-header">
+      <h2 class="fav-h2">{% trans 'проживання' %}<span class="fav-count" data-count>(0)</span></h2>
+    </div>
+
+    <div class="fav-empty" data-empty>{% trans 'заванатження…' %}</div>
+
+    <div class="fav-slider" data-slider hidden>
+      <button class="fav-arrow fav-arrow--left" type="button" data-prev aria-label="Prev" style="display:none">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <div class="catalogFavorite catalogFavorite--center" data-track></div>
+
+      <button class="fav-arrow fav-arrow--right" type="button" data-next aria-label="Next" style="display:none">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path d="M9 6l6 6-6 6"
+                stroke="currentColor"
+                stroke-width="2"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ===================== Робота ===================== -->
+  <!--<section class="fav-section" data-section="JobPost"> -->
+  <!--  <div class="fav-header"> -->
+  <!--    <h2 class="fav-h2">{% trans '💼 робота / працівники' %}<span class="fav-count" data-count>(0)</span></h2> -->
+  <!--  </div> -->
+<!-- -->
+  <!--  <div class="fav-empty" data-empty>{% trans 'заванатження…' %}</div> -->
+<!-- -->
+  <!--  <div class="fav-slider" data-slider hidden> -->
+  <!--    <button class="fav-arrow fav-arrow--left" type="button" data-prev aria-label="Prev" style="display:none"> -->
+  <!--      <svg viewBox="0 0 24 24" width="24" height="24"> -->
+  <!--        <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/> -->
+  <!--      </svg> -->
+  <!--    </button> -->
+<!-- -->
+  <!--    <div class="catalogFavorite catalogFavorite--center" data-track></div> -->
+<!-- -->
+  <!--    <button class="fav-arrow fav-arrow--right" type="button" data-next aria-label="Next" style="display:none"> -->
+  <!--      <svg viewBox="0 0 24 24" width="24" height="24"> -->
+  <!--        <path d="M9 6l6 6-6 6" -->
+  <!--              stroke="currentColor" -->
+  <!--              stroke-width="2" -->
+  <!--              fill="none" -->
+  <!--              stroke-linecap="round" -->
+  <!--              stroke-linejoin="round"/> -->
+  <!--      </svg> -->
+  <!--    </button> -->
+  <!--  </div> -->
+  <!--</section> -->
+
+</div>
+
+<script>
+const GUEST_KEY = "guest_favorites_v1";
+const FALLBACK_IMAGE = "{% static 'ads/images/stub.png' %}";
+const RESOLVE_URL = "{% url 'resolve_favorites' %}";
+
+function getCookieRaw(name) {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = document.cookie.match(
+    new RegExp("(^|;\\s*)" + escaped + "=([^;]*)")
+  );
+  return match ? match[2] : null;
+}
+
+function getCookie(name) {
+  const raw = getCookieRaw(name);
+  return raw ? decodeURIComponent(raw) : null;
+}
+
+function setCookie(name, value, days = 365) {
+  const d = new Date();
+  d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie =
+    `${name}=${encodeURIComponent(value)}; path=/; expires=${d.toUTCString()}; SameSite=Lax`;
+}
+
+function loadGuestFavs() {
+  try {
+    const rawCookie = getCookieRaw(GUEST_KEY);
+    if (rawCookie) {
+      return JSON.parse(decodeURIComponent(rawCookie));
+    }
+  } catch (e) {
+    console.error("Cookie parse error:", e);
+  }
+
+  try {
+    const rawLs = localStorage.getItem(GUEST_KEY);
+    return rawLs ? JSON.parse(rawLs) : {};
+  } catch (e) {
+    console.error("localStorage parse error:", e);
+    return {};
+  }
+}
+
+function saveGuestFavs(data) {
+  try {
+    const json = JSON.stringify(data);
+    setCookie(GUEST_KEY, json);
+    localStorage.setItem(GUEST_KEY, json);
+  } catch (e) {
+    console.error("Favorites save error:", e);
+  }
+}
+
+function normalizeFavsShape(data) {
+  if (!data || typeof data !== "object") return {};
+
+  ["ThingsPost", "NeighborPost", "JobPost"].forEach((key) => {
+    if (!Array.isArray(data[key])) {
+      data[key] = [];
+    }
+
+    data[key] = data[key]
+      .map((v) => Number(v))
+      .filter((v) => Number.isInteger(v));
+  });
+
+  return data;
+}
+
+function removeGuestFavorite(contentType, objectId) {
+  const data = normalizeFavsShape(loadGuestFavs());
+  const arr = Array.isArray(data[contentType]) ? data[contentType] : [];
+  const idx = arr.indexOf(objectId);
+
+  if (idx !== -1) {
+    arr.splice(idx, 1);
+  }
+
+  data[contentType] = arr.slice(-200);
+  saveGuestFavs(data);
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function initSliders() {
+  document.querySelectorAll("[data-slider]").forEach((slider) => {
+    const track = slider.querySelector("[data-track]");
+    const prev = slider.querySelector("[data-prev]");
+    const next = slider.querySelector("[data-next]");
+
+    if (!track || !prev || !next) return;
+
+    function step() {
+      const card = track.querySelector(".pages");
+      return card ? card.offsetWidth + 16 : 240;
+    }
+
+    prev.onclick = () => {
+      track.scrollBy({ left: -step(), behavior: "smooth" });
+    };
+
+    next.onclick = () => {
+      track.scrollBy({ left: step(), behavior: "smooth" });
+    };
+  });
+}
+
+function updateSectionUI(section, count) {
+  const countEl = section.querySelector("[data-count]");
+  const slider = section.querySelector("[data-slider]");
+  const empty = section.querySelector("[data-empty]");
+  const prev = section.querySelector("[data-prev]");
+  const next = section.querySelector("[data-next]");
+  const catalog = section.querySelector(".catalogFavorite");
+
+  if (countEl) {
+    countEl.textContent = `(${count})`;
+  }
+
+  if (catalog) {
+    catalog.classList.toggle("catalogFavorite--center", count <= 5);
+  }
+
+  if (prev && next) {
+    const showArrows = count > 5;
+    prev.style.display = showArrows ? "" : "none";
+    next.style.display = showArrows ? "" : "none";
+  }
+
+  if (count === 0) {
+    if (empty) {
+      empty.hidden = false;
+      empty.textContent = "{% trans 'Поки нічого немає' %}";
+    }
+    if (slider) {
+      slider.hidden = true;
+    }
+  } else {
+    if (empty) {
+      empty.hidden = true;
+    }
+    if (slider) {
+      slider.hidden = false;
+    }
+  }
+}
+
+function makeCardHTML(item, ctype) {
+  const img = escapeHtml(
+    item.preview_image_path
+      ? `/media/${item.preview_image_path}`
+      : (item.first_image_url || FALLBACK_IMAGE)
+  );
+
+  const url = escapeHtml(item.page_url || "#");
+  const title = escapeHtml(item.title || "");
+  const city = escapeHtml(item.city || "");
+  const createdAt = escapeHtml(item.created_at || "");
+
+  const badgesTop = item.source_telegram ? `
+    <div class="badge-top-left">
+      <div class="badge badge-telegram">
+        <span class="badge-dot"></span>
+        <span>{% trans 'зібрано з Telegram' %}</span>
+      </div>
+    </div>
+  ` : "";
+
+  const badgesBottom = `
+    <div class="badge-bottom-left">
+      ${item.user?.verification_user ? `
+        <div class="badge badge-verified">
+          <span class="badge-icon">✓</span>
+          <span>{% trans 'верифікований' %}</span>
+        </div>` : ""}
+
+      ${item.user?.verification_student ? `
+        <div class="badge badge-student">
+          <span class="badge-icon">🎓</span>
+          <span>{% trans 'студент' %}</span>
+        </div>` : ""}
+
+      ${item.user?.verification_employer ? `
+        <div class="badge badge-employer">
+          <span class="badge-icon">💼</span>
+          <span>{% trans 'роботодавець' %}</span>
+        </div>` : ""}
+    </div>
+  `;
+
+  let price = "";
+  if (ctype === "ThingsPost" && item.price) {
+    price = `<h3 class="price">${escapeHtml(item.price)} €</h3>`;
+  } else if (ctype === "NeighborPost" && item.budget) {
+    price = `<h3 class="price">${escapeHtml(item.budget)} €</h3>`;
+  } else if (ctype === "JobPost" && item.salary_from) {
+    price = `<h3 class="price">
+      ${escapeHtml(item.salary_from)}${item.salary_to ? " – " + escapeHtml(item.salary_to) : ""} €
+    </h3>`;
+  }
+
+  return `
+    <a class="card-link" href="${url}">
+      <div class="pages" data-content-type="${ctype}" data-object-id="${item.id}">
+        <button
+          type="button"
+          class="favorite-btn js-fav-btn is-active"
+          data-content-type="${ctype}"
+          data-object-id="${item.id}"
+          aria-label="{% trans 'Видалити з обраного' %}">
+          <span class="favorite-icon">♥</span>
+        </button>
+
+        <div class="card-media">
+          ${badgesTop}
+          ${badgesBottom}
+          <img src="${img}" class="image" loading="lazy" decoding="async" alt="${title}" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+        </div>
+
+        <div class="price-wrap">
+          ${!item.source_telegram ? price : ""}
+        </div>
+
+        <h3 class="title${item.source_telegram === true ? " True" : ""}">
+          ${title}
+        </h3>
+
+        <h5 class="info${item.source_telegram === true ? " True" : ""}">
+          ${city}${city && createdAt ? " - " : ""}${createdAt}
+        </h5>
+      </div>
+    </a>
+  `;
+}
+
+function setLoadingState() {
+  document.querySelectorAll("[data-section]").forEach((section) => {
+    const slider = section.querySelector("[data-slider]");
+    const empty = section.querySelector("[data-empty]");
+    const countEl = section.querySelector("[data-count]");
+    const track = section.querySelector("[data-track]");
+
+    if (countEl) countEl.textContent = "(0)";
+    if (track) track.innerHTML = "";
+
+    if (empty) {
+      empty.hidden = false;
+      empty.textContent = "{% trans 'Завантаження…' %}";
+    }
+
+    if (slider) {
+      slider.hidden = true;
+    }
+  });
+}
+
+function setErrorState() {
+  document.querySelectorAll("[data-section]").forEach((section) => {
+    const empty = section.querySelector("[data-empty]");
+    const slider = section.querySelector("[data-slider]");
+    const track = section.querySelector("[data-track]");
+    const countEl = section.querySelector("[data-count]");
+
+    if (track) track.innerHTML = "";
+    if (countEl) countEl.textContent = "(0)";
+
+    if (empty) {
+      empty.hidden = false;
+      empty.textContent = "{% trans 'Не вдалося завантажити обране' %}";
+    }
+
+    if (slider) {
+      slider.hidden = true;
+    }
+  });
+}
+
+async function renderGuestFavorites() {
+  const items = normalizeFavsShape(loadGuestFavs());
+
+  setLoadingState();
+
+  const hasAny = Object.values(items).some(
+    (arr) => Array.isArray(arr) && arr.length > 0
+  );
+
+  if (!hasAny) {
+    document.querySelectorAll("[data-section]").forEach((section) => {
+      const track = section.querySelector("[data-track]");
+      if (track) track.innerHTML = "";
+      updateSectionUI(section, 0);
+    });
+    return;
+  }
+
+  let res;
+  try {
+    res = await fetch(RESOLVE_URL, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: JSON.stringify({ items })
+    });
+  } catch (e) {
+    console.error("Favorites fetch error:", e);
+    setErrorState();
+    return;
+  }
+
+  if (!res.ok) {
+    console.error("Favorites HTTP error:", res.status);
+    setErrorState();
+    return;
+  }
+
+  let json;
+  try {
+    json = await res.json();
+  } catch (e) {
+    console.error("Favorites JSON error:", e);
+    setErrorState();
+    return;
+  }
+
+  if (!json.ok) {
+    console.error("Favorites backend error:", json);
+    setErrorState();
+    return;
+  }
+
+  const data = json.data || {};
+
+  document.querySelectorAll("[data-section]").forEach((section) => {
+    const ctype = section.dataset.section;
+    const track = section.querySelector("[data-track]");
+    if (!track) return;
+
+    const arr = Array.isArray(data[ctype]) ? data[ctype] : [];
+    track.innerHTML = arr.map((item) => makeCardHTML(item, ctype)).join("");
+    updateSectionUI(section, arr.length);
+  });
+
+  initSliders();
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".js-fav-btn");
+  if (!btn) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const ctype = btn.dataset.contentType;
+  const objectId = Number(btn.dataset.objectId);
+
+  if (!ctype || !Number.isInteger(objectId)) {
+    console.warn("Invalid favorite remove data:", btn);
+    return;
+  }
+
+  removeGuestFavorite(ctype, objectId);
+
+  const card = btn.closest(".card-link");
+  const section = btn.closest("[data-section]");
+  const track = section ? section.querySelector("[data-track]") : null;
+
+  if (!card) return;
+
+  card.style.opacity = "0";
+  card.style.transform = "scale(.98)";
+  card.style.transition = "all .15s ease";
+
+  setTimeout(() => {
+    card.remove();
+
+    if (!section || !track) return;
+
+    const cardsLeft = track.querySelectorAll(".pages").length;
+    updateSectionUI(section, cardsLeft);
+  }, 150);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSliders();
+  renderGuestFavorites();
+});
+</script>
+
+{% endblock %}

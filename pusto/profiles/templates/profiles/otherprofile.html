@@ -1,0 +1,246 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block otherProfile %}
+
+<title>{% trans 'профіль користувача' %}</title>
+<link type="text/css" href="{% static 'profiles/css/myprofile.css' %}" rel="stylesheet" />
+
+<div>
+    <div class="tg-link-box">
+        <div class="profile">
+            <div class="firstBlock">
+                {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" class="avatar">
+                {% else %}
+                    <img src="{% static 'profiles/images/stub.png' %}" class="avatar">
+                {% endif %}
+            </div>
+            <div class="secondBlock">
+
+                <div class="profileTop">
+                    <h3 class="name">{{ user.last_name }} {{ user.first_name }}</h3>
+                    <h3 class="cityDate">{% trans 'на платформі з' %} {{ user.created_at }} · {{ user.city }}</h3>
+
+                </div>
+                <div class="profileBottom">
+                    <div class="verification">
+                        {% if user.verification_email %}
+                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
+                        {% else %}
+                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
+                        {% endif %}
+                        <h5>{% trans 'email веріфікован' %}</h5>
+                    </div>
+                    <div class="verification">
+                        {% if user.verification_user %}
+                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
+                        {% else %}
+                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
+                        {% endif %}
+                        <h5>{% trans 'перевірений користувач' %}</h5>
+                    </div>
+                    <div class="verification">
+                        {% if user.verification_student %}
+                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
+                        {% else %}
+                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
+                        {% endif %}
+                        <h5>{% trans 'перевірений студент' %}</h5>
+                    </div>
+                    <div class="verification">
+                        {% if user.verification_employer %}
+                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
+                        {% else %}
+                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
+                        {% endif %}
+                        <h5>{% trans 'перевірений роботодавець' %}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="thirdBlock">
+                <a class="share">{% trans 'поділитися профілем' %}</a>
+                <a class="write">{% trans 'написати' %}</a>
+            </div>
+        </div>
+
+        <div style="opacity: 0; display: none;">
+            <h3>{% trans "Прив'язка Telegram" %}</h3>
+
+            <p>
+                {% trans 'скопіюйте цей код і відправте його боту в Telegram' %}
+            </p>
+            <div class="tg-code">
+                {{ tg_code }}
+            </div>
+
+            <p class="tg-hint">
+                {% trans 'код діє до' %} {{ tg_code_expires|date:"H:i" }}
+            </p>
+
+            <a href="https://t.me/YourBotName" target="_blank" class="tg-btn">
+                {% trans 'відкрити Telegram-бота' %}
+
+            </a>
+        </div>
+    </div>
+
+
+</div>
+
+<div id="adv" class="fav-page">
+  <h1 class="fav-title">{% trans 'всі оголошення' %}</h1>
+
+  {% if all_posts %}
+    <section class="fav-section" data-section="MyPosts">
+      <div class="fav-header">
+        <h2 class="fav-h2">{% trans 'всі оголошення' %}<span class="fav-count">({{ all_posts|length }})</span></h2>
+      </div>
+
+      <div class="fav-empty" hidden></div>
+
+      <div class="fav-slider" data-slider>
+        {% if all_posts|length > 5 %}
+          <button class="fav-arrow fav-arrow--left" type="button" data-prev aria-label="Prev">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </button>
+        {% else %}
+          <button class="fav-arrow fav-arrow--left" type="button" data-prev aria-label="Prev" style="display:none">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </button>
+        {% endif %}
+
+        <div class="catalogFavorite {% if all_posts|length <= 5 %}catalogFavorite--center{% endif %}" data-track>
+          {% for post in all_posts %}
+            <div class="pages">
+                {% if post.preview_image %}
+                  <img src="/media/{{ post.preview_image }}" class="image" loading="lazy" decoding="async">
+                {% elif post.first_image %}
+                  <img src="{{ post.first_image.image.url }}" class="image" loading="lazy" decoding="async">
+                {% else %}
+                  <img src="{% static 'ads/images/stub.png' %}" class="image" loading="lazy" decoding="async">
+                {% endif %}
+
+              <a class="card-overlay" href="{% url 'ads:page' post.type_key post.slug_title post.id %}"></a>
+
+              {% if post.source_telegram %}
+                <div class="takeTelegram">
+                  <p>{% trans 'зібрано з Telegram' %}</p>
+                </div>
+              {% endif %}
+
+                {% get_current_language as LANGUAGE_CODE %}
+                
+                {% if post.source_telegram %}
+                  <h3 class="price">
+                    {% if LANGUAGE_CODE == "en" %}
+                      {{ post.title_en|default:post.text|default:post.title }}
+                    {% else %}
+                      {{ post.text|default:post.title }}
+                    {% endif %}
+                  </h3>
+                {% else %}
+                  <div class="price">
+                    {% if post.price %}
+                      {{ post.price }} €
+                    {% elif post.budget %}
+                      {{ post.budget }} €
+                    {% elif post.salary_from %}
+                      {{ post.salary_from }}{% if post.salary_to %} – {{ post.salary_to }}{% endif %} €
+                    {% else %}
+                      {{ post.type_name }}
+                    {% endif %}
+                  </div>
+                
+                  <h3 class="title">
+                    {% if LANGUAGE_CODE == "en" %}
+                      {{ post.title_en|default:post.text|default:post.title }}
+                    {% else %}
+                      {{ post.text|default:post.title }}
+                    {% endif %}
+                  </h3>
+                {% endif %}
+
+              <div class="info">
+                {{ post.created_at|date:"d.m.Y H:i" }}
+              </div>
+
+            </div>
+          {% endfor %}
+        </div>
+
+        {% if all_posts|length > 5 %}
+          <button class="fav-arrow fav-arrow--right" type="button" data-next aria-label="Next">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M9 6l6 6-6 6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% else %}
+          <button class="fav-arrow fav-arrow--right" type="button" data-next aria-label="Next" style="display:none">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M9 6l6 6-6 6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
+      </div>
+    </section>
+  {% else %}
+    <div class="fav-empty">{% trans 'У користувача немає оголошень' %}</div>
+  {% endif %}
+</div>
+
+<script src="{% static 'profiles/js/copyText.js' %}"></script>
+<script>
+function initSliders(){
+  document.querySelectorAll("[data-slider]").forEach(slider=>{
+    const track = slider.querySelector("[data-track]");
+    const prev  = slider.querySelector("[data-prev]");
+    const next  = slider.querySelector("[data-next]");
+    if(!track || !prev || !next) return;
+
+    function step(){
+      const card = track.querySelector(".pages");
+      return card ? card.offsetWidth + 16 : 240;
+    }
+
+    prev.onclick = ()=>track.scrollBy({left:-step(),behavior:"smooth"});
+    next.onclick = ()=>track.scrollBy({left: step(),behavior:"smooth"});
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSliders();
+});
+</script>
+<script>
+const shareBtn = document.querySelector('.share');
+
+shareBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const url = window.location.href; // или своя ссылка
+
+    try {
+        await navigator.clipboard.writeText(url);
+        alert('{% trans "Ссылка скопирована!" %}');
+    } catch (err) {
+        console.error('Ошибка копирования:', err);
+    }
+});
+</script>
+{% endblock %}

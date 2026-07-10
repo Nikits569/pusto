@@ -1,0 +1,29 @@
+{% extends 'pusto/head.html' %}
+
+{% block select_payment %}
+<h2>Stripe debug: Pending #{{ pending.id }}</h2>
+
+<p>
+  User: {{ pending.user }}<br>
+  Type: {{ pending.ad_type }}<br>
+  Intent: {{ pending.payment_intent_id }}<br>
+  Duration: {{ pending.duration_days }} дней
+</p>
+
+<hr>
+
+<h3>Webhook events</h3>
+<ul>
+  {% for e in events %}
+    <li>
+      <b>{{ e.created_at }}</b> — {{ e.event_type }} —
+      status: {{ e.status }} —
+      intent: {{ e.payment_intent_id }} —
+      amount: {{ e.amount }} —
+      capturable: {{ e.amount_capturable }}
+    </li>
+  {% empty %}
+    <li>Событий пока нет.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

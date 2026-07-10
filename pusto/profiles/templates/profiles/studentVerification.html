@@ -1,0 +1,47 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block studentVerification %}
+<link rel="stylesheet" href="{% static 'profiles/css/studentVerification.css' %}">
+<title>{% trans 'верифікація студента' %}</title>
+<section class="student-verification">
+    <div class="student-card">
+        <div class="student-card__icon">🎓</div>
+
+        <h1 class="student-card__title">{% trans 'верифікація студента' %}</h1>
+
+        <p class="student-card__text">
+            {% trans 'введіть свою студентську електронну пошту, щоб підтвердити статус студента.' %}
+        </p>
+
+        <form method="post" class="student-form">
+            {% csrf_token %}
+
+            <div class="student-form__group">
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="student-form__error">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="student-form__group">
+                {{ form.captcha }}
+                {% if form.captcha.errors %}
+                    <div class="student-form__error">{{ form.captcha.errors }}</div>
+                {% endif %}
+            </div>
+
+            {% if form.non_field_errors %}
+                <div class="student-form__error student-form__error--main">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <button type="submit" class="student-form__button">
+                {% trans 'відправити лист' %}
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

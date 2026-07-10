@@ -1,0 +1,551 @@
+/* ================= Layout ================= */
+
+.adpay {
+    margin-top: 80px;
+}
+
+.adpay__form{
+  max-width: 620px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.titles_adv{
+  margin: 18px 0 24px;
+  text-align: center;
+}
+
+.title_adv{
+  font-size: 30px;
+  font-weight: 650;
+  margin: 0;
+}
+
+.subtitle_adv{
+  font-size: 13px;
+  opacity: 0.7;
+  margin-top: 15px;
+  font-weight: 400;
+}
+
+.subprice_adv {
+  font-size: 18px;
+  opacity: 0.85;
+  font-weight: 600;
+  line-height: 10px;
+  margin-top: 6px;
+}
+
+
+/* ================= Inputs ================= */
+
+#id_title,
+#id_link{
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 52px;
+  padding: 0 14px;
+
+  border: 1px solid rgba(17,24,39,0.08);
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.75);
+  color: #111827;
+  font-size: 16px;
+
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+#id_title::placeholder,
+#id_link::placeholder{
+  color: rgba(17,24,39,0.28);
+}
+
+#id_title:focus,
+#id_link:focus{
+  background: rgba(255,255,255,0.95);
+  border-color: rgba(17,24,39,0.16);
+}
+
+/* autofill fix */
+#id_title:-webkit-autofill,
+#id_link:-webkit-autofill{
+  -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0.95) inset !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+
+
+/* ================= Upload ================= */
+
+.upload{
+  display: flex;
+  flex-direction: column; /* ключевое */
+  gap: 12px;
+}
+
+/* полностью скрываем file input */
+.upload input[type="file"]{
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* зона выбора */
+.upload__area{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  flex-wrap: wrap; /* чтобы не вылазило */
+
+  padding: 16px 18px;
+
+  border: 1px solid rgba(17,24,39,0.10);
+  border-radius: 14px;
+
+  background: rgba(255,255,255,0.75);
+  cursor: pointer;
+
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.upload__area:hover{
+  border-color: rgba(17,24,39,0.18);
+  background: rgba(255,255,255,0.95);
+}
+
+.upload__area.is-selected{
+  border-color: rgba(32,43,108,0.35);
+}
+
+/* левый блок */
+.upload__text{
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.upload__title{
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.upload__hint{
+  font-size: 12px;
+  color: rgba(17,24,39,0.55);
+  margin-top: 4px;
+}
+
+/* правый блок */
+.upload__meta{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  margin-left: auto;
+}
+
+.upload__filename{
+  font-size: 12px;
+  color: rgba(17,24,39,0.55);
+
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upload__btn{
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 12px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(17,24,39,0.10);
+  background: rgba(249,250,251,0.9);
+  color: #111827;
+}
+
+/* мобильный перенос */
+@media (max-width: 520px){
+  .upload__meta{
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .upload__filename{
+    max-width: 65%;
+  }
+}
+
+
+/* ================= Preview (общие стили) ================= */
+
+.previewHead{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.example_adv{
+  font-size: 12px;
+  opacity: 0.55;
+}
+
+.previewSize{
+  font-size: 12px;
+  color: rgba(17,24,39,0.45);
+}
+
+.uploadPreview{
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.75);
+  border: 1px solid rgba(17,24,39,0.08);
+}
+
+.uploadPreview img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* ================= Формат: Banner ================= */
+
+.uploadField--banner .uploadPreview{
+  aspect-ratio: 1920 / 180;
+}
+
+
+/* ================= Формат: Post ================= */
+.uploadField--post .postPreviewRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    overflow: hidden;    /* обязательно для обрезки */
+}
+
+.uploadField--post .postPreviewBox {
+    width: 147px;
+    height: 200px;
+    border-radius: 14px;
+}
+
+.uploadField--post #imgPreview, .imgPreviewExample {
+    width: 100%;   /* уменьшенное окно превью */
+    height: 147px;
+    display: inline-block;
+    object-fit: cover;   /* ключевая строка */
+    border-radius: 10px 10px 0 0;
+}
+
+
+.uploadField--post .postPrviewExample {
+    width: 147px;
+    height: 200px;
+    border-radius: 14px;
+    display: inline-block;
+}
+
+.uploadField--post .postPreviewTitle {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+.uploadField--post .postPreviewTitle adv {
+    font-weight: 900;
+}
+
+
+.uploadField--post .postPreviewPrice {
+    font-size: 10px;
+
+}
+
+/* ================= Button ================= */
+
+.send_ad{
+    height: 48px;
+    width: 100%;
+    border-radius: 14px;
+    background-color: #202B6C;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: opacity 120ms ease;
+}
+
+.send_ad:hover{
+  opacity: 0.92;
+}
+
+/* ================= Responsive ================= */
+
+@media (max-width: 900px) {
+  .adpay {
+    margin-top: 56px;
+  }
+
+  .adpay__form {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
+  .titles_adv {
+    margin: 14px 0 22px;
+  }
+
+  .title_adv {
+    font-size: 27px;
+  }
+
+  .subtitle_adv {
+    font-size: 13px;
+    margin-top: 12px;
+    line-height: 1.45;
+  }
+
+  .subprice_adv {
+    font-size: 17px;
+    line-height: 1.3;
+  }
+
+  .upload__area {
+    padding: 14px 16px;
+  }
+
+  .uploadField--post .postPreviewRow {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .adpay {
+    margin-top: 42px;
+  }
+
+  .adpay__form {
+    gap: 14px;
+    padding: 0 14px;
+  }
+
+  .title_adv {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+
+  .subtitle_adv {
+    font-size: 12px;
+    margin-top: 10px;
+  }
+
+  .subprice_adv {
+    font-size: 16px;
+    margin-top: 8px;
+  }
+
+  #id_title,
+  #id_link {
+    height: 48px;
+    font-size: 15px;
+    border-radius: 12px;
+    padding: 0 12px;
+  }
+
+  .upload__area {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .upload__text {
+    flex: 1 1 100%;
+  }
+
+  .upload__meta {
+    width: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+  }
+
+  .upload__filename {
+    max-width: 70%;
+  }
+
+  .upload__btn {
+    font-size: 12px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+
+  .previewHead {
+    gap: 10px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .example_adv,
+  .previewSize {
+    font-size: 11px;
+  }
+
+  .uploadPreview {
+    border-radius: 12px;
+  }
+
+  .uploadField--post .postPreviewRow {
+    gap: 10px;
+    justify-content: flex-start;
+  }
+
+  .uploadField--post .postPreviewBox,
+  .uploadField--post .postPrviewExample {
+    width: calc(50% - 5px);
+    height: auto;
+    min-height: 190px;
+  }
+
+  .uploadField--post #imgPreview,
+  .imgPreviewExample {
+    width: 100%;
+    height: 150px;
+  }
+
+  .uploadField--post .postPreviewTitle {
+    font-size: 11px;
+    line-height: 1.35;
+    padding-right: 4px;
+  }
+
+  .uploadField--post .postPreviewPrice {
+    font-size: 10px;
+  }
+
+  .send_ad {
+    height: 46px;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 520px) {
+  .adpay {
+    margin-top: 30px;
+  }
+
+  .adpay__form {
+    padding: 0 12px;
+    gap: 12px;
+  }
+
+  .titles_adv {
+    margin: 10px 0 18px;
+  }
+
+  .title_adv {
+    font-size: 21px;
+  }
+
+  .subtitle_adv {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 10px;
+  }
+
+  .subprice_adv {
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  #id_title,
+  #id_link {
+    height: 46px;
+    font-size: 14px;
+    padding: 0 11px;
+  }
+
+  .upload__area {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .upload__title {
+    font-size: 13px;
+  }
+
+  .upload__hint {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .upload__meta {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .upload__filename {
+    max-width: 60%;
+    font-size: 11px;
+  }
+
+  .upload__btn {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .previewHead {
+    margin-top: 2px;
+  }
+
+  .uploadField--banner .uploadPreview {
+    aspect-ratio: 16 / 4;
+  }
+
+  .uploadField--post .postPreviewRow {
+    gap: 8px;
+  }
+
+  .uploadField--post .postPreviewBox,
+  .uploadField--post .postPrviewExample {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .uploadField--post #imgPreview,
+  .imgPreviewExample {
+    height: 170px;
+  }
+
+  .uploadField--post .postPreviewTitle {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+
+  .uploadField--post .postPreviewPrice {
+    font-size: 11px;
+  }
+
+  .send_ad {
+    height: 44px;
+    font-size: 14px;
+  }
+}

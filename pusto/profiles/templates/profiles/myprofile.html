@@ -1,0 +1,700 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block myProfile %}
+
+<title>{% trans 'мій профіль' %}</title>
+<link type="text/css" href="{% static 'profiles/css/myprofile.css' %}" rel="stylesheet" />
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const contactModal = document.getElementById('contactModal');
+    const selectedDuration = document.getElementById('selectedDuration');
+    const telegramLink = document.getElementById('telegramContactLink');
+
+    document.addEventListener('submit', function(e) {
+
+        const form = e.target.closest('.topup-card');
+
+        if (!form) return;
+
+        e.preventDefault();
+
+        const duration = form.dataset.duration || '';
+
+        selectedDuration.textContent = duration + ' днів';
+
+        const text = encodeURIComponent(
+            `Хочу просунути оголошення на ${duration} днів`
+        );
+
+        telegramLink.href =
+            `https://t.me/SKpusto?text=${text}`;
+
+        contactModal.classList.add('is-active');
+    });
+
+    document.getElementById('closeContactModal')
+        .addEventListener('click', function() {
+            contactModal.classList.remove('is-active');
+        });
+
+    document.querySelector('.contact-modal__overlay')
+        .addEventListener('click', function() {
+            contactModal.classList.remove('is-active');
+        });
+
+});
+</script>
+<div>
+    <div class="tg-link-box">
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <span class="main" style="font-weight:600;">{% trans "код прив'язки Telegram:" %}</span>
+
+            <span
+                    class="other"
+                    id="tgCodeBtn"
+                    data-url="{% url 'profiles:regenerate_tg_code' %}">
+                {{ tg_code }}
+            </span>
+
+            <button type="button" id="regenerateBtn">
+                {% trans 'згенерувати заново' %}
+            </button>
+        </div>
+
+        <div  style="margin-top:10px;">
+            <span class="other">{% trans 'діє до:' %}</span>
+            <span class="other">{{ tg_code_expires|date:"d.m.Y H:i:s" }}</span>
+        </div>
+    </div>
+    <div class="tg-link-box">
+        <div class="profile">
+            <div class="firstBlock">
+                {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" class="avatar">
+                {% else %}
+                    <img src="{% static 'profiles/images/stub.png' %}" class="avatar">
+                {% endif %}
+            </div>
+            <div class="secondBlock">
+
+                <div class="profileTop">
+                    <h3 class="name">{{ user.last_name }} {{ user.first_name }}</h3>
+                    <h3 class="cityDate">{% trans 'на платформі з' %} {{ user.created_at }} · {{ user.city }}</h3>
+
+                </div>
+                <div class="profileBottom">
+                    <div class="verification">
+                        {% if user.verification_email %}
+                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
+                        {% else %}
+                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
+                        {% endif %}
+                        <h5>{% trans 'email веріфікован' %}</h5>
+                    </div>
+                    <div class="verification">
+                        {% if user.verification_user %}
+                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
+                        {% else %}
+                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
+                        {% endif %}
+                        <h5>{% trans 'перевірений користувач' %}</h5>
+                    </div>
+                    <div class="verification">
+                        {% if user.verification_student %}
+                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
+                        {% else %}
+                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
+                        {% endif %}
+                        <h5>{% trans 'перевірений студент' %}</h5>
+                    </div>
+                    <div class="verification">
+                        {% if user.verification_employer %}
+                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
+                        {% else %}
+                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
+                        {% endif %}
+                        <h5>{% trans 'перевірений роботодавець' %}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="thirdBlock">
+                <a class="share" data-user-id="{{ user.id }}">{% trans 'поділитися профілем' %}</a>
+                <a class="exit" href="{% url 'logout' %}">{% trans 'вийти з аккаунту' %}</a>
+            </div>
+        </div>
+
+        <div style="opacity: 0; display: none;">
+            <h3>{% trans "Прив'язка Telegram" %}</h3>
+
+            <p>
+                {% trans 'Скопіюйте цей код і відправте його боту в Telegram:' %}
+            </p>
+            <div class="tg-code">
+                {{ tg_code }}
+            </div>
+
+            <p class="tg-hint">
+                {% trans 'Код діє до' %} {{ tg_code_expires|date:"H:i" }}
+            </p>
+
+            <a href="https://t.me/YourBotName" target="_blank" class="tg-btn">
+                {% trans 'Відкрити Telegram-бота' %}
+            </a>
+        </div>
+        <div class="underLink">
+            <form method="post" action="{% url 'profiles:claim_posts_by_email' %}">
+                {% csrf_token %}
+                <button type="submit">
+                    {% trans 'відновити оголошення за email' %}
+                </button>
+            </form>
+
+            <button type="button" onclick="openModal()">
+                {% trans 'змінити профіль' %}
+            </button>
+
+            <button type="button" onclick="openVerifyModal()">
+                {% trans 'пройти верифікацію' %}
+            </button>
+
+            <button type="button" onclick="openAdsModal()">
+                {% trans 'купити рекламу' %}
+            </button>
+        </div>
+
+        <div id="profileModal" class="modal">
+            <div class="modal-content profile-modal">
+                <span class="close" onclick="closeModal()">&times;</span>
+
+                <div class="profile-modal-header">
+                    <h2>{% trans 'редагування профілю' %}</h2>
+                    <p>{% trans 'оновіть основну інформацію вашого профілю' %}</p>
+                </div>
+
+                <form method="post" enctype="multipart/form-data" class="profile-form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <div class="profile-form-actions">
+                        <button type="submit" name="edit_profile" class="save-btn">
+                            {% trans 'зберегти зміни' %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+        <div id="verifyModal" class="modal">
+            <div class="modal-content verify-modal">
+                <span class="close" onclick="closeVerifyModal()">&times;</span>
+
+                <h2>{% trans 'Верифікація' %}</h2>
+                <p class="subtitle">{% trans 'оберіть тип верифікації' %}</p>
+
+                <div class="verify-options">
+
+                    <div class="verify-card">
+                        <h3>{% trans '👤 користувач' %}</h3>
+                        <p>{% trans 'підтвердження особистого профілю' %}</p>
+                        <a href="{% url 'profiles:UserVerificationForm' %}" class="btn">
+                            {% trans 'пройти' %}
+                        </a>
+                    </div>
+
+                    <div class="verify-card">
+                        <h3>{% trans '🎓 студент' %}</h3>
+                        <p>{% trans 'підтвердження студентського статусу' %}</p>
+                        <a href="{% url 'profiles:StudentVerificationForm' %}" class="btn">
+                            {% trans 'пройти' %}
+                        </a>
+                    </div>
+
+                    <div class="verify-card">
+                        <h3>{% trans '💼 роботодавець' %}</h3>
+                        <p>{% trans 'підтвердження компанії або бізнесу' %}</p>
+                        <a href="{% url 'profiles:EmployerVerificationForm' %}" class="btn">
+                            {% trans 'пройти' %}
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="adsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAdsModal()">&times;</span>
+
+                <h2 style="margin-bottom: 20px;">
+                    {% trans 'Реклама на Pusto.sk' %}
+                </h2>
+
+                <p>
+                    {% trans 'Наразі придбати рекламу можна напряму через адміністратора Telegram.' %}
+                </p>
+
+                <p style="margin-top: 15px;">
+                    {% trans 'Для замовлення реклами звертайтесь:' %}
+                    <a href="https://t.me/SKpusto" target="_blank">@SKpusto</a>
+                </p>
+
+                <p style="font-size: 13px; font-weight: 300; opacity: 0.7; margin-top: 15px;">
+                    {% trans 'Ми допоможемо підібрати формат реклами та відповімо на всі запитання.' %}
+                </p>
+            </div>
+        </div>
+</div>
+
+<div id="adv" class="fav-page">
+  <h1 class="fav-title">{% trans 'мої оголошення' %}</h1>
+
+  {% if all_posts %}
+    <section class="fav-section" data-section="MyPosts">
+      <div class="fav-header">
+        <h2 class="fav-h2">{% trans 'всі оголошення' %}<span class="fav-count">({{ all_posts|length }})</span></h2>
+      </div>
+
+      <div class="fav-empty" hidden></div>
+
+      <div class="fav-slider" data-slider>
+        {% if all_posts|length > 5 %}
+          <button class="fav-arrow fav-arrow--left" type="button" data-prev aria-label="Prev">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </button>
+        {% else %}
+          <button class="fav-arrow fav-arrow--left" type="button" data-prev aria-label="Prev" style="display:none">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </button>
+        {% endif %}
+            <div class="catalogFavorite {% if all_posts|length <= 5 %}catalogFavorite--center{% endif %}" data-track>
+              {% for post in all_posts %}
+
+                    <div class="pages">
+
+                        {% if post.preview_image %}
+                          <img src="/media/{{ post.preview_image }}" class="image" loading="lazy" decoding="async">
+                        {% elif post.first_image %}
+                          <img src="{{ post.first_image.image.url }}" class="image" loading="lazy" decoding="async">
+                        {% else %}
+                          <img src="{% static 'ads/images/stub.png' %}" class="image" loading="lazy" decoding="async">
+                        {% endif %}
+                        <a class="card-overlay" href="{% url 'ads:page' post.type_key post.slug_title|default:'listing' post.id %}"></a>
+                        {% if post.source_telegram %}
+                            <div class="takeTelegram">
+                                <p>{% trans 'зібрано з Telegram' %}</p>
+                            </div>
+                        {% endif %}
+                        {% if post.private_status == 'top' %}
+                            <div class="topBadge">
+                                <span class="badge-icon">★</span>
+                                <span>TOP</span>
+                            </div>
+                        {% endif %}
+                        {% get_current_language as LANGUAGE_CODE %}
+
+                        {% if post.source_telegram %}
+                          <h3 class="price">
+                            {% if LANGUAGE_CODE == "en" %}
+                              {{ post.title_en|default:post.text|default:post.title }}
+                            {% else %}
+                              {{ post.text|default:post.title }}
+                            {% endif %}
+                          </h3>
+                        {% else %}
+                          <div class="price">
+                            {% if post.price %}
+                              {{ post.price }} €
+                            {% elif post.budget %}
+                              {{ post.budget }} €
+                            {% elif post.salary_from %}
+                              {{ post.salary_from }}{% if post.salary_to %} – {{ post.salary_to }}{% endif %} €
+                            {% else %}
+                              {{ post.type_name }}
+                            {% endif %}
+                          </div>
+
+                          <h3 class="title">
+                            {% if LANGUAGE_CODE == "en" %}
+                              {{ post.title_en|default:post.text|default:post.title }}
+                            {% else %}
+                              {{ post.text|default:post.title }}
+                            {% endif %}
+                          </h3>
+                        {% endif %}
+
+                      <div class="info">
+                        {{ post.created_at|date:"d.m.Y H:i" }}
+                      </div>
+
+                      <div class="post-actions">
+                          {% if post.private_status != 'top' %}
+                            <button
+                                type="button"
+                                class="post-action-btn open-topup-modal"
+                                data-section="{{ post.type_key }}"
+                                data-post-id="{{ post.id }}"
+                            >
+                                {% trans 'підняти' %}
+                            </button>
+                          {% endif %}
+                        <a href="{% url 'profiles:edit_post' post.type_key post.id %}" class="post-action-btn">
+                          {% trans 'редагувати' %}
+                        </a>
+                        <a href="{% url 'profiles:delete_post' post_type=post.type_key post_id=post.id %}"
+                           onclick="return confirm('{% trans "Ви впевнені, що хочете видалити це оголошення?" %}');"
+                           class="post-action-btn post-action-btn--delete">
+                          {% trans 'видалити' %}
+                        </a>
+                      </div>
+                    </div>
+              {% endfor %}
+            </div>
+            <div class="topup-modal" id="topupModal" aria-hidden="true">
+                <div class="topup-modal__overlay"></div>
+
+                <div class="topup-modal__content" role="dialog" aria-modal="true" aria-labelledby="topupModalTitle">
+                    <button type="button" class="topup-modal__close" id="closeTopupModal" aria-label="{% trans 'Закрити' %}">
+                        &times;
+                    </button>
+
+                    <h2 class="topup-modal__title" id="topupModalTitle">{% trans 'Просування оголошення' %}</h2>
+                    <p class="topup-modal__subtitle">
+                        {% trans 'Оберіть тривалість підняття. Ваше оголошення отримає більше видимості у списку.' %}
+                    </p>
+
+                    <div class="topup-plans">
+                        <form method="post" action="" class="topup-card" data-duration="3">
+                            {% csrf_token %}
+                            <div class="topup-card__badge">{% trans 'Старт' %}</div>
+                            <div class="topup-card__days">{% trans '3 дні' %}</div>
+                            <div class="topup-card__price">€2.99</div>
+                            <div class="topup-card__info">
+                                {% trans 'Швидке підняття оголошення для короткого просування.' %}
+                            </div>
+                            <button type="submit" class="topup-card__btn">{% trans 'Обрати' %}</button>
+                        </form>
+
+                        <form method="post" action="" class="topup-card topup-card--featured" data-duration="7">
+                            {% csrf_token %}
+                            <div class="topup-card__badge topup-card__badge--accent">{% trans 'Популярний' %}</div>
+                            <div class="topup-card__days">{% trans '7 днів' %}</div>
+                            <div class="topup-card__price">€5.99</div>
+                            <div class="topup-card__info">
+                                {% trans 'Оптимальний варіант для більш стабільного просування.' %}
+                            </div>
+                            <button type="submit" class="topup-card__btn topup-card__btn--accent">{% trans 'Обрати' %}</button>
+                        </form>
+
+                        <form method="post" action="" class="topup-card" data-duration="14">
+                            {% csrf_token %}
+                            <div class="topup-card__badge">{% trans 'Максимум' %}</div>
+                            <div class="topup-card__days">{% trans '14 днів' %}</div>
+                            <div class="topup-card__price">€9.99</div>
+                            <div class="topup-card__info">
+                                {% trans 'Найкраще рішення для довшого та помітнішого розміщення.' %}
+                            </div>
+                            <button type="submit" class="topup-card__btn">{% trans 'Обрати' %}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-modal" id="contactModal">
+    <div class="contact-modal__overlay"></div>
+
+    <div class="contact-modal__content">
+            <button type="button" class="contact-modal__close" id="closeContactModal">
+                &times;
+            </button>
+
+            <h2>Просування оголошення</h2>
+
+            <p style="margin-top:10px">
+                Ви обрали тариф:
+                <strong id="selectedDuration"></strong>
+            </p>
+
+            <p style="margin-top:15px">
+                Для оформлення просування зверніться до адміністратора Telegram.
+            </p>
+
+            <a
+                id="telegramContactLink"
+                href="https://t.me/SKpusto"
+                target="_blank"
+                class="contact-modal__btn"
+            >
+                Написати в Telegram
+            </a>
+        </div>
+    </div>
+        {% if all_posts|length > 5 %}
+          <button class="fav-arrow fav-arrow--right" type="button" data-next aria-label="Next">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M9 6l6 6-6 6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% else %}
+          <button class="fav-arrow fav-arrow--right" type="button" data-next aria-label="Next" style="display:none">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M9 6l6 6-6 6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+          </button>
+        {% endif %}
+      </div>
+    </section>
+  {% else %}
+    <div class="fav-empty">{% trans 'у вас поки що немає оголошень' %}</div>
+  {% endif %}
+</div>
+
+<script src="{% static 'profiles/js/copyText.js' %}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const contactModal = document.getElementById('contactModal');
+
+    document.querySelectorAll('.topup-card').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const duration = this.dataset.duration;
+
+            // если хочешь показывать выбранный тариф
+            document.getElementById('selectedDuration').textContent =
+                duration + ' днів';
+
+            contactModal.classList.add('is-open');
+        });
+    });
+
+    document.getElementById('closeContactModal').addEventListener('click', () => {
+        contactModal.classList.remove('is-open');
+    });
+
+    contactModal.querySelector('.contact-modal__overlay').addEventListener('click', () => {
+        contactModal.classList.remove('is-open');
+    });
+});
+</script>
+<script>
+function initSliders(){
+  document.querySelectorAll("[data-slider]").forEach(slider=>{
+    const track = slider.querySelector("[data-track]");
+    const prev  = slider.querySelector("[data-prev]");
+    const next  = slider.querySelector("[data-next]");
+    if(!track || !prev || !next) return;
+
+    function step(){
+      const card = track.querySelector(".pages");
+      return card ? card.offsetWidth + 16 : 240;
+    }
+
+    prev.onclick = ()=>track.scrollBy({left:-step(),behavior:"smooth"});
+    next.onclick = ()=>track.scrollBy({left: step(),behavior:"smooth"});
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSliders();
+});
+</script>
+<script>
+const shareBtn = document.querySelector('.share');
+
+shareBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const userId = shareBtn.dataset.userId;
+    const url = `${window.location.origin}/OtherProfile/${userId}/`;
+
+    try {
+        await navigator.clipboard.writeText(url);
+        alert('{% trans "Посилання скопійовано!" %}');
+    } catch (err) {
+        console.error(err);
+    }
+});
+</script>
+<script>
+function openModalById(id) {
+    document.getElementById(id).style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModalById(id) {
+    document.getElementById(id).style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function openModal() {
+    openModalById('profileModal');
+}
+
+function closeModal() {
+    closeModalById('profileModal');
+}
+
+function openVerifyModal() {
+    openModalById('verifyModal');
+}
+
+function closeVerifyModal() {
+    closeModalById('verifyModal');
+}
+
+function openAdsModal() {
+    openModalById('adsModal');
+}
+
+function closeAdsModal() {
+    closeModalById('adsModal');
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.modal').forEach(function(modal) {
+        modal.style.display = 'none';
+    });
+    document.body.style.overflow = '';
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('topupModal');
+    if (!modal) return;
+
+    const closeBtn = document.getElementById('closeTopupModal');
+    const overlay = modal.querySelector('.topup-modal__overlay');
+    const openButtons = document.querySelectorAll('.open-topup-modal');
+    const forms = modal.querySelectorAll('.topup-card');
+
+    let currentSection = null;
+    let currentPostId = null;
+
+    function openTopupModal(section, postId) {
+        currentSection = section;
+        currentPostId = postId;
+
+        forms.forEach(function(form) {
+            const duration = form.dataset.duration;
+            form.action = `/payments/top/create-intent/${currentSection}/${currentPostId}/${duration}/`;
+        });
+
+        modal.classList.add('is-active');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeTopupModal() {
+        modal.classList.remove('is-active');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    openButtons.forEach(function(button) {
+        button.addEventListener('click', function () {
+            const section = this.dataset.section;
+            const postId = this.dataset.postId;
+            openTopupModal(section, postId);
+        });
+    });
+
+    forms.forEach(function(form) {
+        form.addEventListener('submit', function () {
+            if (!currentSection || !currentPostId) {
+                event.preventDefault();
+                alert('{% trans "Не вдалося визначити оголошення для просування." %}');
+            }
+        });
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeTopupModal);
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', closeTopupModal);
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+            closeTopupModal();
+        }
+    });
+});
+</script>
+
+<script>
+(function () {
+    const codeBtn = document.getElementById('tgCodeBtn');
+    const regenerateBtn = document.getElementById('regenerateBtn');
+
+    let expiresAt = new Date("{{ tg_code_expires|date:'c' }}");
+    let timerInterval = null;
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    async function regenerateCode() {
+        try {
+            const response = await fetch(codeBtn.dataset.url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.error || '{% trans "Помилка генерації коду" %}');
+                return;
+            }
+
+            codeBtn.textContent = data.code;
+            expiresAt = new Date(data.expires_at);
+        } catch (error) {
+            alert('{% trans "Помилка мережі" %}');
+            console.error(error);
+        }
+    }
+
+    if (regenerateBtn) {
+        regenerateBtn.addEventListener('click', regenerateCode);
+    }
+})();
+</script>
+{% endblock %}

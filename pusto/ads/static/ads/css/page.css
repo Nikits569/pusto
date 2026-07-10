@@ -1,0 +1,810 @@
+/* ===== Layout (минимум, подстрой под себя) ===== */
+#container{
+    width: 100%;
+    height: auto;
+    display: flex;
+    gap: 80px;
+    margin-top: 10px;
+}
+
+/* ===== Slider ===== */
+.card-slider {
+    width: 100%;
+    max-width: none;
+    flex: 0 0 460px;   /* НЕ растягиваться/не сжиматься, базовая ширина 520 */
+ }
+
+.card-slider.True {
+    flex: 0 0 550px;
+ }
+
+/* viewport: квадрат, как в примере */
+.card-slider__viewport{
+  position: relative;
+  border-radius: 1px;
+  overflow: hidden;
+  background: #f2f2f2;
+}
+
+/* квадратное место под изображение */
+.card-slider__viewport::before{
+  content:"";
+  display:block;
+  padding-top: 100%;
+}
+
+.card-slider__track{
+  position:absolute;
+  inset:0;
+}
+
+/* слайды */
+.card-slider__slide{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition: opacity .18s ease;
+}
+.card-slider__slide.is-active{ opacity:1; }
+
+.card-slider__img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* badge 1/4 */
+.card-slider__badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  font-size:12px;
+  line-height:1;
+  padding:7px 10px;
+  border-radius:999px;
+  background: rgba(0,0,0,.35);
+  color:#fff;
+  backdrop-filter: blur(6px);
+}
+
+/* ===== Thumbnails: ровно 3 на ширину, дальше скролл ===== */
+.card-slider__thumbs-wrap{
+  display: grid;
+  grid-template-columns: 34px 1fr 34px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* лента превью */
+.card-slider__thumbs{
+  --gap: 10px;
+  --cols: 3;
+  --colw: calc((105% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: var(--colw);
+  gap: var(--gap);
+
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  padding: 2px;
+  margin-top: 20px;
+
+  scrollbar-width: none;
+}
+.card-slider__thumbs::-webkit-scrollbar{ height: 0; }
+.card-slider__thumb{ scroll-snap-align: start; }
+
+.card-slider__thumb{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 1px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  scroll-snap-align: start;
+  height: 55px;
+}
+
+.card-slider__thumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-slider__thumb.is-active{
+  border-color: rgba(0,0,0,.35);
+}
+
+.card-slider__thumb.is-active{
+  border-color: rgba(0,0,0,.35);
+}
+
+/* стрелки */
+
+.thumb-nav::before{
+  content:"";
+  position:absolute;
+  inset: 0;
+  margin:auto;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid rgba(0,0,0,.55);
+  border-bottom: 2px solid rgba(0,0,0,.55);
+  transform: rotate(135deg);
+}
+
+.thumb-nav--right::before{
+  transform: rotate(-45deg);
+}
+
+.thumb-nav:disabled{
+  opacity: .35;
+  cursor: default;
+}
+
+.price{
+  display: inline-flex;
+  align-items: baseline; /* ключевое */
+  gap: 6px;
+  margin: 0;
+}
+
+.amount{
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.currency{
+    font-size: 40px;
+    line-height: 1;
+    font-weight: 400;
+    opacity: .75;
+}
+
+.info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;    /* инфо сверху, описание ниже */
+}
+
+.info .title {
+    font-weight: 300;
+    opacity: .8;
+    font-size: 30px;
+    margin-top: 5px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;   /* максимум 2 строки */
+    overflow: hidden;
+}
+
+.info .title.True {
+    font-weight: 500;
+    opacity: .9;
+    font-size: 40px;
+    margin-top: 0;
+}
+
+.info .mainInfo {
+    max-height: 150px;
+    overflow: hidden;
+    margin-bottom: 35px;
+}
+
+.info .mainInfo.True {
+    margin-bottom: 20px;
+}
+
+.info .dateTime {
+    width: 100%;
+    margin-bottom: 35px;
+}
+
+.info .dateTime .cityTime {
+    opacity: 70%;
+    font-weight: 400;
+    font-size: 15px;
+
+}
+
+.info .description {
+    opacity: 70%;
+
+}
+
+.info .dateTime .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 8px;
+    max-height: 65px;
+}
+
+.info .dateTime .badge {
+    width: auto;
+    background: white;
+    height: 20px;
+    opacity: .8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    background: #FFFFFF;
+
+    padding: 4px 10px;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 999px;
+}
+
+.description {
+    font-size: 18px;
+    font-weight: 300;
+    opacity: .8;
+    line-height: 1.5;
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+.description.open {
+  display: block;        /* снимаем clamp */
+  overflow: visible;
+}
+
+.show-more {
+  display: inline-block;
+  margin-top: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+
+
+.info .buttons {
+    display: flex;
+    gap: 6%;
+    height: 50px;
+    margin-bottom: 15px;
+    margin-top: auto;
+}
+
+.info .buttons .write {
+    background-color: #1E296A;
+    width: 87%;
+    height: 100%;
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.info .profile {
+    width: 100%;
+    height: 70px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    padding: 5px 7px;
+
+}
+
+.info .buttons .favorite {
+    width: 6%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.info .buttons .favorite img {
+    width: 100%;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile .avatar {
+    border-radius: 999px;
+    width: 60px;
+    height: 60px;
+    margin-left: 25px;
+}
+
+.profile .infoUser {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+    color: black;
+
+}
+
+.profile .infoUser .names {
+    font-size: 25px;
+    font-weight: 500;
+
+}
+
+.profile .infoUser .dateCreate {
+    font-size: 15px;
+    font-weight: 300;
+    opacity: 60%;
+}
+
+.textAction {
+    display: flex;
+    opacity: 40%;
+    margin-top: 5px;
+    font-size: 15px;
+    justify-content: space-between; /* разносит по краям */
+    align-items: center;
+}
+
+.textAction a {
+    color: black;
+}
+
+
+.favorite-btn {
+    z-index: 4;     /* выше градиента (.card-media::after = z-index:1) */
+
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+
+    background: none; /* полупрозрачный круг */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    transition: transform .15s ease, background .15s ease;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.06);
+}
+
+.favorite-icon {
+  font-size: 60px;
+  line-height: 1;
+  color: white; /* белое по умолчанию */
+  text-shadow: 0 1px 3px rgba(0,0,0,.4); /* читаемость */
+}
+
+.favorite-btn.is-active .favorite-icon {
+  color: #e53935;
+}
+
+
+/* === MODAL ROOT === */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* === BACKDROP === */
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+/* === CONTENT BOX === */
+.modal__content {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px;
+
+}
+
+/* === CLOSE BUTTON === */
+.modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+
+  color: #888;
+  transition: 0.2s;
+}
+
+
+/* === TITLE === */
+.modal__content h3 {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* === FIELDS === */
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+
+.field label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #666;
+}
+
+/* === INPUTS === */
+.field input,
+.field textarea {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px 12px;
+
+  font-size: 14px;
+  outline: none;
+
+  transition: all 0.2s ease;
+}
+
+
+/* disabled email */
+.field input:disabled {
+  background: #f5f5f5;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* textarea */
+.field textarea {
+  resize: none;
+  min-height: 100px;
+}
+
+/* === SUBMIT BUTTON === */
+.modal__content button[type="submit"] {
+  width: 100%;
+  margin-top: 10px;
+
+  background: #1E296A;
+  color: #fff;
+
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+
+/* === MOBILE === */
+@media (max-width: 480px) {
+  .modal__content {
+    margin: 16px;
+    padding: 20px;
+    border-radius: 14px;
+  }
+}
+
+/* =========================
+   AD PAGE ADAPTIVE
+   ========================= */
+
+@media (max-width: 1200px) {
+    #container {
+        gap: 36px;
+    }
+
+    .card-slider {
+        flex: 0 1 500px;
+        max-width: 500px;
+    }
+
+    .card-slider.True {
+        flex-basis: 540px;
+        max-width: 540px;
+    }
+
+    .info .mainInfo {
+        margin-bottom: 22px;
+    }
+
+    .info .dateTime {
+        margin-bottom: 22px;
+    }
+}
+
+@media (max-width: 992px) {
+    #container {
+        gap: 28px;
+        align-items: flex-start;
+    }
+
+    .card-slider {
+        flex: 0 1 420px;
+        max-width: 420px;
+    }
+
+    .card-slider.True {
+        flex-basis: 460px;
+        max-width: 460px;
+    }
+
+    .amount {
+        font-size: 46px;
+    }
+
+    .currency {
+        font-size: 32px;
+    }
+
+    .info .title {
+        font-size: 26px;
+    }
+
+    .info .title.True {
+        font-size: 32px;
+    }
+
+    .description {
+        -webkit-line-clamp: 5;
+    }
+
+    .info .buttons .write {
+        min-height: 52px;
+        font-size: 24px;
+    }
+
+    .info .buttons .favorite {
+        flex-basis: 52px;
+        width: 52px;
+        height: 52px;
+    }
+}
+
+@media (max-width: 768px) {
+    #container {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .card-slider,
+    .card-slider.True {
+        width: 100%;
+        max-width: 100%;
+        flex: 1 1 auto;
+    }
+
+    .card-slider__thumbs {
+        --cols: 4;
+        --gap: 8px;
+    }
+
+    .info {
+        width: 100%;
+    }
+
+    .info .mainInfo {
+        margin-bottom: 18px;
+    }
+
+    .info .dateTime {
+        margin-bottom: 18px;
+    }
+
+    .info .buttons {
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .info .buttons .write {
+        font-size: 22px;
+        min-height: 50px;
+        border-radius: 16px;
+    }
+
+    .info .buttons .favorite {
+        flex: 0 0 50px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .profile .avatar {
+        width: 54px;
+        height: 54px;
+        flex-basis: 54px;
+        margin-left: 4px;
+    }
+
+    .profile .infoUser .names {
+        font-size: 21px;
+    }
+
+    .profile .infoUser .dateCreate {
+        font-size: 14px;
+    }
+
+    .textAction {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 560px) {
+    #container {
+        gap: 18px;
+    }
+
+    .card-slider__thumbs-wrap {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .card-slider__thumbs {
+        --cols: 3;
+        margin-top: 10px;
+    }
+
+    .amount {
+        font-size: 38px;
+    }
+
+    .currency {
+        font-size: 26px;
+    }
+
+    .info .title {
+        font-size: 22px;
+        line-height: 1.2;
+    }
+
+    .info .title.True {
+        font-size: 26px;
+    }
+
+    .info .dateTime .cityTime {
+        font-size: 14px;
+    }
+
+    .info .dateTime .badge {
+        font-size: 11px;
+        min-height: 26px;
+        padding: 4px 9px;
+    }
+
+    .description {
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-line-clamp: 6;
+    }
+
+    .info .buttons {
+        align-items: stretch;
+    }
+
+    .info .buttons .write {
+        font-size: 20px;
+        min-height: 48px;
+    }
+
+    .info .buttons .favorite {
+        flex: 0 0 48px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .info .buttons .favorite img {
+        max-width: 34px;
+    }
+
+    .info .profile {
+        min-height: 74px;
+        border-radius: 16px;
+        padding: 10px 12px;
+    }
+
+    .profile .avatar {
+        width: 48px;
+        height: 48px;
+        flex-basis: 48px;
+    }
+
+    .profile .infoUser {
+        margin-left: 12px;
+    }
+
+    .profile .infoUser .names {
+        font-size: 18px;
+    }
+
+    .profile .infoUser .dateCreate {
+        font-size: 13px;
+    }
+
+    .textAction {
+        font-size: 13px;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 420px) {
+    .card-slider__thumbs {
+        --cols: 3;
+    }
+
+    .amount {
+        font-size: 34px;
+    }
+
+    .currency {
+        font-size: 24px;
+    }
+
+    .info .title {
+        font-size: 20px;
+    }
+
+    .info .title.True {
+        font-size: 23px;
+    }
+
+    .description {
+        font-size: 14px;
+    }
+
+    .info .buttons {
+        gap: 10px;
+    }
+
+    .info .buttons .write {
+        font-size: 18px;
+        border-radius: 14px;
+    }
+
+    .info .buttons .favorite {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+    }
+}
