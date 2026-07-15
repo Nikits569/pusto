@@ -1,0 +1,344 @@
+/* =========================================================
+   ТОКЕНИ
+   Тема: "дошка оголошень" — той самий візуальний код, що й
+   зірочка-бейдж "закріплено" на реальних оголошеннях сайту,
+   тільки розкручений у повноцінну сторінку.
+   ========================================================= */
+:root {
+  --ink:        #2B3674; /* основний текст, hero-фон — індиго замість чорного */
+  --ink-deep:   #1E2557; /* темніший відтінок того ж індиго, для градієнта */
+  --ink-soft:   #5A63A0; /* приглушений текст на світлому, той самий відтінок */
+  --paper:      #F7F5F0; /* фон сторінки, папір — без змін */
+  --paper-card: #FFFFFF; /* картки нотаток */
+  --gold:       #D4A017; /* акцент — пін, штамп, лінія */
+  --gold-soft:  #F4E4B8; /* м'який акцент під штампи */
+  --teal:       #1F6F63; /* другий акцент — telegram/лінк */
+  --line:       #E4E0D5; /* тонкі розділювачі на папері */
+
+  --font-display: 'Unbounded', system-ui, sans-serif;
+  --font-body:    'Manrope', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.p-hero {
+  background: linear-gradient(160deg, var(--ink-deep), var(--ink) 70%);
+  color: var(--paper);
+  padding: 96px 24px 88px;
+}
+
+.p-hero__inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.p-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 20px;
+}
+
+.p-eyebrow--dark {
+  color: var(--teal);
+}
+
+.p-hero__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(34px, 6vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0 0 24px;
+}
+
+.p-hero__sub {
+  font-size: 17px;
+  line-height: 1.6;
+  color: #C9CCDA;
+  max-width: 52ch;
+  margin: 0 0 32px;
+}
+
+.p-hero__cta {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--gold);
+  padding: 12px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.p-hero__cta:hover { transform: translateY(-2px); }
+
+/* =========================================================
+   ОБЩИЙ КОНТЕЙНЕР СЕКЦІЙ
+   ========================================================= */
+.p-page {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.p-section {
+  padding: 72px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.p-section__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 3.4vw, 34px);
+  line-height: 1.15;
+  margin: 0 0 40px;
+  max-width: 30ch;
+}
+
+.p-section__title--light {
+  color: var(--paper);
+}
+
+/* =========================================================
+   СФЕРИ — теги-штампи
+   ========================================================= */
+.p-stamps {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.p-stamp {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  background: var(--gold-soft);
+  border: 1.5px solid var(--gold);
+  border-radius: 8px;
+  padding: 9px 14px;
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.p-stamp:nth-child(3n)   { --tilt: -1.4deg; }
+.p-stamp:nth-child(3n+1) { --tilt: 1deg; }
+.p-stamp:nth-child(3n+2) { --tilt: -0.6deg; }
+
+.p-spheres__note {
+  font-size: 15px;
+  color: var(--ink-soft);
+  max-width: 56ch;
+  margin: 0;
+}
+
+/* =========================================================
+   УМОВИ — дошка з пришпиленими нотатками
+   ========================================================= */
+.p-section--board {
+  background:
+    radial-gradient(circle at 1px 1px, rgba(22,27,46,0.06) 1px, transparent 0) 0 0/22px 22px,
+    var(--paper);
+}
+
+.p-board {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px 24px;
+}
+
+.p-note {
+  position: relative;
+  background: var(--paper-card);
+  border-radius: 4px;
+  padding: 26px 22px 22px;
+  box-shadow: 0 10px 24px rgba(22, 27, 46, 0.08);
+}
+
+.p-note--a { transform: rotate(-1.6deg); }
+.p-note--b { transform: rotate(1.1deg); }
+.p-note--c { transform: rotate(-0.8deg); }
+.p-note--d { transform: rotate(1.6deg); }
+
+.p-note__pin {
+  position: absolute;
+  top: -9px;
+  left: 26px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 3px 5px rgba(22, 27, 46, 0.25);
+}
+
+.p-note__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  margin: 6px 0 10px;
+}
+
+.p-note__text {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* =========================================================
+   ФОРМАТИ СПІВПРАЦІ
+   ========================================================= */
+.p-formats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.p-format {
+  background: var(--paper);
+  padding: 30px 26px;
+}
+
+.p-format__tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--teal);
+  letter-spacing: 0.08em;
+  margin: 0 0 14px;
+}
+
+.p-format__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 0 10px;
+}
+
+.p-format__text {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* =========================================================
+   КОНТАКТИ
+   ========================================================= */
+.p-contact {
+  background: linear-gradient(160deg, var(--ink-deep), var(--ink) 70%);
+  padding: 80px 24px 96px;
+  text-align: left;
+}
+
+.p-contact__sub {
+  color: #C9CCDA;
+  font-size: 15.5px;
+  max-width: 50ch;
+  margin: 0 0 40px;
+}
+
+.p-contact .p-section__title {
+  max-width: 40ch;
+}
+
+.p-contact__grid {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.p-contact__card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(247, 245, 240, 0.06);
+  border: 1.5px solid rgba(247, 245, 240, 0.18);
+  border-radius: 14px;
+  padding: 24px 22px;
+  text-decoration: none;
+  color: var(--paper);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.p-contact__card:hover {
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.p-contact__icon {
+  font-size: 20px;
+  color: var(--gold);
+}
+
+.p-contact__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9BA0B5;
+}
+
+.p-contact__value {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+@media (max-width: 720px) {
+  .p-hero { padding: 72px 20px 64px; }
+  .p-section { padding: 56px 0; }
+  .p-page { padding: 0 20px; }
+  .p-board,
+  .p-formats,
+  .p-contact__grid {
+    grid-template-columns: 1fr;
+  }
+  .p-note--a, .p-note--b, .p-note--c, .p-note--d {
+    transform: none;
+  }
+  .p-contact { padding: 64px 20px 72px; }
+}

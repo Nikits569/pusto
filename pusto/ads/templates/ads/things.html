@@ -67,6 +67,7 @@
     <input type="hidden" name="sort" value="{{ current_sort }}">
     <input type="hidden" name="order" value="{{ current_order }}">
     <input type="hidden" name="page" value="1">
+    <input type="hidden" name="category" id="categoryInput" value="{{ filter_category }}">
 
     <div class="filters-top">
         <select name="city" class="ui-field type2">
@@ -132,13 +133,13 @@
 
     <div class="category-badges">
 
-    <a href="?{% query_transform request category='' page=1 %}"
+    <a href="#" data-slug=""
        class="badge {% if not filter_category %}active{% endif %}">
         {% trans 'Все' %}
     </a>
 
     {% for cat in categories %}
-        <a href="?{% query_transform request category=cat.slug page=1 %}"
+        <a href="#" data-slug="{{ cat.slug }}"
            class="badge {% if filter_category == cat.slug %}active{% endif %} {% if forloop.counter > 10 %}hidden-category{% endif %}">
             {% if LANGUAGE_CODE == 'en' %}
                 {{ cat.title_en }}
@@ -165,7 +166,6 @@
     <a href="{% url 'ads:things' 'all' %}" class="btn btn-ghost">
         {% trans 'скинути' %}
     </a>
-
 
 </form>
 
@@ -593,5 +593,19 @@ function applyFreshness() {
 }
 
 document.addEventListener('DOMContentLoaded', applyFreshness);
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const categoryInput = document.getElementById("categoryInput");
+    const filtersForm = document.getElementById("filters");
+
+    document.querySelectorAll(".category-badges .badge[data-slug]").forEach(badge => {
+        badge.addEventListener("click", (e) => {
+            e.preventDefault();
+            categoryInput.value = badge.dataset.slug;
+            filtersForm.submit();
+        });
+    });
+});
 </script>
 {% endblock %}

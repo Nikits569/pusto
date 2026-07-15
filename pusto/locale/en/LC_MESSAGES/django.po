@@ -1363,6 +1363,32 @@ msgstr "neighbors and housing"
 msgid "кількість кімнат"
 msgstr "number of rooms"
 
+msgid "Зібрано з"
+msgstr "Collected from"
 
+msgid "кімнат"
+msgstr "number of rooms"
 
+msgid "Відкрити фільтри"
+msgstr "Open filters"
 
+msgid "речі в Братиславі"
+msgstr "things in Bratislava"
+
+msgid "речі в Пряшеві"
+msgstr "things in Presov"
+
+msgid "речі в Кошицях"
+msgstr "things in Kosice"
+
+msgid "Квартири в Братиславі"
+msgstr "Apartments in Bratislava"
+
+msgid "Квартири в Пряшеві"
+msgstr "Apartments in Presov"
+
+msgid "Квартири в Кошицях"
+msgstr "Apartments in Kosice"
+
+msgid "депозит"
+msgstr "deposit"

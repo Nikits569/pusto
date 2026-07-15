@@ -8,7 +8,7 @@ from ads.sitemaps import ThingsSitemap, StaticSitemap
 from django.conf.urls.i18n import set_language
 from django.conf.urls.i18n import i18n_patterns
 from django.views.generic import RedirectView
-
+from .views import *
 sitemaps = {
     "things": ThingsSitemap,
     "static": StaticSitemap,
@@ -16,7 +16,7 @@ sitemaps = {
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/uk/", permanent=False)),
-    path("i18n/setlang/", set_language, name="set_language"),
+    path("i18n/setlang/", custom_set_language, name="set_language"),
 ]
 
 

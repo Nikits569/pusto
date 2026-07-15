@@ -6,6 +6,7 @@
 
 <title>{% trans 'мій профіль' %}</title>
 <link type="text/css" href="{% static 'profiles/css/myprofile.css' %}" rel="stylesheet" />
+<link type="text/css" href="{% static 'profiles/css/payment-widget.css' %}" rel="stylesheet" />
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -48,27 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <div>
-    <div class="tg-link-box">
-        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-            <span class="main" style="font-weight:600;">{% trans "код прив'язки Telegram:" %}</span>
 
-            <span
-                    class="other"
-                    id="tgCodeBtn"
-                    data-url="{% url 'profiles:regenerate_tg_code' %}">
-                {{ tg_code }}
-            </span>
-
-            <button type="button" id="regenerateBtn">
-                {% trans 'згенерувати заново' %}
-            </button>
-        </div>
-
-        <div  style="margin-top:10px;">
-            <span class="other">{% trans 'діє до:' %}</span>
-            <span class="other">{{ tg_code_expires|date:"d.m.Y H:i:s" }}</span>
-        </div>
-    </div>
     <div class="tg-link-box">
         <div class="profile">
             <div class="firstBlock">
@@ -110,14 +91,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         {% endif %}
                         <h5>{% trans 'перевірений студент' %}</h5>
                     </div>
-                    <div class="verification">
-                        {% if user.verification_employer %}
-                            <img src="{% static 'profiles/images/agree.png' %}" class="agree">
-                        {% else %}
-                            <img src="{% static 'profiles/images/disagree.png' %}" class="disagree">
-                        {% endif %}
-                        <h5>{% trans 'перевірений роботодавець' %}</h5>
-                    </div>
+                    <!--<div class="verification"> -->
+                    <!--    {% if user.verification_employer %} -->
+                    <!--        <img src="{% static 'profiles/images/agree.png' %}" class="agree"> -->
+                    <!--    {% else %} -->
+                    <!--        <img src="{% static 'profiles/images/disagree.png' %}" class="disagree"> -->
+                    <!--    {% endif %} -->
+                    <!--    <h5>{% trans 'перевірений роботодавець' %}</h5> -->
+                    <!--</div> -->
                 </div>
             </div>
             <div class="thirdBlock">
@@ -126,24 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
 
-        <div style="opacity: 0; display: none;">
-            <h3>{% trans "Прив'язка Telegram" %}</h3>
 
-            <p>
-                {% trans 'Скопіюйте цей код і відправте його боту в Telegram:' %}
-            </p>
-            <div class="tg-code">
-                {{ tg_code }}
-            </div>
-
-            <p class="tg-hint">
-                {% trans 'Код діє до' %} {{ tg_code_expires|date:"H:i" }}
-            </p>
-
-            <a href="https://t.me/YourBotName" target="_blank" class="tg-btn">
-                {% trans 'Відкрити Telegram-бота' %}
-            </a>
-        </div>
         <div class="underLink">
             <form method="post" action="{% url 'profiles:claim_posts_by_email' %}">
                 {% csrf_token %}
@@ -160,9 +124,56 @@ document.addEventListener('DOMContentLoaded', function() {
                 {% trans 'пройти верифікацію' %}
             </button>
 
-            <button type="button" onclick="openAdsModal()">
+            <button type="button" class="btn-promo-attention" onclick="window.location.href='{% url 'select_adv' %}'">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 11l18-5v12L3 14v-3z"/>
+                    <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+                </svg>
                 {% trans 'купити рекламу' %}
             </button>
+
+            <style>
+            .btn-promo-attention {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 20px;
+                background: #202B6C;
+                color: black; /* убрал дубль color:#fff ниже */
+                font-weight: 700;
+                font-size: 1.03em;
+                letter-spacing: 0.2px;
+                border: 1.5px solid #202B6C;
+                border-radius: 99px;
+                cursor: pointer;
+                transform: scale(1);
+                transition: transform 0.75s ease, box-shadow 0.75s ease, background 0.75s ease, color 0.75s ease;
+                animation: promo-breathe 4.5s ease-in-out infinite;
+            }
+
+            @keyframes promo-breathe {
+                0%, 100% {
+                    box-shadow: 0 0 0 0 rgba(32, 43, 108, 0.25);
+                }
+                50% {
+                    box-shadow: 0 0 0 5px rgba(32, 43, 108, 0);
+                }
+            }
+
+            .btn-promo-attention:hover {
+                animation-play-state: paused;
+                background: #1a2456;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(32, 43, 108, 0.3);
+                color: white;
+            }
+
+
+
+            .btn-promo-attention:active {
+                transform: translateY(0);
+            }
+            </style>
         </div>
 
         <div id="profileModal" class="modal">
@@ -215,13 +226,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         </a>
                     </div>
 
-                    <div class="verify-card">
-                        <h3>{% trans '💼 роботодавець' %}</h3>
-                        <p>{% trans 'підтвердження компанії або бізнесу' %}</p>
-                        <a href="{% url 'profiles:EmployerVerificationForm' %}" class="btn">
-                            {% trans 'пройти' %}
-                        </a>
-                    </div>
+                    <!--<div class="verify-card"> -->
+                    <!--    <h3>{% trans '💼 роботодавець' %}</h3> -->
+                    <!--    <p>{% trans 'підтвердження компанії або бізнесу' %}</p> -->
+                    <!--    <a href="{% url 'profiles:EmployerVerificationForm' %}" class="btn"> -->
+                    <!--        {% trans 'пройти' %} -->
+                    <!--    </a> -->
+                    <!--</div> -->
 
                 </div>
             </div>
@@ -277,6 +288,7 @@ document.addEventListener('DOMContentLoaded', function() {
         {% endif %}
             <div class="catalogFavorite {% if all_posts|length <= 5 %}catalogFavorite--center{% endif %}" data-track>
               {% for post in all_posts %}
+
 
                     <div class="pages">
 
@@ -359,84 +371,121 @@ document.addEventListener('DOMContentLoaded', function() {
               {% endfor %}
             </div>
             <div class="topup-modal" id="topupModal" aria-hidden="true">
-                <div class="topup-modal__overlay"></div>
+            <div class="topup-modal__overlay"></div>
 
                 <div class="topup-modal__content" role="dialog" aria-modal="true" aria-labelledby="topupModalTitle">
                     <button type="button" class="topup-modal__close" id="closeTopupModal" aria-label="{% trans 'Закрити' %}">
                         &times;
                     </button>
 
-                    <h2 class="topup-modal__title" id="topupModalTitle">{% trans 'Просування оголошення' %}</h2>
-                    <p class="topup-modal__subtitle">
-                        {% trans 'Оберіть тривалість підняття. Ваше оголошення отримає більше видимості у списку.' %}
-                    </p>
+                    <!-- ШАГ 1: выбор тарифа -->
+                    <div id="stepPlans">
+                        <h2 class="topup-modal__title" id="topupModalTitle">{% trans 'Просування оголошення' %}</h2>
+                        <p class="topup-modal__subtitle">
+                            {% trans 'Оберіть тривалість підняття. Ваше оголошення отримає більше видимості у списку.' %}
+                        </p>
 
-                    <div class="topup-plans">
-                        <form method="post" action="" class="topup-card" data-duration="3">
-                            {% csrf_token %}
-                            <div class="topup-card__badge">{% trans 'Старт' %}</div>
-                            <div class="topup-card__days">{% trans '3 дні' %}</div>
-                            <div class="topup-card__price">€2.99</div>
-                            <div class="topup-card__info">
-                                {% trans 'Швидке підняття оголошення для короткого просування.' %}
+                        <div class="topup-plans" id="topupPlans">
+                            <div class="topup-card" data-duration="3" data-price="2.99" data-label="3 дні">
+                                <div class="topup-card__badge">{% trans 'Старт' %}</div>
+                                <div class="topup-card__days">{% trans '3 дні' %}</div>
+                                <div class="topup-card__price">€2.99</div>
+                                <div class="topup-card__info">
+                                    {% trans 'Швидке підняття оголошення для короткого просування.' %}
+                                </div>
+                                <button type="button" class="topup-card__btn">{% trans 'Обрати' %}</button>
                             </div>
-                            <button type="submit" class="topup-card__btn">{% trans 'Обрати' %}</button>
-                        </form>
 
-                        <form method="post" action="" class="topup-card topup-card--featured" data-duration="7">
-                            {% csrf_token %}
-                            <div class="topup-card__badge topup-card__badge--accent">{% trans 'Популярний' %}</div>
-                            <div class="topup-card__days">{% trans '7 днів' %}</div>
-                            <div class="topup-card__price">€5.99</div>
-                            <div class="topup-card__info">
-                                {% trans 'Оптимальний варіант для більш стабільного просування.' %}
+                            <div class="topup-card topup-card--featured" data-duration="7" data-price="5.99" data-label="7 днів">
+                                <div class="topup-card__badge topup-card__badge--accent">{% trans 'Популярний' %}</div>
+                                <div class="topup-card__days">{% trans '7 днів' %}</div>
+                                <div class="topup-card__price">€5.99</div>
+                                <div class="topup-card__info">
+                                    {% trans 'Оптимальний варіант для більш стабільного просування.' %}
+                                </div>
+                                <button type="button" class="topup-card__btn topup-card__btn--accent">{% trans 'Обрати' %}</button>
                             </div>
-                            <button type="submit" class="topup-card__btn topup-card__btn--accent">{% trans 'Обрати' %}</button>
-                        </form>
 
-                        <form method="post" action="" class="topup-card" data-duration="14">
-                            {% csrf_token %}
-                            <div class="topup-card__badge">{% trans 'Максимум' %}</div>
-                            <div class="topup-card__days">{% trans '14 днів' %}</div>
-                            <div class="topup-card__price">€9.99</div>
-                            <div class="topup-card__info">
-                                {% trans 'Найкраще рішення для довшого та помітнішого розміщення.' %}
+                            <div class="topup-card" data-duration="14" data-price="9.99" data-label="14 днів">
+                                <div class="topup-card__badge">{% trans 'Максимум' %}</div>
+                                <div class="topup-card__days">{% trans '14 днів' %}</div>
+                                <div class="topup-card__price">€9.99</div>
+                                <div class="topup-card__info">
+                                    {% trans 'Найкраще рішення для довшого та помітнішого розміщення.' %}
+                                </div>
+                                <button type="button" class="topup-card__btn">{% trans 'Обрати' %}</button>
                             </div>
-                            <button type="submit" class="topup-card__btn">{% trans 'Обрати' %}</button>
-                        </form>
+                        </div>
+                    </div>
+
+                    <!-- ШАГ 2: выбор способа оплаты -->
+                    <div id="stepPayment" style="display:none;">
+                        <button type="button" class="topup-back" id="backToPlans">
+                            &larr; {% trans 'Змінити тариф' %}
+                        </button>
+
+                        <h2 class="topup-modal__title">{% trans 'Спосіб оплати' %}</h2>
+                        <div class="topup-selected-plan" id="topupSelectedPlan"></div>
+                        <div class="payment-panel">
+                            <div class="pm-switch" id="pmSwitch">
+                                <button type="button" class="pm-btn active" data-method="crypto">
+                                    <span class="pm-btn__icon">₿</span>
+                                    {% trans 'Крипта' %}
+                                </button>
+                                <button type="button" class="pm-btn" data-method="revolut">
+                                    <span class="pm-btn__icon">💳</span>
+                                    Картка EU Revolut/Tatra
+                                </button>
+                                <button type="button" class="pm-btn" data-method="card_ua">
+                                    <span class="pm-btn__icon">🇺🇦</span>
+                                    {% trans 'Картка UA' %}
+                                </button>
+                            </div>
+
+                            <div id="payment-widget-root" class="payment-widget-root" style="display:none;"></div>
+
+                            <div class="manual-contact" id="manualContactForm" style="display:none;">
+                                <form id="manualPaymentForm" class="manual-contact__form">
+                                    {% csrf_token %}
+                                    <label class="manual-contact__label" for="manualContactInput">
+                                        {% trans "Email, Telegram (@нік) або телефон" %}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="manualContactInput"
+                                        name="contact"
+                                        class="manual-contact__input"
+                                        placeholder="{% trans 'Наприклад: user@mail.com або @username' %}"
+                                        required
+                                    >
+                                    <p class="manual-contact__hint">
+                                        {% trans "Адміністратор зв'яжеться з вами для оплати цим способом." %}
+                                    </p>
+
+                                    <div class="manual-contact__error" id="manualFormError" style="display:none;"></div>
+
+                                    <button type="submit" class="topup-card__btn manual-contact__submit">
+                                        {% trans 'Надіслати запит' %}
+                                    </button>
+                                </form>
+
+                                <div class="manual-contact__success" id="manualFormSuccess" style="display:none;">
+                                    <span class="manual-contact__success-icon">✓</span>
+                                    <p>{% trans "Дякуємо! Очікуйте, адміністратор незабаром зв'яжеться з вами." %}</p>
+                                </div>
+                            </div>
+
+                            <!-- крипто-форма запускается через initPaymentWidget по клику "Крипта" -->
+                            <button type="button" class="topup-card__btn topup-crypto-start" id="startCryptoBtn">
+                                {% trans 'Оплатити криптою' %}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="contact-modal" id="contactModal">
     <div class="contact-modal__overlay"></div>
-
-    <div class="contact-modal__content">
-            <button type="button" class="contact-modal__close" id="closeContactModal">
-                &times;
-            </button>
-
-            <h2>Просування оголошення</h2>
-
-            <p style="margin-top:10px">
-                Ви обрали тариф:
-                <strong id="selectedDuration"></strong>
-            </p>
-
-            <p style="margin-top:15px">
-                Для оформлення просування зверніться до адміністратора Telegram.
-            </p>
-
-            <a
-                id="telegramContactLink"
-                href="https://t.me/SKpusto"
-                target="_blank"
-                class="contact-modal__btn"
-            >
-                Написати в Telegram
-            </a>
-        </div>
-    </div>
         {% if all_posts|length > 5 %}
           <button class="fav-arrow fav-arrow--right" type="button" data-next aria-label="Next">
             <svg viewBox="0 0 24 24" width="24" height="24">
@@ -465,37 +514,31 @@ document.addEventListener('DOMContentLoaded', function() {
   {% else %}
     <div class="fav-empty">{% trans 'у вас поки що немає оголошень' %}</div>
   {% endif %}
+    <div class="tg-link-box">
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span class="main" style="font-weight:600;">{% trans "код прив'язки Telegram:" %}</span>
+
+        <span
+                class="other"
+                id="tgCodeBtn"
+                data-url="{% url 'profiles:regenerate_tg_code' %}">
+            {{ tg_code }}
+        </span>
+
+        <button type="button" id="regenerateBtn">
+            {% trans 'згенерувати заново' %}
+        </button>
+    </div>
+
+    <div  style="margin-top:10px;">
+        <span class="other">{% trans 'діє до:' %}</span>
+        <span class="other">{{ tg_code_expires|date:"d.m.Y H:i:s" }}</span>
+    </div>
+    </div>
 </div>
 
 <script src="{% static 'profiles/js/copyText.js' %}"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-    const contactModal = document.getElementById('contactModal');
-
-    document.querySelectorAll('.topup-card').forEach(form => {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const duration = this.dataset.duration;
-
-            // если хочешь показывать выбранный тариф
-            document.getElementById('selectedDuration').textContent =
-                duration + ' днів';
-
-            contactModal.classList.add('is-open');
-        });
-    });
-
-    document.getElementById('closeContactModal').addEventListener('click', () => {
-        contactModal.classList.remove('is-open');
-    });
-
-    contactModal.querySelector('.contact-modal__overlay').addEventListener('click', () => {
-        contactModal.classList.remove('is-open');
-    });
-});
-</script>
+<script src="{% static 'profiles/js/payment-widget.js' %}"></script>
 <script>
 function initSliders(){
   document.querySelectorAll("[data-slider]").forEach(slider=>{
@@ -518,6 +561,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSliders();
 });
 </script>
+
 <script>
 const shareBtn = document.querySelector('.share');
 
@@ -535,6 +579,7 @@ shareBtn.addEventListener('click', async (e) => {
     }
 });
 </script>
+
 <script>
 function openModalById(id) {
     document.getElementById(id).style.display = 'flex';
@@ -570,79 +615,188 @@ function closeAdsModal() {
     closeModalById('adsModal');
 }
 </script>
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.modal').forEach(function(modal) {
-        modal.style.display = 'none';
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("topupModal");
+  if (!modal) return;
+
+  const stepPlans = document.getElementById("stepPlans");
+  const stepPayment = document.getElementById("stepPayment");
+  const plansContainer = document.getElementById("topupPlans");
+  const widgetRoot = document.getElementById("payment-widget-root");
+  const manualForm = document.getElementById("manualContactForm");
+  const pmSwitch = document.getElementById("pmSwitch");
+  const closeBtn = document.getElementById("closeTopupModal");
+  const backBtn = document.getElementById("backToPlans");
+  const startCryptoBtn = document.getElementById("startCryptoBtn");
+  const overlay = modal.querySelector(".topup-modal__overlay");
+
+  function normalizePostType(section) {
+    const map = { things: "things", jobs: "job", job: "job", neighbors: "neighbor", neighbor: "neighbor" };
+    return map[section] || section;
+  }
+
+  function getCookie(name) {
+    let v = null;
+    document.cookie.split(';').forEach((c) => {
+      c = c.trim();
+      if (c.startsWith(name + '=')) v = decodeURIComponent(c.substring(name.length + 1));
     });
-    document.body.style.overflow = '';
+    return v;
+  }
+
+  let selectedDuration = null;
+  let selectedPrice = null;
+  let selectedLabel = "";
+
+  function showPlansStep() {
+    stepPlans.style.display = "block";
+    stepPayment.style.display = "none";
+  }
+
+  function showPaymentStep() {
+    stepPlans.style.display = "none";
+    stepPayment.style.display = "block";
+
+    document.getElementById("topupSelectedPlan").textContent = `${selectedLabel} — €${selectedPrice}`;
+
+    widgetRoot.style.display = "none";
+    widgetRoot.innerHTML = "";
+    manualForm.style.display = "none";
+    startCryptoBtn.style.display = "block";
+
+    pmSwitch.querySelectorAll(".pm-btn").forEach((b) => b.classList.remove("active"));
+    pmSwitch.querySelector('[data-method="crypto"]').classList.add("active");
+  }
+
+  function openModal(postType, postId) {
+    modal.dataset.postType = postType;
+    modal.dataset.postId = postId;
+    selectedDuration = null;
+    selectedPrice = null;
+    showPlansStep();
+    modal.style.display = "flex";
+    modal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeModal() {
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+  }
+
+  document.querySelectorAll(".open-topup-modal").forEach((btn) => {
+    btn.addEventListener("click", () => openModal(normalizePostType(btn.dataset.section), btn.dataset.postId));
+  });
+
+  if (closeBtn) closeBtn.addEventListener("click", closeModal);
+  if (overlay) overlay.addEventListener("click", closeModal);
+  if (backBtn) backBtn.addEventListener("click", showPlansStep);
+
+  // --- ШАГ 1: выбор тарифа ---
+  plansContainer.querySelectorAll(".topup-card").forEach((card) => {
+    card.querySelector(".topup-card__btn").addEventListener("click", () => {
+      selectedDuration = parseInt(card.dataset.duration, 10);
+      selectedPrice = card.dataset.price;
+      selectedLabel = card.dataset.label;
+
+      plansContainer.querySelectorAll(".topup-card").forEach((c) => c.classList.remove("is-selected"));
+      card.classList.add("is-selected");
+
+      showPaymentStep();
+    });
+  });
+
+  // --- ШАГ 2: переключатель способа оплаты ---
+  pmSwitch.querySelectorAll(".pm-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      pmSwitch.querySelectorAll(".pm-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const method = btn.dataset.method;
+      widgetRoot.style.display = "none";
+      widgetRoot.innerHTML = "";
+      manualForm.style.display = "none";
+      startCryptoBtn.style.display = "none";
+
+      manualForm.querySelector(".manual-contact__form").style.display = "";
+      document.getElementById("manualFormSuccess").style.display = "none";
+      document.getElementById("manualFormError").style.display = "none";
+
+      if (method === "crypto") {
+        startCryptoBtn.style.display = "block";
+      } else {
+        manualForm.style.display = "block";
+        manualForm.dataset.method = method;
+      }
+    });
+  });
+
+  // --- запуск крипто-виджета ---
+    startCryptoBtn.addEventListener("click", () => {
+        const postType = modal.dataset.postType;
+        const postId = modal.dataset.postId;
+        if (!postType || !postId) return;
+
+        startCryptoBtn.style.display = "none";
+        widgetRoot.style.display = "block";
+
+        initPaymentWidget(
+          "#payment-widget-root",
+          "{% url 'create_promotion_order' %}",
+          { post_type: postType, post_id: postId, duration_days: selectedDuration, price_eur: selectedPrice },
+          () => window.location.reload()
+        );
+    });
+
+  // --- ручні способи оплати (Revolut / картка) ---
+  document.getElementById("manualPaymentForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const errorBox = document.getElementById("manualFormError");
+    errorBox.style.display = "none";
+
+    const contact = e.target.contact.value.trim();
+    const postType = modal.dataset.postType;
+    const postId = modal.dataset.postId;
+
+    if (!postType || !postId) {
+      errorBox.textContent = "{% trans 'Помилка: не визначено оголошення' %}";
+      errorBox.style.display = "block";
+      return;
+    }
+
+    try {
+      const resp = await fetch("{% url 'create_manual_promotion_order' %}", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie("csrftoken") },
+        body: JSON.stringify({
+          post_type: postType,
+          post_id: parseInt(postId, 10),
+          duration_days: selectedDuration,
+          price_eur: selectedPrice,
+          payment_method: manualForm.dataset.method,
+          contact: contact,
+        }),
+      });
+      const data = await resp.json();
+
+      if (!resp.ok) {
+        errorBox.textContent = data.error || "{% trans 'Сталася помилка' %}";
+        errorBox.style.display = "block";
+        return;
+      }
+
+      manualForm.querySelector(".manual-contact__form").style.display = "none";
+      document.getElementById("manualFormSuccess").style.display = "flex";
+    } catch (err) {
+      errorBox.textContent = "{% trans 'Помилка мережі' %}";
+      errorBox.style.display = "block";
+    }
+  });
 });
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const modal = document.getElementById('topupModal');
-    if (!modal) return;
 
-    const closeBtn = document.getElementById('closeTopupModal');
-    const overlay = modal.querySelector('.topup-modal__overlay');
-    const openButtons = document.querySelectorAll('.open-topup-modal');
-    const forms = modal.querySelectorAll('.topup-card');
-
-    let currentSection = null;
-    let currentPostId = null;
-
-    function openTopupModal(section, postId) {
-        currentSection = section;
-        currentPostId = postId;
-
-        forms.forEach(function(form) {
-            const duration = form.dataset.duration;
-            form.action = `/payments/top/create-intent/${currentSection}/${currentPostId}/${duration}/`;
-        });
-
-        modal.classList.add('is-active');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeTopupModal() {
-        modal.classList.remove('is-active');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-    }
-
-    openButtons.forEach(function(button) {
-        button.addEventListener('click', function () {
-            const section = this.dataset.section;
-            const postId = this.dataset.postId;
-            openTopupModal(section, postId);
-        });
-    });
-
-    forms.forEach(function(form) {
-        form.addEventListener('submit', function () {
-            if (!currentSection || !currentPostId) {
-                event.preventDefault();
-                alert('{% trans "Не вдалося визначити оголошення для просування." %}');
-            }
-        });
-    });
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeTopupModal);
-    }
-
-    if (overlay) {
-        overlay.addEventListener('click', closeTopupModal);
-    }
-
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && modal.classList.contains('is-active')) {
-            closeTopupModal();
-        }
-    });
-});
-</script>
 
 <script>
 (function () {
@@ -697,4 +851,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })();
 </script>
+
 {% endblock %}

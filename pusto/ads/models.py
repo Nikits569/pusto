@@ -260,6 +260,11 @@ class ThingsPost(models.Model):
         default=PrivateStatus.COMMON,
         verbose_name=_('Private status'),
     )
+    promoted_until = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('Promoted until'),
+    )
 
     withoutRegister = models.BooleanField(default=False, verbose_name=_('Without registration'))
 
@@ -394,11 +399,17 @@ class NeighborPost(models.Model):
         default=PrivateStatus.COMMON,
         verbose_name=_('Private status'),
     )
+    promoted_until = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('Promoted until'),
+    )
 
     withoutRegister = models.BooleanField(default=False, verbose_name=_('Without registration'))
 
     preview_image = models.CharField(max_length=250, null=True, blank=True, verbose_name=_('Preview image'))
 
+    ad_id = models.CharField(max_length=100, null=True, blank=True, verbose_name=_('Ad ID'))
     def __str__(self):
         return f'{self.city} — {self.user}'
 
@@ -498,6 +509,11 @@ class JobPost(models.Model):
         choices=PrivateStatus.choices,
         default=PrivateStatus.COMMON,
         verbose_name=_('Private status'),
+    )
+    promoted_until = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('Promoted until'),
     )
 
     withoutRegister = models.BooleanField(default=False, verbose_name=_('Without registration'))

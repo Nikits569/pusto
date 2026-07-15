@@ -100,7 +100,7 @@
               {% endif %}
 
               {% if obj.source %}
-                  <span class="badge">{% trans 'Зібрано з ' %} {{ obj.source }}</span>
+                  <span class="badge">{% trans 'Зібрано з' %} {{ obj.source }}</span>
               {% endif %}
 
               {% if obj.condition %}
@@ -120,7 +120,7 @@
               {% endif %}
 
               {% if obj.rooms %}
-                  <span class="badge">{{ obj.rooms|floatformat:0 }} кімнат</span>
+                  <span class="badge">{{ obj.rooms|floatformat:0 }} {% trans 'кімнат' %}</span>
               {% endif %}
 
               {% if obj.deposit %}
@@ -237,7 +237,7 @@
                 {% trans 'перейти в джерело' %}
               </a>
 
-              <a href="https://t.me/c/{{ obj.chat_id|cut:'-100' }}/{{ obj.message_id }}"
+              <a href="https://telegram.me/c/{{ obj.chat_id|cut:'-100' }}/{{ obj.message_id }}"
                  target="_blank"
                  rel="noopener noreferrer"
                  class="write">

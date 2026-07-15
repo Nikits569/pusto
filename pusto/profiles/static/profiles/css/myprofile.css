@@ -443,9 +443,15 @@
 
 .underLink form {
     margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .underLink button {
+    display: inline-flex;
+    align-items: center;      /* центрирует по вертикали */
+    justify-content: center;
     width: 100%;
     background: none;
     border: none;
@@ -1206,7 +1212,9 @@
   position: relative;
   z-index: 2;
   width: min(960px, calc(100% - 32px));
-  margin: 130px auto;
+  margin: 40px auto;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
   background: #fff;
   border-radius: 24px;
   padding: 28px;
@@ -1355,4 +1363,207 @@
   .topup-modal__title {
     font-size: 24px;
   }
+}
+
+/* =========================
+   PAYMENT METHOD SWITCH
+========================= */
+
+.pm-switch {
+    display: flex;
+    gap: 8px;
+    padding: 5px;
+    background: #f1f5f9;
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+.pm-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    background: transparent;
+    padding: 12px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pm-btn__icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.pm-btn:hover {
+    color: #202B6C;
+}
+
+.pm-btn.active {
+    background: #fff;
+    color: #202B6C;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+}
+
+/* =========================
+   MANUAL CONTACT FORM
+========================= */
+
+.manual-contact {
+    animation: modalFadeIn 0.2s ease;
+}
+
+.manual-contact__selected {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #eef2ff;
+    color: #202B6C;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.manual-contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.manual-contact__label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.manual-contact__input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #dcdfe4;
+    border-radius: 14px;
+    background: #fafafa;
+    font-size: 15px;
+    color: #111;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.manual-contact__input:focus {
+    border-color: #202B6C;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(32, 43, 108, 0.08);
+}
+
+.manual-contact__hint {
+    margin: 0 0 6px;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.manual-contact__error {
+    color: #b42318;
+    background: rgba(180, 35, 24, 0.08);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+}
+
+.manual-contact__submit {
+    margin-top: 8px;
+}
+
+.manual-contact__success {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 16px;
+    color: #166534;
+}
+
+.manual-contact__success-icon {
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.manual-contact__success p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.payment-widget-root {
+    animation: modalFadeIn 0.2s ease;
+}
+
+@media (max-width: 600px) {
+    .pm-switch {
+        flex-direction: column;
+    }
+
+    .pm-btn {
+        justify-content: flex-start;
+        padding: 12px 14px;
+    }
+}
+
+.topup-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: none;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 16px;
+    transition: color 0.2s ease;
+}
+
+.topup-back:hover {
+    color: #202B6C;
+}
+
+.topup-selected-plan {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #eef2ff;
+    color: #202B6C;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.topup-card.is-selected {
+    border-color: #202B6C;
+    box-shadow: 0 14px 35px rgba(37, 99, 235, 0.12);
+}
+
+.topup-crypto-start {
+    margin-top: 4px;
 }

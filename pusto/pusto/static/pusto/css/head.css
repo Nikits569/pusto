@@ -761,7 +761,7 @@ footer textarea:focus {
 
 /* Email как ссылка */
 .modal-content a {
-  color: #2563eb;
+
   text-decoration: none;
   font-weight: 500;
 }

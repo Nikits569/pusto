@@ -329,7 +329,11 @@
 
                         </div>
 
-                        {% if i.img_bazos %}
+                        {% if i.source == 'reality.sk' %}
+                            <img src="https://pusto.sk/photos/reality/{{ i.ad_id }}/1.jpg"alt="" class="image" loading="lazy" decoding="async">
+                        {% elif i.source == 'topreality' %}
+                            <img src="https://pusto.sk/photos/topreality/{{ i.ad_id }}/1.jpg"alt="" class="image" loading="lazy" decoding="async">
+                        {% elif i.img_bazos %}
                             <img src="{{ i.img_bazos }}"alt="" class="image" loading="lazy" decoding="async">
                         {% elif i.first_image %}
                             <img src="{{ i.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
@@ -371,8 +375,9 @@
                         </h3>
                     {% endif %}
 
-                    <h5 class="info {{ i.budget }}">
-                      {{ i.city }} - {{ i.created_at }}
+                    <h5 class="info {{ i.source }}">
+                      {{ i.city }} - {{ i.created_at|date:"d F Y р. H:i" }}
+                      <span class="freshness-dot" data-created="{{ i.created_at|date:'c' }}" title=""></span>
                     </h5>
                 </div>
             </a>
@@ -480,4 +485,69 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+<script>
+function pluralize(n, one, few, many) {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod100 > 10 && mod100 < 20) return many;
+  if (mod10 === 1) return one;
+  if (mod10 > 1 && mod10 < 5) return few;
+  return many;
+}
+
+function formatFreshness(diffMin) {
+  if (diffMin < 1) return 'щойно';
+
+  if (diffMin < 60) {
+    const m = Math.floor(diffMin);
+    return `${m} ${pluralize(m, 'хвилину', 'хвилини', 'хвилин')} тому`;
+  }
+
+  if (diffMin < 1440) {
+    const h = Math.floor(diffMin / 60);
+    const m = Math.floor(diffMin % 60);
+    let str = `${h} ${pluralize(h, 'годину', 'години', 'годин')}`;
+    if (m > 0) str += ` ${m} ${pluralize(m, 'хвилину', 'хвилини', 'хвилин')}`;
+    return str + ' тому';
+  }
+
+  const d = Math.floor(diffMin / 1440);
+  const h = Math.floor((diffMin % 1440) / 60);
+  let str = `${d} ${pluralize(d, 'день', 'дні', 'днів')}`;
+  if (h > 0) str += ` ${h} ${pluralize(h, 'годину', 'години', 'годин')}`;
+  return str + ' тому';
+}
+
+function getFreshnessColor(diffMin) {
+  const hours = diffMin / 60;
+  const days = hours / 24;
+
+  if (hours < 1)  return '#97C459';
+  if (hours < 6)  return '#639922';
+  if (hours < 24) return '#3B6D11';
+  if (days < 3)   return '#FAC775';
+  if (days < 7)   return '#EF9F27';
+  if (days < 14)  return '#E24B4A';
+  return '#791F1F';
+}
+
+function applyFreshness() {
+  document.querySelectorAll('.freshness-dot').forEach(dot => {
+    const created = new Date(dot.dataset.created);
+
+    if (isNaN(created.getTime())) {
+      dot.style.background = '#791F1F';
+      dot.title = 'Дата невідома';
+      return;
+    }
+
+    const diffMin = (Date.now() - created.getTime()) / 60000;
+    dot.style.background = getFreshnessColor(diffMin);
+    dot.title = 'Опубліковано ' + formatFreshness(diffMin);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', applyFreshness);
+</script>
+
 {% endblock %}

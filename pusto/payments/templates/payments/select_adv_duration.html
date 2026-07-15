@@ -2,84 +2,216 @@
 {% load static %}
 {% load i18n %}
 
-{% block select_payment_time %}
+{% block select_ad_type %}
 
 <link type="text/css" href="{% static 'payments/css/advDuration.css' %}" rel="stylesheet" />
+<link type="text/css" href="{% static 'payments/css/adSubmit.css' %}" rel="stylesheet" />
 
 <div class="pricing-wrap">
-  <div class="titleMain">{% trans 'обери рекламу' %}</div>
-  {% if ad_type == 'post' %}
-    <div class="title">
-      {% trans 'оберіть тривалість рекламного' %} <span>{% trans 'поста' %}</span>
+  <div class="titleMain">обери рекламу</div>
+  <div class="subtitle">порівняй формати просування та обери термін, який підходить саме вам</div>
+
+  <!-- ===== Рекламний пост ===== -->
+  <div class="adBlock">
+    <div class="adHeader">
+      <div class="adImg">
+        <div class="mockAdCard">
+          <div class="mockAdCard__badge">📢 реклама</div>
+          <div class="mockAdCard__image"></div>
+          <div class="mockAdCard__text">Ремонт ноутбуків по низьким цінам</div>
+        </div>
+      </div>
+      <div class="adInfo">
+        <div class="adTitle">Рекламний пост</div>
+        <div class="adDesc">Ваша пропозиція публікується у стрічці як звичайний пост із фото, описом та ціною — виглядає органічно і викликає більше довіри у покупців або кліентів.</div>
+        <ul class="adFeatures">
+          <li>детальний опис пропозицію</li>
+          <li>кілька фото у галереї</li>
+          <li>органічний вигляд у стрічці</li>
+          <li>! публікується тільки в одну із вибраних категорій (речі або житло) !</li>
+        </ul>
+      </div>
     </div>
 
-  {% elif ad_type == 'banner' %}
-    <div class="title">
-      {% trans 'оберіть тривалість рекламного' %} <span>{% trans 'банера' %}</span>
+    <div class="durationsRow">
+      {% for tariff in post_tariffs %}
+        <div class="durationTile {% if forloop.counter0 == 1 %}popular{% endif %}">
+          {% if forloop.counter0 == 1 %}<div class="tileBadge">оптимально</div>{% endif %}
+          <div class="tileDuration">{{ tariff.duration_days }} днів</div>
+          <div class="tilePrice">{{ tariff.price_eur }} €</div>
+          <button
+            type="button"
+            class="btn {% if forloop.counter0 == 1 %}primary{% else %}light{% endif %} open-ad-submit"
+            data-type-order="post"
+            data-duration-days="{{ tariff.duration_days }}"
+            data-price-eur="{{ tariff.price_eur }}"
+            data-label="Рекламний пост, {{ tariff.duration_days }} днів"
+          >обрати</button>
+        </div>
+      {% endfor %}
     </div>
-  {% endif %}
+  </div>
 
-
-  {% if error %}
-    <div class="error">{{ error }}</div>
-  {% endif %}
-
-  <form method="post">
-    {% csrf_token %}
-
-    <div class="grid">
-
-      <!-- 7 днів -->
-      <div class="card">
-        <div class="price">3 €</div>
-        <div class="duration">{% trans '7 днів' %}</div>
-
-
-        <ul class="features">
-          <li>{% trans 'підвищена видимість' %}</li>
-          <li>{% trans 'швидкий запуск' %}</li>
-        </ul>
-
-        <button type="submit" name="duration" value="7" class="btn light">
-          {% trans 'обрати' %}
-        </button>
+  <!-- ===== Рекламний банер ===== -->
+  <div class="adBlock">
+    <div class="adHeader">
+      <div class="adImg">
+        <div class="mockBanner">
+          <div class="mockBanner__image"></div>
+          <div class="mockBanner__alt">alt: «Знижки до -30% на всі товари цього тижня»</div>
+        </div>
       </div>
-
-      <!-- 30 днів -->
-      <div class="card popular">
-        <div class="price">9 €</div>
-        <div class="duration">{% trans '30 днів' %}</div>
-
-
-        <ul class="features">
-          <li>{% trans 'більше переглядів' %}</li>
-          <li>{% trans 'кращий результат' %}</li>
-          <li>{% trans 'оптимальний варіант' %}</li>
+      <div class="adInfo">
+        <div class="adTitle">Рекламний банер</div>
+        <div class="adDesc">Яскравий візуальний блок розміщується на видному місці сайту — головна сторінка, каталог або сторінка пошуку. Максимальна кількість переглядів.</div>
+        <ul class="adFeatures">
+          <li>видне розміщення на сайті</li>
+          <li>яскравий візуал, привертає увагу</li>
+          <li>найбільше переглядів</li>
+          <li>підходить для акцій та розпродажів</li>
         </ul>
-
-        <button type="submit" name="duration" value="30" class="btn primary">
-          {% trans 'обрати' %}
-        </button>
       </div>
-
-      <!-- 90 днів -->
-      <div class="card">
-        <div class="price">19 €</div>
-        <div class="duration">{% trans '90 днів' %}</div>
-
-
-        <ul class="features">
-          <li>{% trans 'максимальне охоплення' %}</li>
-          <li>{% trans 'довгий період' %}</li>
-        </ul>
-
-        <button type="submit" name="duration" value="90" class="btn light">
-          {% trans 'обрати' %}
-        </button>
-      </div>
-
     </div>
-  </form>
+
+    <div class="durationsRow">
+      {% for tariff in banner_tariffs %}
+        <div class="durationTile {% if forloop.counter0 == 1 %}popular{% endif %}">
+          {% if forloop.counter0 == 1 %}<div class="tileBadge">оптимально</div>{% endif %}
+          <div class="tileDuration">{{ tariff.duration_days }} днів</div>
+          <div class="tilePrice">{{ tariff.price_eur }} €</div>
+          <button
+            type="button"
+            class="btn {% if forloop.counter0 == 1 %}primary{% else %}light{% endif %} open-ad-submit"
+            data-type-order="banner"
+            data-duration-days="{{ tariff.duration_days }}"
+            data-price-eur="{{ tariff.price_eur }}"
+            data-label="Рекламний банер, {{ tariff.duration_days }} днів"
+          >обрати</button>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ===== Партнерство ===== -->
+  <div class="partnershipBanner">
+    <div class="partnershipInfo">
+      <div class="partnershipTitle">Партнерство</div>
+      <div class="partnershipDesc">Довгострокова співпраця для брендів та магазинів: індивідуальні умови розміщення, спільні акції та пріоритетна підтримка.</div>
+      <ul class="partnershipFeatures">
+        <li>індивідуальні умови</li>
+        <li>спільні акції та промо</li>
+        <li>персональний менеджер</li>
+        <li>довгостроковий контракт</li>
+      </ul>
+    </div>
+    <button class="partnershipBtn" onclick="window.location.href='{% url 'partnership' %}'">дізнатись більше</button>
+  </div>
+
 </div>
+
+<!-- ===== Модалка заявки на рекламу (post/banner) ===== -->
+<div class="ad-submit-modal" id="adSubmitModal" aria-hidden="true">
+  <div class="ad-submit-modal__overlay"></div>
+
+  <div class="ad-submit-modal__content" role="dialog" aria-modal="true" aria-labelledby="adSubmitTitle">
+    <button type="button" class="ad-submit-modal__close" id="closeAdSubmitModal" aria-label="{% trans 'Закрити' %}">
+      &times;
+    </button>
+
+    <h2 class="ad-submit-modal__title" id="adSubmitTitle">{% trans 'Заявка на рекламу' %}</h2>
+    <div class="ad-submit-selected-plan" id="adSubmitSelectedPlan"></div>
+
+    <p class="ad-submit-modal__hint">
+      {% trans 'Заповніть форму нижче — після цього наш адміністратор зв\'яжеться з вами щодо оплати.' %}
+    </p>
+
+    <div class="ad-submit-layout">
+      <!-- Форма -->
+      <form id="adSubmitForm" class="ad-submit-form" enctype="multipart/form-data" data-submit-url="{% url 'submit_ad_content' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type_order" id="adTypeOrder">
+        <input type="hidden" name="duration_days" id="adDurationDays">
+        <input type="hidden" name="price_eur" id="adPriceEur">
+
+        <label class="ad-submit-form__label" for="adImageInput">{% trans 'Фото реклами' %}</label>
+        <input type="file" id="adImageInput" name="ad_image" accept="image/*" class="ad-submit-form__file">
+
+        <label
+          class="ad-submit-form__label"
+          for="adTextInput"
+          id="adTextLabel"
+          data-label-post="{% trans 'Текст оголошення' %}"
+          data-label-banner="{% trans 'Alt текст банера (не відображається на зображенні)' %}"
+        >{% trans 'Текст оголошення' %}</label>
+        <textarea
+          id="adTextInput"
+          name="ad_text"
+          class="ad-submit-form__textarea"
+          rows="4"
+          maxlength="500"
+          data-placeholder-post="{% trans 'Наприклад: iPhone 13 Pro, ідеальний стан, повний комплект, торг доречний' %}"
+          data-placeholder-banner="{% trans 'Наприклад: Знижки до -30% на всі товари цього тижня' %}"
+          placeholder="{% trans 'Наприклад: iPhone 13 Pro, ідеальний стан, повний комплект, торг доречний' %}"
+          required
+        ></textarea>
+        <p class="ad-submit-form__hint-small" id="adTextHint" style="display:none;">
+          {% trans 'Цей текст не показується на самому банері — він потрібен як alt-текст зображення (для доступності та SEO). Сам текст акції додайте прямо на зображення банера.' %}
+        </p>
+
+        <label class="ad-submit-form__label" for="adLinkInput">{% trans 'Посилання (необов\'язково)' %}</label>
+        <input
+          type="url"
+          id="adLinkInput"
+          name="ad_link"
+          class="ad-submit-form__input"
+          data-placeholder-post="{% trans 'Наприклад: посилання на ваш магазин чи товар' %}"
+          data-placeholder-banner="{% trans 'Наприклад: посилання на сторінку акції' %}"
+          placeholder="{% trans 'Наприклад: посилання на ваш магазин чи товар' %}"
+        >
+
+        <label class="ad-submit-form__label" for="adContactInput">{% trans "Контакт (email, Telegram @нік або телефон)" %}</label>
+        <input
+          type="text"
+          id="adContactInput"
+          name="contact"
+          class="ad-submit-form__input"
+          placeholder="{% trans 'Наприклад: user@mail.com або @username' %}"
+          required
+        >
+
+        <div class="ad-submit-form__error" id="adSubmitError" style="display:none;"></div>
+
+        <button type="submit" class="topup-card__btn ad-submit-form__submit">
+          {% trans 'Надіслати заявку' %}
+        </button>
+      </form>
+
+      <!-- Живе превью -->
+      <div class="ad-submit-preview">
+        <div class="ad-submit-preview__label">{% trans 'Так виглядатиме на сайті' %}</div>
+        <div class="ad-submit-preview__card" id="adPreviewCard">
+          <div class="ad-submit-preview__badge" id="adPreviewBadge">★ {% trans 'TOP' %}</div>
+          <img id="adPreviewImage" class="ad-submit-preview__image" src="" alt="" style="display:none;">
+          <div id="adPreviewImagePlaceholder" class="ad-submit-preview__image-placeholder">
+            {% trans 'фото ще не завантажено' %}
+          </div>
+          <div
+            class="ad-submit-preview__text"
+            id="adPreviewText"
+            data-placeholder-post="{% trans 'текст оголошення зʼявиться тут' %}"
+            data-placeholder-banner="{% trans 'alt-текст зʼявиться тут' %}"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ad-submit-success" id="adSubmitSuccess" style="display:none;">
+      <span class="ad-submit-success__icon">✓</span>
+      <p>{% trans "Дякуємо! Заявку прийнято. Очікуйте, адміністратор незабаром зв'яжеться з вами щодо оплати." %}</p>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'payments/js/adSubmit.js' %}"></script>
 
 {% endblock %}

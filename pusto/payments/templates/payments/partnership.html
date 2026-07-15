@@ -1,0 +1,147 @@
+{% extends 'pusto/head.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block partnership %}
+
+<!-- ===== HERO ===== -->
+<link type="text/css" href="{% static 'payments/css/partnership.css' %}" rel="stylesheet" />
+
+<div class="p-hero__inner">
+  <p class="p-eyebrow">pusto.sk · партнерство</p>
+  <h1 class="p-hero__title">
+    Ваш бізнес там,<br>де щодня шукають,<br>наймають і винаймають
+  </h1>
+  <p class="p-hero__sub">
+    Pusto.sk — майданчик оголошень для української спільноти у Словаччині:
+    речі, сусіди, житло. Замість разової реклами пропонуємо співпрацю
+    з умовами, підібраними під ваш бізнес.
+  </p>
+  <a href="#p-contact" class="p-hero__cta">до контактів ↓</a>
+</div>
+
+
+<main class="p-page">
+
+  <!-- ===== СФЕРИ ===== -->
+  <section class="p-section" aria-labelledby="p-spheres-title">
+    <p class="p-eyebrow p-eyebrow--dark">де нам цікава співпраця</p>
+    <h2 class="p-section__title" id="p-spheres-title">Сфери, які ми зараз розглядаємо</h2>
+
+    <ul class="p-stamps" role="list">
+      <li class="p-stamp">нерухомість та оренда</li>
+      <li class="p-stamp">магазини та роздрібна торгівля</li>
+      <li class="p-stamp">юридичні та візові послуги</li>
+      <li class="p-stamp">переклад і легалізація документів</li>
+      <li class="p-stamp">мовні курси та освіта</li>
+      <li class="p-stamp">кафе та доставка їжі</li>
+      <li class="p-stamp">перевезення та переїзд</li>
+      <li class="p-stamp">фінансові та банківські послуги</li>
+      <li class="p-stamp">it та фріланс-послуги</li>
+    </ul>
+
+    <p class="p-spheres__note">
+      Не знайшли свою сферу в списку? Це не означає відмову — просто напишіть,
+      яким бізнесом займаєтесь, і ми разом подивимось, чи є сенс.
+    </p>
+  </section>
+
+  <!-- ===== УМОВИ ===== -->
+  <section class="p-section p-section--board" aria-labelledby="p-terms-title">
+    <p class="p-eyebrow">на дошці оголошень</p>
+    <h2 class="p-section__title" id="p-terms-title">Умови співпраці</h2>
+
+    <div class="p-board">
+      <article class="p-note p-note--a">
+        <span class="p-note__pin"></span>
+        <h3 class="p-note__title">Індивідуальні умови</h3>
+        <p class="p-note__text">Ціну та формат розміщення підбираємо під ваш бюджет
+          і цілі, а не видаємо з прайс-листа під копірку.</p>
+      </article>
+
+      <article class="p-note p-note--b">
+        <span class="p-note__pin"></span>
+        <h3 class="p-note__title">Спільні акції</h3>
+        <p class="p-note__text">Тематичні добірки, розсилки та промо разом
+          із вашим брендом під сезонні кампанії й розпродажі.</p>
+      </article>
+
+      <article class="p-note p-note--c">
+        <span class="p-note__pin"></span>
+        <h3 class="p-note__title">Персональний менеджер</h3>
+        <p class="p-note__text">Один контакт, який веде співпрацю від старту
+          до продовження — без пересилання між відділами.</p>
+      </article>
+
+      <article class="p-note p-note--d">
+        <span class="p-note__pin"></span>
+        <h3 class="p-note__title">Довгостроковий контракт</h3>
+        <p class="p-note__text">Фіксуємо умови на квартал чи рік наперед —
+          стабільна ціна замість щомісячного перегляду.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== ВАРІАНТИ ===== -->
+  <section class="p-section" aria-labelledby="p-formats-title">
+    <p class="p-eyebrow p-eyebrow--dark">формати</p>
+    <h2 class="p-section__title" id="p-formats-title">Варіанти співпраці</h2>
+
+    <div class="p-formats">
+      <article class="p-format">
+        <p class="p-format__tag">01</p>
+        <h3 class="p-format__title">Бартер</h3>
+        <p class="p-format__text">Обмін вашими товарами чи послугами
+          на рекламне розміщення — без грошей на старті.</p>
+      </article>
+
+      <article class="p-format">
+        <p class="p-format__tag">02</p>
+        <h3 class="p-format__title">Щомісячна підписка</h3>
+        <p class="p-format__text">Фіксоване розміщення оголошень або банера
+          щомісяця зі знижкою за постійність.</p>
+      </article>
+
+      <article class="p-format">
+        <p class="p-format__tag">03</p>
+        <h3 class="p-format__title">Разова кампанія</h3>
+        <p class="p-format__text">Під конкретну подію: відкриття, розпродаж,
+          сезонну акцію чи запуск нового продукту.</p>
+      </article>
+
+      <article class="p-format">
+        <p class="p-format__tag">04</p>
+        <h3 class="p-format__title">Ексклюзив категорії</h3>
+        <p class="p-format__text">Єдиний партнер у своїй ніші — наприклад,
+          один юрист чи один перевізник на сайті.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== КОНТАКТИ ===== -->
+  <section class="p-contact" id="p-contact" aria-labelledby="p-contact-title">
+    <p class="p-eyebrow">останній пункт</p>
+    <h2 class="p-section__title p-section__title--light" id="p-contact-title">
+      Напишіть нам напряму
+    </h2>
+    <p class="p-contact__sub">
+      Розкажіть коротко, чим займаєтесь і що маєте на увазі —
+      відповідаємо особисто, без ботів і форм на 12 полів.
+    </p>
+
+    <div class="p-contact__grid">
+      <a href="mailto:partnership@pusto.sk?subject=Партнерство%20з%20Pusto.sk" class="p-contact__card">
+        <span class="p-contact__icon" aria-hidden="true">✉</span>
+        <span class="p-contact__label">email</span>
+        <span class="p-contact__value">pusto.sk.com@gmail.com</span>
+      </a>
+
+      <a href="https://t.me/SKpusto" target="_blank" rel="noopener" class="p-contact__card">
+        <span class="p-contact__icon" aria-hidden="true">✈</span>
+        <span class="p-contact__label">telegram</span>
+        <span class="p-contact__value">@SKpusto</span>
+      </a>
+    </div>
+  </section>
+
+{% endblock %}

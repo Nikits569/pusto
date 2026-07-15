@@ -33,23 +33,23 @@ from django.contrib.admin.views.decorators import staff_member_required
 import json
 from urllib.parse import quote
 from django.core.cache import cache
+import requests
 
 TG_SUPERGROUP_PREFIX = 1000000000000
 
 chat_invite = {
-    "1175233956": 'https://t.me/baraholka_presov_kosice',  # Барахолка Presov
-    "1386423654": 'https://t.me/tuke_hack',                # Tuke market
-    "1274583303": 'https://t.me/kosice_hack',              # Kosice market
-    "2766446415": 't.me/NashaBratislava',                  # Nasha Bratislava
-    "1666679455": 't.me/zhytlo_robota_sk',
-    '1840072195': 't.me/bratislava_slovakia_arenda',
-
-    '1956832493': 't.me/kosiceflats',
-    '2091082928': 't.me/arenda_nitra',
-    '2101692521': 't.me/baraholka_nitra',
-    '1912835249': 't.me/nitra_hack',
-    '2240457831': 't.me/DreamCityGroupSro',
-    '1764112838': 't.me/GoldKeyBratislava',
+    "1175233956": 'https://telegram.me/baraholka_presov_kosice',
+    "1386423654": 'https://telegram.me/tuke_hack',
+    "1274583303": 'https://telegram.me/kosice_hack',
+    "2766446415": 'https://telegram.me/NashaBratislava',
+    "1666679455": 'https://telegram.me/zhytlo_robota_sk',
+    '1840072195': 'https://telegram.me/bratislava_slovakia_arenda',
+    '1956832493': 'https://telegram.me/kosiceflats',
+    '2091082928': 'https://telegram.me/arenda_nitra',
+    '2101692521': 'https://telegram.me/baraholka_nitra',
+    '1912835249': 'https://telegram.me/nitra_hack',
+    '2240457831': 'https://telegram.me/DreamCityGroupSro',
+    '1764112838': 'https://telegram.me/GoldKeyBratislava',
 }
 
 class GlobalSearchView(View):
@@ -939,21 +939,39 @@ class page(TemplateView):
 
         return f"{settings.MEDIA_URL.rstrip('/')}/{value.lstrip('/')}"
 
+    def _get_remote_photos(self, folder, max_photos=5):
+        """Проверяет по HEAD-запросу, сколько фото реально существует."""
+        slides = []
+        for i in range(1, max_photos + 1):
+            url = f'https://pusto.sk/photos/{folder}/{self.obj.ad_id}/{i}.jpg'
+            try:
+                resp = requests.head(url, timeout=2)
+            except requests.RequestException:
+                break
+            if resp.status_code != 200:
+                break
+            slides.append({"src": url})
+        return slides
 
     def get_slider_images(self):
         slides = []
+        source = getattr(self.obj, "source", None)
 
-        # Bazos
-        if getattr(self.obj, "source", None) in ("bazos", "reality.sk", "topreality") and (
-                getattr(self.obj, "img_bazos", None) or getattr(self.obj, "img_reality", None)
-        ):
+        if source == "reality.sk":
+            slides.extend(self._get_remote_photos("reality"))
+
+        elif source == "topreality":
+            slides.extend(self._get_remote_photos("topreality"))
+
+        elif source == "bazos" and getattr(self.obj, "img_bazos", None):
             slides.append({
                 "src": self.obj.img_bazos,
                 "is_preview": True,
             })
             return slides
 
-
+        if slides:
+            return slides
 
         # Telegram / пользовательские изображения
         preview_src = self._resolve_image_src(getattr(self.obj, "preview_image", None))

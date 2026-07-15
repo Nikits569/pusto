@@ -1,0 +1,298 @@
+#payment-widget-root {
+  --pw-bg: #ffffff;
+  --pw-border: #e4e4e7;
+  --pw-text: #18181b;
+  --pw-muted: #71717a;
+  --pw-accent: #0f766e;       /* teal — основной акцент */
+  --pw-accent-soft: #ccfbf1;
+  --pw-success: #16a34a;
+  --pw-success-soft: #dcfce7;
+  --pw-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --pw-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --pw-radius: 16px;
+}
+
+#payment-widget-root * {
+  box-sizing: border-box;
+}
+
+#payment-widget-root .pw-card {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  background: var(--pw-bg);
+  border: 1px solid var(--pw-border);
+  border-radius: var(--pw-radius);
+  padding: 24px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06);
+  font-family: var(--pw-sans);
+}
+
+/* тонкая полоса таймера сверху карточки, "утекает" по мере истечения */
+#payment-widget-root .pw-timerbar {
+  position: absolute;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--pw-accent);
+  width: 100%;
+  transform-origin: left;
+  transition: transform 1s linear;
+}
+
+#payment-widget-root .pw-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 18px;
+}
+
+#payment-widget-root .pw-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--pw-text);
+  letter-spacing: -0.01em;
+}
+
+#payment-widget-root .pw-countdown {
+  font-family: var(--pw-mono);
+  font-size: 13px;
+  color: var(--pw-muted);
+}
+
+/* QR с "уголками видоискателя" — единственный акцентный элемент */
+#payment-widget-root .pw-qr-frame {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 20px;
+  padding: 12px;
+}
+
+#payment-widget-root .pw-qr-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 4px;
+}
+
+#payment-widget-root .pw-corner-tl,
+#payment-widget-root .pw-corner-tr,
+#payment-widget-root .pw-corner-bl,
+#payment-widget-root .pw-corner-br {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: var(--pw-accent);
+  border-style: solid;
+  border-width: 0;
+}
+
+#payment-widget-root .pw-corner-tl { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; border-radius: 4px 0 0 0; }
+#payment-widget-root .pw-corner-tr { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; border-radius: 0 4px 0 0; }
+#payment-widget-root .pw-corner-bl { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; border-radius: 0 0 0 4px; }
+#payment-widget-root .pw-corner-br { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; border-radius: 0 0 4px 0; }
+
+#payment-widget-root .pw-field {
+  margin-bottom: 12px;
+}
+
+#payment-widget-root .pw-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pw-muted);
+  margin-bottom: 4px;
+}
+
+#payment-widget-root .pw-value-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fafafa;
+  border: 1px solid var(--pw-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+#payment-widget-root .pw-value {
+  font-family: var(--pw-mono);
+  font-size: 13px;
+  color: var(--pw-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+#payment-widget-root .pw-copy-btn {
+  background: none;
+  border: none;
+  color: var(--pw-accent);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+#payment-widget-root .pw-copy-btn:hover { background: var(--pw-accent-soft); }
+
+#payment-widget-root .pw-status {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--pw-muted);
+}
+
+#payment-widget-root .pw-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pw-accent);
+  animation: pw-pulse 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pw-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* состояние "оплачено" — перекрывает карточку */
+#payment-widget-root .pw-success {
+  position: absolute;
+  inset: 0;
+  background: var(--pw-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#payment-widget-root .pw-success.pw-visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#payment-widget-root .pw-success-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--pw-success-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.6);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#payment-widget-root .pw-success.pw-visible .pw-success-icon {
+  transform: scale(1);
+}
+
+#payment-widget-root .pw-success-icon svg { width: 28px; height: 28px; }
+
+#payment-widget-root .pw-success-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pw-text);
+}
+
+#payment-widget-root .pw-success-sub {
+  font-size: 13px;
+  color: var(--pw-muted);
+}
+
+#payment-widget-root .pw-expired {
+  text-align: center;
+  color: var(--pw-muted);
+  font-size: 13px;
+  padding: 20px 0;
+}
+
+#payment-widget-root .pw-method-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px;
+  background: #fafafa;
+  border: 1px solid var(--pw-border);
+  border-radius: 10px;
+  font-family: var(--pw-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pw-text);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+#payment-widget-root .pw-method-btn:hover {
+  border-color: var(--pw-accent);
+  background: var(--pw-accent-soft);
+}
+
+#payment-widget-root .pw-method-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+#payment-widget-root .pw-manual-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--pw-border);
+  border-radius: 10px;
+  font-family: var(--pw-sans);
+  font-size: 14px;
+  color: var(--pw-text);
+  outline: none;
+}
+
+#payment-widget-root .pw-manual-input:focus {
+  border-color: var(--pw-accent);
+}
+
+#payment-widget-root .pw-manual-submit {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: var(--pw-accent);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-family: var(--pw-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#payment-widget-root .pw-manual-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+#payment-widget-root .pw-back-link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--pw-muted);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #payment-widget-root .pw-status-dot { animation: none; }
+  #payment-widget-root .pw-success-icon { transition: none; }
+}

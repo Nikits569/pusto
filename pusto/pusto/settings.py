@@ -15,6 +15,8 @@ import os
 from dotenv import load_dotenv
 from django.utils.translation import gettext_lazy as _
 import pymysql
+import os
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR.parent / ".env")
@@ -27,14 +29,18 @@ USE_L10N = True
 USE_TZ = True
 TIME_ZONE = "Europe/Bratislava"
 
-STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
-STRIPE_SECRET_KEY  = os.getenv('STRIPE_SECRET_KEY')
+BYBIT_API_KEY = os.environ["BYBIT_API_KEY"]
+BYBIT_API_SECRET = os.environ["BYBIT_API_SECRET"]
+BYBIT_TESTNET = os.environ.get("BYBIT_TESTNET", "False") == "True"
+PAYMENT_DEPOSIT_ADDRESS = os.environ["PAYMENT_DEPOSIT_ADDRESS"]
 
 DAILY_LIMITS = {
     'thingspost': 5,
     'neighborpost': 3,
     'jobpost': 3,
 }
+
+ADMIN_NOTIFICATION_EMAIL = 'pusto.sk.com@gmail.com'
 
 LANGUAGE_CODE = 'uk'
 
@@ -110,6 +116,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.i18n',
                 'django.contrib.messages.context_processors.messages',
 
                 'pusto.context_processors.support_form',

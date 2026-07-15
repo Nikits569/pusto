@@ -1,5 +1,13 @@
-pricing-wrap {
-  max-width: 1000px;
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #fafafa;
+  margin: 0;
+  color: #111;
+}
+
+.pricing-wrap {
+  max-width: 1100px;
   margin: 50px auto;
   padding: 0 16px;
 }
@@ -7,296 +15,515 @@ pricing-wrap {
 .titleMain {
   font-size: 28px;
   font-weight: 600;
-  display: flex;
-}
-
-.title {
-  font-size: 28px;
-  font-weight: 400;
-  margin-bottom: 20px;
-}
-
-.title span {
-    font-size: 33px;
-    font-weight: 700;
 }
 
 .subtitle {
   color: #6b7280;
-  margin-bottom: 28px;
+  margin: 8px 0 36px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.card {
+/* ===== Ad type block ===== */
+.adBlock {
   border: 1px solid #e5e7eb;
-  border-radius: 18px;
-  padding: 22px;
+  border-radius: 20px;
   background: #fff;
-  transition: 0.25s;
+  padding: 28px;
+  margin-bottom: 24px;
+}
 
+.adHeader {
   display: flex;
-  flex-direction: column;
-  height: 400px;
+  gap: 22px;
+  margin-bottom: 20px;
 }
 
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+.adImg {
+  width: 220px;
+  height: 140px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #eef2ff, #dfe4fb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2b3674;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px;
 }
 
-.card.popular {
-  border: 2px solid #2b3674;
+.adInfo { flex: 1; }
+
+.adTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
-.badge {
-  font-size: 12px;
-  background: #2b3674;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 999px;
-  display: inline-block;
-  margin-bottom: 10px;
+.adDesc {
+  color: #6b7280;
+  font-size: 15px;
+  margin-bottom: 14px;
+  line-height: 1.5;
 }
 
-.duration {
-  font-size: 20px;
-  font-weight: 500;
+.adFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
 }
 
-.top {
-  margin-bottom: 10px;
-}
-
-.price {
-    font-size: 37px;
-    font-weight: 800;
-    margin: 8px 0 14px;
-}
-
-.features {
-    list-style: none;
-    padding: 0;
-    margin: 16px 0;
-
-    flex-grow: 1;               /* РАСТЯГИВАЕТ */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;    /* ЦЕНТРИРУЕТ */
-    gap: 10px;
-}
-.features li {
+.adFeatures li {
   position: relative;
-  padding-left: 26px;
-  margin-bottom: 10px;
-  font-size: 16px;
+  padding-left: 22px;
+  font-size: 14px;
   color: #374151;
 }
 
-.features li::before {
+.adFeatures li::before {
   content: "✓";
   position: absolute;
   left: 0;
   top: 0;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #eef2ff;
   color: #2b3674;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* ===== durations row ===== */
+.durationsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.durationTile {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  transition: 0.2s;
+  position: relative;
+}
+
+.durationTile.popular {
+  border: 2px solid #2b3674;
+}
+
+.tileBadge {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  background: #2b3674;
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.tileDuration {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.tilePrice {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
 .btn {
   width: 100%;
-  height: 46px;
-  border-radius: 12px;
+  height: 42px;
+  border-radius: 10px;
   border: none;
   font-weight: 700;
   cursor: pointer;
+  font-size: 14px;
   transition: 0.2s;
-  margin-top: auto;
 }
 
-.btn.primary {
-  background: #2b3674;
-  color: white;
+.btn.primary { background: #2b3674; color: #fff; }
+.btn.primary:hover { background: #1f2858; }
+.btn.light { background: #f3f4f6; color: #111; }
+.btn.light:hover { background: #e5e7eb; }
+
+/* ===== Partnership banner ===== */
+.partnershipBanner {
+  border-radius: 20px;
+  background: linear-gradient(135deg, #2b3674, #1f2858);
+  color: #fff;
+  padding: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
 }
 
-.btn.primary:hover {
-  background: #1f2858;
+.partnershipInfo { flex: 1; min-width: 260px; }
+
+.partnershipTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
-.btn.light {
-  background: #f3f4f6;
-  color: #111;
+.partnershipDesc {
+  color: #c7cdf0;
+  font-size: 15px;
+  margin-bottom: 14px;
+  max-width: 520px;
+  line-height: 1.5;
 }
 
-.btn.light:hover {
-  background: #e5e7eb;
+.partnershipFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
 }
 
-.error {
-  color: red;
-  margin-bottom: 16px;
+.partnershipFeatures li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 14px;
+  color: #e7e9fb;
 }
 
-/* =========================
-   Responsive
-========================= */
-
-@media (max-width: 1024px) {
-  .pricing-wrap {
-    max-width: 900px;
-    margin: 40px auto;
-  }
-
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-
-  .card {
-    height: auto;
-    min-height: 380px;
-  }
-
-  .titleMain,
-  .title {
-    font-size: 26px;
-  }
-
-  .title span {
-    font-size: 30px;
-  }
-
-  .price {
-    font-size: 34px;
-  }
+.partnershipFeatures li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (max-width: 768px) {
-  .pricing-wrap {
-    margin: 32px auto;
-    padding: 0 14px;
-  }
+.partnershipBtn {
+  background: #fff;
+  color: #2b3674;
+  border: none;
+  padding: 14px 30px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.partnershipBtn:hover { background: #eef2ff; }
 
-  .grid {
+@media (max-width: 900px) {
+  .durationsRow { grid-template-columns: 1fr; }
+  .adHeader { flex-direction: column; }
+  .adImg { width: 100%; height: 120px; }
+}
+
+/*
+  Стили намеренно близки к .topup-modal, чтобы визуально сочетаться
+  с модалкой "підняти оголошення". Если у тебя уже есть общие переменные
+  цветов (--primary, --bg-card и т.д.) — замени хардкод ниже на них.
+*/
+
+/*
+  Стили намеренно близки к .topup-modal, чтобы визуально сочетаться
+  с модалкой "підняти оголошення". Если у тебя уже есть общие переменные
+  цветов (--primary, --bg-card и т.д.) — замени хардкод ниже на них.
+*/
+
+.ad-submit-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-submit-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.ad-submit-modal__content {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+.ad-submit-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #888;
+}
+
+.ad-submit-modal__title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.ad-submit-selected-plan {
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 12px;
+}
+
+.ad-submit-modal__hint {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.ad-submit-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 640px) {
+  .ad-submit-layout {
     grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .card {
-    padding: 20px;
-    border-radius: 16px;
-    min-height: auto;
-    height: auto;
-  }
-
-  .titleMain,
-  .title {
-    font-size: 24px;
-    line-height: 1.25;
-    flex-wrap: wrap;
-  }
-
-  .title span {
-    font-size: 28px;
-  }
-
-  .subtitle {
-    font-size: 15px;
-    margin-bottom: 22px;
-    line-height: 1.5;
-  }
-
-  .duration {
-    font-size: 18px;
-  }
-
-  .price {
-    font-size: 32px;
-    margin: 6px 0 12px;
-  }
-
-  .features {
-    margin: 14px 0 18px;
-    gap: 8px;
-    justify-content: flex-start;
-  }
-
-  .features li {
-    font-size: 15px;
-    padding-left: 24px;
-    margin-bottom: 8px;
-  }
-
-  .btn {
-    height: 44px;
-    font-size: 15px;
-    border-radius: 10px;
   }
 }
 
-@media (max-width: 480px) {
-  .pricing-wrap {
-    margin: 24px auto;
-    padding: 0 12px;
-  }
+.ad-submit-form__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 14px 0 6px;
+  color: #333;
+}
 
-  .titleMain,
-  .title {
-    font-size: 21px;
-  }
+.ad-submit-form__label:first-of-type {
+  margin-top: 0;
+}
 
-  .title span {
-    font-size: 24px;
-  }
+.ad-submit-form__input,
+.ad-submit-form__textarea,
+.ad-submit-form__file {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
 
-  .subtitle {
-    font-size: 14px;
-    margin-bottom: 18px;
-  }
+.ad-submit-form__textarea {
+  resize: vertical;
+}
 
-  .card {
-    padding: 16px;
-    border-radius: 14px;
-  }
+.ad-submit-form__error {
+  color: #d33;
+  font-size: 13px;
+  margin-top: 10px;
+}
 
-  .badge {
-    font-size: 11px;
-    padding: 4px 8px;
-    margin-bottom: 8px;
-  }
+.ad-submit-form__submit {
+  margin-top: 18px;
+  width: 100%;
+  background: #2B3674;
+  border-radius: 20px;
+  color: white;
+  font-size: 15px;
+  height: 30px;
+  cursor: pointer;
+}
 
-  .duration {
-    font-size: 17px;
-  }
+.ad-submit-preview__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  margin-bottom: 8px;
+}
 
-  .price {
-    font-size: 28px;
-  }
+.ad-submit-preview__card {
+  position: relative;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 14px;
+  background: #fafafa;
+}
 
-  .features li {
-    font-size: 14px;
-    line-height: 1.4;
-  }
+.ad-submit-preview__badge {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  z-index: 1;
+  background: #fff;
+  color: #d4a017;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
 
-  .features li::before {
-    width: 16px;
-    height: 16px;
-    font-size: 12px;
-  }
+.ad-submit-preview__image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
 
-  .btn {
-    height: 42px;
-    font-size: 14px;
-  }
+.ad-submit-preview__image-placeholder {
+  width: 100%;
+  height: 160px;
+  border-radius: 8px;
+  background: #eee;
+  color: #999;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 0 12px;
+}
+
+.ad-submit-preview__text {
+  font-size: 14px;
+  color: #333;
+  word-break: break-word;
+}
+
+/* Пост: картка обʼяви, без ціни — тільки текст */
+.ad-submit-preview__card--post .ad-submit-preview__text {
+  font-weight: 600;
+}
+
+/* Банер: широка низька плашка, alt-текст показуємо приглушено —
+   він не є видимим заголовком, це лише службовий опис зображення */
+.ad-submit-preview__card--banner .ad-submit-preview__image,
+.ad-submit-preview__card--banner .ad-submit-preview__image-placeholder {
+  height: 90px;
+}
+
+.ad-submit-preview__card--banner .ad-submit-preview__text {
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+}
+
+.ad-submit-form__hint-small {
+  font-size: 12px;
+  color: #888;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.ad-submit-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 30px 0 10px;
+}
+
+.ad-submit-success__icon {
+  font-size: 32px;
+  color: #16a34a;
+}
+
+/* ===== Мок-превью в adBlock: приклад поста та банера ===== */
+
+.mockAdCard {
+  position: relative;
+  width: 100%;
+  max-width: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.mockAdCard__badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  background: #fff;
+  color: #d4a017;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.mockAdCard__image {
+  width: 100%;
+  height: 130px;
+  background: linear-gradient(135deg, #dfe6ee, #c8d2de);
+}
+
+.mockAdCard__text {
+  padding: 10px 12px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.3;
+  /* цены тут намеренно немає — тільки текст оголошення, як і буде на сайті */
+}
+
+.mockBanner {
+  width: 100%;
+}
+
+.mockBanner__image {
+  width: 100%;
+  height: 90px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ffd9a0, #ffb347);
+}
+
+.mockBanner__alt {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #888;
+  font-style: italic;
+  /* це саме alt-текст картинки банера (для доступності/SEO),
+     а не видимий заголовок — сам банер це просто зображення */
 }

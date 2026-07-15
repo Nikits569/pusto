@@ -1,480 +1,385 @@
+import datetime
 import json
-import stripe
-import uuid
-from django.conf import settings
 from django.core.mail import send_mail
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
-from django.views import View
-from django.views.generic import TemplateView, FormView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.admin.views.decorators import staff_member_required
-from django.views.decorators.http import require_POST
-from django.db import transaction
-from django.db.utils import IntegrityError
-from .forms import AdvertisementForm
-from .models import PendingAdvPromotion, AdvPromotion, TopPromotion, StripeWebhookEvent
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import render
 from ads.models import ThingsPost, JobPost, NeighborPost
+from .pricing import get_price, get_all_tariffs
+from .fx import eur_to_usdt
+from .models import Order
+from .qr import generate_qr_data_url
+from .utils import generate_unique_amount
+from decimal import Decimal, InvalidOperation
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
+ORDER_TTL_MINUTES = 30
 
-
-def _sess_key(base: str, slug: str) -> str:
-    return f"{base}:{slug}"
-
-
-POST_MODELS = {
+# post_type -> модель объявления (используется и для эндпоинта, и в кроне)
+POST_MODEL_MAP = {
     "things": ThingsPost,
     "job": JobPost,
     "neighbor": NeighborPost,
 }
 
-ADV_DURATION_PRICE = {
-    "7": 500,
-    "30": 3000,
-    "90": 8000,
-}
 
-TOP_DURATION_PRICE = {
-    "3": 250,
-    "7": 500,
-    "14": 900,
-}
-
-
-# -------------------------
-# ADS: type -> duration -> create -> pay
-# -------------------------
-
-class SelectAdvDurationView(LoginRequiredMixin, View):
-    template_name = "payments/select_adv_duration.html"
-    ALLOWED = set(ADV_DURATION_PRICE.keys())
-
-    def get(self, request, slug):
-        return render(request, self.template_name, {"ad_type": slug})
-
-    def post(self, request, slug):
-        duration = request.POST.get("duration")
-        if duration not in self.ALLOWED:
-            return render(request, self.template_name, {"ad_type": slug, "error": "Неверный срок"})
-
-        # Храним duration строго по slug (чтобы вкладки не мешали)
-        request.session[_sess_key("adv_duration", slug)] = duration
-
-        # Сбрасываем только "свои" ключи
-        request.session.pop(_sess_key("adv_intent_id", slug), None)
-        request.session.pop(_sess_key("pending_id", slug), None)
-
-        return redirect("create_ad", slug=slug)
-
-class AdvertisementCreateView(LoginRequiredMixin, FormView):
-    template_name = "payments/ad_payment.html"
-    form_class = AdvertisementForm
-
-    def dispatch(self, request, *args, **kwargs):
-        slug = self.kwargs.get("slug")
-        duration = request.session.get(_sess_key("adv_duration", slug))
-        if not duration:
-            return redirect("select_adv_duration", slug=slug)
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        slug = self.kwargs.get("slug")
-
-        duration = self.request.session.get(_sess_key("adv_duration", slug))
-        price_cents = ADV_DURATION_PRICE.get(str(duration)) if duration else None
-
-        ctx["slug"] = slug
-        ctx["duration"] = duration
-        ctx["price"] = (price_cents // 100) if price_cents else None  # евро
-        return ctx
-
-    def form_valid(self, form):
-        slug = self.kwargs["slug"]
-
-        # ВАЖНО:
-        # В session храним только имя файла (строку), не сам файл.
-        # Если тебе нужен реальный файл на этапе оплаты — сохраняй его в модель/временное хранилище.
-        image_name = None
-        if form.cleaned_data.get("image"):
-            image_name = form.cleaned_data["image"].name
-
-        # храним данные формы по slug
-        ad_map = self.request.session.get("ad_form_data_map", {})
-        ad_map[slug] = {
-            "title": form.cleaned_data["title"],
-            "link": form.cleaned_data.get("link"),
-            "image": image_name,
-            "ad_type": slug,
-        }
-        self.request.session["ad_form_data_map"] = ad_map
-
-        # сбрасываем все payment-сессионные ключи для этого slug,
-        # чтобы новая попытка оплаты создала новый PaymentIntent + Pending.
-        for k in ("adv_intent_id", "pending_id", "checkout_key"):
-            self.request.session.pop(_sess_key(k, slug), None)
-
-        self.request.session.modified = True
-        return redirect("ad_payment", slug=slug)
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-def _sess_key(name: str, slug: str) -> str:
-    return f"adv:{slug}:{name}"
-
-class AdvertisementPaymentView(LoginRequiredMixin, View):
-    template_name = "payments/pay.html"
-
-    def _ensure_checkout_key(self, request, slug) -> str:
-        key = request.session.get(_sess_key("checkout_key", slug))
-        if not key:
-            key = str(uuid.uuid4())
-            request.session[_sess_key("checkout_key", slug)] = key
-            request.session.modified = True
-        return key
-
-    def _rotate_checkout_key(self, request, slug) -> str:
-        key = str(uuid.uuid4())
-        request.session[_sess_key("checkout_key", slug)] = key
-        request.session.pop(_sess_key("adv_intent_id", slug), None)
-        request.session.pop(_sess_key("pending_id", slug), None)
-        request.session.modified = True
-        return key
-
-    def _get_amount(self, duration: str) -> int:
-        from .views import ADV_DURATION_PRICE  # или откуда у тебя
-        amount = ADV_DURATION_PRICE.get(str(duration))
-        if not amount:
-            raise ValueError("Неверная длительность")
-        return amount
-
-    def _render(self, request, slug, duration, intent):
-        return render(
-            request,
-            self.template_name,
-            {
-                "client_secret": intent.client_secret,
-                "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY,
-                "ad_type": slug,
-                "duration": int(duration),
-                "price": intent.amount,
-            },
-        )
-
-    def get(self, request, slug):
-        ad_data = request.session.get("ad_form_data_map", {}).get(slug)
-        duration = request.session.get(_sess_key("adv_duration", slug))
-
-        if not duration:
-            return redirect("select_adv_duration", slug=slug)
-        if not ad_data:
-            return redirect("create_ad", slug=slug)
-
-        checkout_key = self._ensure_checkout_key(request, slug)
-
-        # 0) reuse intent from session
-        intent_id = request.session.get(_sess_key("adv_intent_id", slug))
-        if intent_id:
-            try:
-                intent = stripe.PaymentIntent.retrieve(intent_id)
-            except stripe.error.StripeError:
-                checkout_key = self._rotate_checkout_key(request, slug)
-            else:
-                if intent.status in ("succeeded", "canceled"):
-                    checkout_key = self._rotate_checkout_key(request, slug)
-                else:
-                    return self._render(request, slug, duration, intent)
-
-        # 1) restore via pending
-        existing = PendingAdvPromotion.objects.filter(
-            checkout_key=checkout_key,
-            user=request.user,
-        ).first()
-
-        if existing:
-            request.session[_sess_key("pending_id", slug)] = existing.id
-            request.session[_sess_key("adv_intent_id", slug)] = existing.payment_intent_id
-            request.session.modified = True
-
-            try:
-                intent = stripe.PaymentIntent.retrieve(existing.payment_intent_id)
-            except stripe.error.StripeError:
-                checkout_key = self._rotate_checkout_key(request, slug)
-            else:
-                if intent.status in ("succeeded", "canceled"):
-                    checkout_key = self._rotate_checkout_key(request, slug)
-                else:
-                    return self._render(request, slug, duration, intent)
-
-        # 2) create new PI (manual capture) + pending + adv
-        try:
-            amount = self._get_amount(duration)
-        except ValueError:
-            return HttpResponse("Неверная длительность", status=400)
-
-        stripe_idem = f"adv:{request.user.id}:{slug}:{checkout_key}"
-
-        # ✅ ВАЖНО:
-        # - оставляем automatic_payment_methods для Payment Element
-        # - НЕ передаем confirmation_method (иначе ошибка)
-        # - capture_method="manual" включает HOLD (requires_capture)
-        intent = stripe.PaymentIntent.create(
-            amount=amount,
-            currency="eur",
-            capture_method="manual",
-            automatic_payment_methods={"enabled": True},
-            metadata={
-                "payment_type": "adv_promotion",
-                "user_id": str(request.user.id),
-                "ad_type": slug,
-                "duration": str(duration),
-                "checkout_key": str(checkout_key),
-            },
-            idempotency_key=stripe_idem,
-        )
-
-        print("VIEW CREATED PI:", intent.id, "status:", intent.status, "meta:", intent.metadata)
-
-        try:
-            with transaction.atomic():
-                pending = PendingAdvPromotion.objects.create(
-                    user=request.user,
-                    title=ad_data["title"],
-                    link=ad_data.get("link"),
-                    image=ad_data.get("image"),
-                    ad_type=slug,
-                    payment_intent_id=intent.id,
-                    duration_days=int(duration),
-                    checkout_key=checkout_key,
-                )
-
-                # дописываем pending_id в metadata PI
-                try:
-                    stripe.PaymentIntent.modify(
-                        intent.id,
-                        metadata={**(intent.metadata or {}), "pending_id": str(pending.id)},
-                    )
-                except stripe.error.StripeError as e:
-                    print("PI modify metadata failed:", e)
-
-                AdvPromotion.objects.get_or_create(
-                    payment_id=intent.id,
-                    defaults=dict(
-                        user=request.user,
-                        title=ad_data["title"],
-                        link=ad_data.get("link"),
-                        image=ad_data.get("image"),
-                        ad_type=slug,
-                        is_paid=False,
-                        is_frozen=False,  # станет True через webhook при requires_capture
-                        duration_days=int(duration),
-                        status=AdvPromotion.Status.PENDING,
-                    ),
-                )
-
-        except IntegrityError:
-            pending = PendingAdvPromotion.objects.get(checkout_key=checkout_key, user=request.user)
-            intent = stripe.PaymentIntent.retrieve(pending.payment_intent_id)
-
-        request.session[_sess_key("adv_intent_id", slug)] = intent.id
-        request.session[_sess_key("pending_id", slug)] = pending.id
-        request.session.modified = True
-
-        return self._render(request, slug, duration, intent)
-
-    def post(self, request, slug):
-        return redirect("ad_payment", slug=slug)
-
-@require_POST
-def create_payment_intent(request):
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_order(request):
     """
-    CONFIRM существующего PaymentIntent (manual capture).
-    НЕ создаём новый intent.
+    Ожидает JSON: {"amount": "25.00"}
+    Возвращает данные для отрисовки QR на фронте.
     """
     try:
-        data = json.loads(request.body or "{}")
-    except Exception:
-        return JsonResponse({"error": "Bad JSON"}, status=400)
+        body = json.loads(request.body)
+        base_amount = Decimal(str(body["amount"]))
+    except (json.JSONDecodeError, KeyError, ValueError):
+        return JsonResponse({"error": "invalid payload"}, status=400)
 
-    slug = data.get("slug")
-    payment_method_id = data.get("payment_method")
+    unique_amount = generate_unique_amount(base_amount)
 
-    if not slug:
-        return JsonResponse({"error": "slug required"}, status=400)
-    if not payment_method_id:
-        return JsonResponse({"error": "payment_method required"}, status=400)
+    order = Order.objects.create(
+        base_amount=base_amount,
+        unique_amount=unique_amount,
+        expires_at=timezone.now() + datetime.timedelta(minutes=ORDER_TTL_MINUTES),
+    )
 
-    pending_id = request.session.get(_sess_key("pending_id", slug))
-    intent_id = request.session.get(_sess_key("adv_intent_id", slug))
-
-    if not pending_id:
-        return JsonResponse({"error": "pending_id missing in session"}, status=400)
-    if not intent_id:
-        return JsonResponse({"error": "intent_id missing in session"}, status=400)
-
-    pending = PendingAdvPromotion.objects.filter(id=pending_id, user=request.user).first()
-    if not pending:
-        return JsonResponse({"error": "Pending ad not found"}, status=404)
-
-    if pending.payment_intent_id != intent_id:
-        return JsonResponse({"error": "Intent mismatch"}, status=400)
-
-    ad = AdvPromotion.objects.filter(payment_id=intent_id, user=request.user).first()
-    if ad and ad.is_paid:
-        return JsonResponse({"error": "Already paid"}, status=400)
-
-    try:
-        intent = stripe.PaymentIntent.retrieve(intent_id)
-
-        if intent.status in ("requires_capture", "succeeded", "processing"):
-            return JsonResponse({"client_secret": intent.client_secret, "status": intent.status})
-
-        if intent.status in ("requires_payment_method", "requires_confirmation", "requires_action"):
-            intent = stripe.PaymentIntent.confirm(intent_id, payment_method=payment_method_id)
-            return JsonResponse({"client_secret": intent.client_secret, "status": intent.status})
-
-        return JsonResponse({"error": f"Unexpected intent status: {intent.status}"}, status=400)
-
-    except stripe.error.StripeError as e:
-        return JsonResponse({"error": str(e)}, status=400)
-
-
-# -------------------------
-# TOP promotion (обычная оплата)
-# -------------------------
-
-class CreateTopPaymentIntentView(LoginRequiredMixin, View):
-    def post(self, request, section, post_id, duration):
-        model = POST_MODELS.get(section)
-        if not model:
-            return HttpResponse("Неверная секция", status=400)
-
-        post = get_object_or_404(model, pk=post_id)
-
-        price_cents = TOP_DURATION_PRICE.get(str(duration))
-        if not price_cents:
-            return HttpResponse("Неверная длительность", status=400)
-
-        intent = stripe.PaymentIntent.create(
-            amount=price_cents,
-            currency="eur",
-            metadata={
-                "payment_type": "top_promotion",
-                "section": section,
-                "post_id": str(post.id),
-                "duration": str(duration),
-            }
-        )
-
-        TopPromotion.objects.create(
-            user=request.user,
-            content_type=ContentType.objects.get_for_model(post),
-            object_id=post.id,
-            payment_id=intent.id,
-            is_paid=False,
-            duration_days=int(duration),
-        )
-
-        return render(request, "payments/top_payment.html", {
-            "section": section,
-            "post": post,
-            "price": intent.amount,
-            "client_secret": intent.client_secret,
-            "STRIPE_PUBLIC_KEY": settings.STRIPE_PUBLIC_KEY,
-        })
-
-class SelectPaymentView(TemplateView):
-    template_name = "payments/select_payment.html"
-
-def SelectTopPaymentView(request, ad_type, section, post_id):
-    model = POST_MODELS.get(section)
-    if not model:
-        return HttpResponse("Неверная секция", status=400)
-
-    post = get_object_or_404(model, pk=post_id)
-
-    return render(request, "payments/select_top_payment.html", {
-        "section": section,
-        "post": post,
-        "ad_type": ad_type,
-    })
-
-class PaymentSuccessView(TemplateView):
-    template_name = "payments/payment_success.html"
-
-
-# -------------------------
-# Admin-only tools
-# -------------------------
-
-@staff_member_required
-def stripe_debug_pending(request, pending_id: int):
-    pending = get_object_or_404(PendingAdvPromotion, id=pending_id)
-    events = StripeWebhookEvent.objects.filter(pending_id=pending.id).order_by("-created_at")
-    return render(request, "payments/stripe_debug.html", {
-        "pending": pending,
-        "events": events,
+    return JsonResponse({
+        "order_id": order.id,
+        "amount": str(order.unique_amount),
+        "currency": order.currency,
+        "chain": order.chain,
+        "address": settings.PAYMENT_DEPOSIT_ADDRESS,
+        "qr_code": generate_qr_data_url(settings.PAYMENT_DEPOSIT_ADDRESS),
+        "expires_at": order.expires_at.isoformat(),
+        "type_order": order.TypeOrder.UPGRADE,
     })
 
 
-@staff_member_required
-@require_POST
-def approve_adv(request, adv_id: int):
-    adv = get_object_or_404(AdvPromotion, id=adv_id)
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_promotion_order(request):
+    """
+    Ожидает JSON:
+    {"post_type": "things", "post_id": 42, "duration_days": 7, "price_eur": "5.99"}
 
-    if adv.status != AdvPromotion.Status.PENDING:
-        return HttpResponse("Нельзя approve: не PENDING", status=400)
-    if not adv.is_frozen:
-        return HttpResponse("Нельзя approve: нет холда (is_frozen=False)", status=400)
+    post_type должен быть одним из POST_MODEL_MAP.
+    Объявление должно принадлежать текущему пользователю — иначе 404,
+    чтобы никто не мог оплатить продвижение чужого объявления.
 
-    intent = stripe.PaymentIntent.retrieve(adv.payment_id)
-    if intent.status != "requires_capture":
-        return HttpResponse(f"Нельзя capture, статус: {intent.status}", status=400)
+    Если у пользователя уже есть неоплаченный и не истёкший заказ
+    на этот же post_type/post_id/duration_days — возвращаем его же
+    (тот же QR и сумму), а не создаём новый.
+    """
+    try:
+        body = json.loads(request.body)
+        post_type = body["post_type"]
+        post_id = int(body["post_id"])
+        duration_days = int(body["duration_days"])
+        price_eur = Decimal(str(body["price_eur"]))
+    except (json.JSONDecodeError, KeyError, ValueError, TypeError):
+        return JsonResponse({"error": "invalid payload"}, status=400)
 
-    stripe.PaymentIntent.capture(adv.payment_id)
-    return redirect("admin:payments_advpromotion_change", adv.id)
+    PostModel = POST_MODEL_MAP.get(post_type)
+    if PostModel is None:
+        return JsonResponse({"error": "unknown post_type"}, status=400)
 
-@staff_member_required
-@require_POST
-def reject_adv(request, adv_id: int):
-    adv = get_object_or_404(AdvPromotion, id=adv_id)
+    # 404 если объявления нет или оно принадлежит не этому пользователю
+    get_object_or_404(PostModel, id=post_id, user=request.user)
 
-    if adv.status != AdvPromotion.Status.PENDING:
-        return HttpResponse("Нельзя reject: не PENDING", status=400)
+    # ищем уже существующий неоплаченный и не истёкший заказ на этот же тариф —
+    # чтобы повторное открытие крипто-оплаты не плодило новые заказы с новым QR
+    existing_order = Order.objects.filter(
+        user=request.user,
+        post_type=post_type,
+        post_id=post_id,
+        duration_days=duration_days,
+        payment_method=Order.PaymentMethod.CRYPTO,
+        status=Order.Status.PENDING,
+        expires_at__gt=timezone.now(),
+    ).first()
 
-    intent = stripe.PaymentIntent.retrieve(adv.payment_id)
-    if intent.status in ("requires_capture", "requires_action", "requires_confirmation", "requires_payment_method"):
-        stripe.PaymentIntent.cancel(adv.payment_id)
+    if existing_order:
+        order = existing_order
+    else:
+        base_amount = eur_to_usdt(price_eur)
+        unique_amount = generate_unique_amount(base_amount)
 
-    adv.status = AdvPromotion.Status.REJECTED
-    adv.is_paid = False
-    adv.is_frozen = False
-    adv.save(update_fields=["status", "is_paid", "is_frozen"])
+        order = Order.objects.create(
+            user=request.user,
+            base_amount=base_amount,
+            unique_amount=unique_amount,
+            post_type=post_type,
+            post_id=post_id,
+            duration_days=duration_days,
+            price_eur=price_eur,
+            expires_at=timezone.now() + datetime.timedelta(minutes=ORDER_TTL_MINUTES),
+        )
 
-    return redirect("admin:payments_advpromotion_change", adv.id)
+    expected_price = get_price(Order.TypeOrder.UPGRADE, duration_days)
+    if expected_price is None or expected_price != price_eur:
+        return JsonResponse({"error": "price mismatch, refresh the page"}, status=400)
 
-class PaymentSuccessView(View):
-    def get(self, request):
-        user = request.user
+    return JsonResponse({
+        "order_id": order.id,
+        "amount": str(order.unique_amount),
+        "currency": order.currency,
+        "chain": order.chain,
+        "address": settings.PAYMENT_DEPOSIT_ADDRESS,
+        "qr_code": generate_qr_data_url(settings.PAYMENT_DEPOSIT_ADDRESS),
+        "expires_at": order.expires_at.isoformat(),
+        "type_order": order.TypeOrder.UPGRADE,
 
-        first_name = user.first_name or ""
-        last_name = user.last_name or ""
+    })
 
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_manual_promotion_order(request):
+    """
+    Заказ на продвижение через способ оплаты без автоматической проверки
+    (Revolut, українська картка). Никакого QR/крипты — просто фиксируем
+    заявку с контактом клиента, дальше администратор вручную подтверждает
+    оплату в админке (после чего объявление поднимется автоматически).
+
+    Ожидает JSON:
+    {
+      "post_type": "things", "post_id": 42, "duration_days": 7,
+      "price_eur": "5.99", "payment_method": "revolut", "contact": "@username"
+    }
+    """
+    try:
+        body = json.loads(request.body)
+        post_type = body["post_type"]
+        post_id = int(body["post_id"])
+        duration_days = int(body["duration_days"])
+        price_eur = Decimal(str(body["price_eur"]))
+        payment_method = body["payment_method"]
+        contact = str(body.get("contact", "")).strip()
+    except (json.JSONDecodeError, KeyError, ValueError, TypeError):
+        return JsonResponse({"error": "invalid payload"}, status=400)
+
+    if payment_method not in (Order.PaymentMethod.REVOLUT, Order.PaymentMethod.CARD_UA):
+        return JsonResponse({"error": "invalid payment_method"}, status=400)
+
+    if not contact:
+        return JsonResponse({"error": "contact is required"}, status=400)
+
+    PostModel = POST_MODEL_MAP.get(post_type)
+    if PostModel is None:
+        return JsonResponse({"error": "unknown post_type"}, status=400)
+
+    get_object_or_404(PostModel, id=post_id, user=request.user)
+
+    MAX_MANUAL_REQUESTS = 5
+
+    manual_requests_count = Order.objects.filter(
+        user=request.user,
+        payment_method__in=[Order.PaymentMethod.REVOLUT, Order.PaymentMethod.CARD_UA],
+    ).count()
+
+    if manual_requests_count >= MAX_MANUAL_REQUESTS:
+        return JsonResponse(
+            {"error": "Ви досягли ліміту запитів на оплату. Зверніться до адміністратора напряму."},
+            status=429,
+        )
+
+    order = Order.objects.create(
+        user=request.user,
+        payment_method=payment_method,
+        contact=contact,
+        post_type=post_type,
+        post_id=post_id,
+        duration_days=duration_days,
+        price_eur=price_eur,
+    )
+
+    method_label = order.get_payment_method_display()
+
+    # письмо администратору — есть новая заявка на ручную оплату
+    send_mail(
+        subject=f"Нова заявка на оплату ({method_label}) — заказ #{order.id}",
+        message=(
+            f"Користувач: {request.user.email or request.user.username} (id={request.user.id})\n"
+            f"Оголошення: {post_type} #{post_id}\n"
+            f"Тариф: {duration_days} днів, {price_eur} €\n"
+            f"Спосіб оплати: {method_label}\n"
+            f"Контакт клієнта: {contact}\n\n"
+            f"Підтвердіть оплату вручну в адмінці, коли гроші надійдуть."
+        ),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[settings.ADMIN_NOTIFICATION_EMAIL],
+        fail_silently=False,
+    )
+
+    # письмо пользователю — просим подождать
+    if request.user.email:
         send_mail(
-            subject='Оплата прошла успешно',
+            subject="Ваш запит на оплату отримано",
             message=(
-                f'Здравствуйте, {first_name} {last_name}!\n\n'
-                'Ваш платёж успешно обработан.\n'
-                'Проверьте почту — мы отправили подтверждение.'
+                f"Дякуємо! Ваш запит на оплату ({method_label}) отримано.\n"
+                f"Очікуйте, наш адміністратор незабаром зв'яжеться з вами "
+                f"за контактом: {contact}."
             ),
-            from_email='noreply@yourdomain.com',
-            recipient_list=[user.email],
-            fail_silently=False,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[request.user.email],
+            fail_silently=True,
         )
 
-        return render(request, "payments/success_payment.html", {
-            "first_name": first_name,
-            "last_name": last_name,
-        })
+    expected_price = get_price(Order.TypeOrder.UPGRADE, duration_days)
+    if expected_price is None or expected_price != price_eur:
+        return JsonResponse({"error": "price mismatch, refresh the page"}, status=400)
+
+    return JsonResponse({
+        "order_id": order.id,
+        "payment_method": order.payment_method,
+        "type_order": order.TypeOrder.UPGRADE,
+
+
+    })
+
+
+@require_http_methods(["GET"])
+def order_status(request, order_id: int):
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        return JsonResponse({"error": "not found"}, status=404)
+
+    if order.is_expired():
+        order.status = Order.Status.EXPIRED
+        order.save(update_fields=["status"])
+
+    return JsonResponse({
+        "status": order.status,
+        "type_order": order.TypeOrder.UPGRADE,
+        "paid_at": order.paid_at.isoformat() if order.paid_at else None,
+    })
+
+
+csrf_exempt
+
+
+@require_http_methods(["POST"])
+def submit_ad_content(request):
+    """
+    Заявка на рекламный пост/баннер.
+
+    В отличие от create_promotion_order/create_manual_promotion_order,
+    здесь пользователь СРАЗУ загружает креатив (фото + текст + опционально
+    ссылку) и оставляет контакт. Оплата НЕ автоматизирована ни для одного
+    способа — админ сам списывается с клиентом, договаривается об оплате
+    и вручную переводит Order.status в PAID + публикует рекламу
+    (через отдельный процесс/админку, вне этого файла).
+
+    Ожидает multipart/form-data (не JSON — из-за файла):
+      type_order:     "post" | "banner"
+      duration_days:  int
+      price_eur:      str  (сверяется с pricing.json)
+      contact:        str  (email / @telegram / телефон)
+      ad_text:        str
+      ad_link:        str  (опционально)
+      ad_image:       file (опционально, но рекомендуем делать required на фронте)
+    """
+    type_order = request.POST.get("type_order")
+    if type_order not in (Order.TypeOrder.POST, Order.TypeOrder.BANNER):
+        return JsonResponse({"error": "invalid type_order"}, status=400)
+
+    try:
+        duration_days = int(request.POST.get("duration_days"))
+
+        raw_price = (request.POST.get("price_eur") or "").replace(",", ".").strip()
+        price_eur = Decimal(raw_price)
+    except (TypeError, ValueError, InvalidOperation):
+        return JsonResponse({"error": "invalid payload"}, status=400)
+
+    contact = request.POST.get("contact", "").strip()
+    ad_text = request.POST.get("ad_text", "").strip()
+    ad_link = request.POST.get("ad_link", "").strip()
+    ad_image = request.FILES.get("ad_image")
+
+    if not contact:
+        return JsonResponse({"error": "contact is required"}, status=400)
+    if not ad_text:
+        return JsonResponse({"error": "ad_text is required"}, status=400)
+
+    # сверяем цену с прайсом на сервере — не доверяем тому, что прислал фронт
+    expected_price = get_price(type_order, duration_days)
+    if expected_price is None or expected_price != price_eur:
+        return JsonResponse({"error": "price mismatch, refresh the page"}, status=400)
+
+    MAX_AD_SUBMISSIONS = 5
+    submissions_count = Order.objects.filter(
+        user=request.user,
+        type_order__in=[Order.TypeOrder.POST, Order.TypeOrder.BANNER],
+    ).count()
+    if submissions_count >= MAX_AD_SUBMISSIONS:
+        return JsonResponse(
+            {"error": "Ви досягли ліміту заявок на рекламу. Зверніться до адміністратора напряму."},
+            status=429,
+        )
+
+    order = Order.objects.create(
+        user=request.user,
+        type_order=type_order,
+        duration_days=duration_days,
+        price_eur=price_eur,
+        contact=contact,
+        ad_text=ad_text,
+        ad_link=ad_link or None,
+        ad_image=ad_image,
+        status=Order.Status.PENDING,  # ждём, пока админ вручную договорится об оплате
+    )
+
+    format_label = order.get_type_order_display()
+
+    send_mail(
+        subject=f"Нова заявка на рекламу ({format_label}) — заказ #{order.id}",
+        message=(
+            f"Користувач: {request.user.email or request.user.username} (id={request.user.id})\n"
+            f"Формат: {format_label}, {duration_days} днів, {price_eur} €\n"
+            f"Контакт клієнта: {contact}\n\n"
+            f"Текст оголошення:\n{ad_text}\n\n"
+            f"Посилання: {ad_link or '—'}\n"
+            f"Фото додано: {'так' if ad_image else 'ні'}\n\n"
+            f"Домовтесь з клієнтом про оплату вручну. Після надходження оплати "
+            f"підтвердіть заказ #{order.id} в адмінці і опублікуйте рекламу."
+        ),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[settings.ADMIN_NOTIFICATION_EMAIL],
+        fail_silently=False,
+    )
+
+    if request.user.email:
+        send_mail(
+            subject="Вашу заявку на рекламу отримано",
+            message=(
+                f"Дякуємо! Заявку на рекламу ({format_label}, {duration_days} днів, "
+                f"{price_eur} €) отримано.\n"
+                f"Наш адміністратор зв'яжеться з вами за контактом «{contact}» "
+                f"щодо оплати."
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[request.user.email],
+            fail_silently=True,
+        )
+
+    return JsonResponse({
+        "order_id": order.id,
+        "status": order.status,
+        "type_order": order.type_order,
+    })
+
+
+def select_adv(request):
+    tariffs = get_all_tariffs()
+    return render(request, "payments/select_adv_duration.html", {
+        "post_tariffs": tariffs.get("post", []),
+        "banner_tariffs": tariffs.get("banner", []),
+    })
+
+def partnership(request):
+    return render(request, "payments/partnership.html")
