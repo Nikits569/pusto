@@ -4,47 +4,41 @@
 
 {% block things_SEO %}
 
-<title>Квартири в {{ city }} - оренда та пошук житла</title>
+<title>{% blocktrans %}Квартири в {{ city }} - оренда та пошук житла{% endblocktrans %}</title>
 <link type="text/css" href="{% static 'SEO/css/SEO.css' %}" rel="stylesheet" />
-
 
 <section id="SEO" aria-labelledby="seo-title">
 
-    <h1 id="seo-title">Купівля та продаж речей в {{ city }}</h1>
+    <h1 id="seo-title">{% blocktrans %}Купівля та продаж речей в {{ city }}{% endblocktrans %}</h1>
 
-    <h2>Шукаєте де купити або продати речі в {{ city }}?</h2>
+    <h2>{% blocktrans %}Шукаєте де купити або продати речі в {{ city }}?{% endblocktrans %}</h2>
 
     <p>
-        На платформі pusto.sk ви можете швидко знайти оголошення про продаж та купівлю речей у {{ city }}.
-        Користувачі публікують актуальні пропозиції з різних категорій: електроніка, меблі,
-        одяг, техніка, товари для дому, велосипеди, аксесуари та багато іншого.
+        {% blocktrans %}На платформі pusto.sk ви можете швидко знайти оголошення про продаж та купівлю речей у {{ city }}. Користувачі публікують актуальні пропозиції з різних категорій: електроніка, меблі, одяг, техніка, товари для дому, велосипеди, аксесуари та багато іншого.{% endblocktrans %}
     </p>
 
     <p>
-        Сервіс допомагає легко купувати та продавати речі без посередників.
-        Ви можете переглядати фотографії, опис товарів, ціни та напряму зв’язуватись із продавцями.
+        {% blocktrans %}Сервіс допомагає легко купувати та продавати речі без посередників. Ви можете переглядати фотографії, опис товарів, ціни та напряму зв’язуватись із продавцями.{% endblocktrans %}
     </p>
 
-    <h3>У каталозі доступні:</h3>
+    <h3>{% trans "У каталозі доступні:" %}</h3>
 
     <ul>
-        <li>електроніка та гаджети;</li>
-        <li>меблі та товари для дому;</li>
-        <li>одяг та взуття;</li>
-        <li>велосипеди та спорттовари;</li>
-        <li>побутова техніка;</li>
-        <li>дитячі товари;</li>
-        <li>аксесуари та інші речі.</li>
+        <li>{% trans "електроніка та гаджети;" %}</li>
+        <li>{% trans "меблі та товари для дому;" %}</li>
+        <li>{% trans "одяг та взуття;" %}</li>
+        <li>{% trans "велосипеди та спорттовари;" %}</li>
+        <li>{% trans "побутова техніка;" %}</li>
+        <li>{% trans "дитячі товари;" %}</li>
+        <li>{% trans "аксесуари та інші речі." %}</li>
     </ul>
 
     <p>
-        На pusto.sk можна знайти як нові, так і вживані речі за доступними цінами.
-        Оголошення регулярно оновлюються, тому користувачі швидко знаходять потрібні товари у {{ city }}.
+        {% blocktrans %}На pusto.sk можна знайти як нові, так і вживані речі за доступними цінами. Оголошення регулярно оновлюються, тому користувачі швидко знаходять потрібні товари у {{ city }}.{% endblocktrans %}
     </p>
 
     <p>
-        Якщо ви хочете купити або продати речі в {{ city }}, переглядайте актуальні оголошення,
-        публікуйте власні пропозиції та знаходьте вигідні покупки поруч.
+        {% blocktrans %}Якщо ви хочете купити або продати речі в {{ city }}, переглядайте актуальні оголошення, публікуйте власні пропозиції та знаходьте вигідні покупки поруч.{% endblocktrans %}
     </p>
 
 </section>
@@ -62,15 +56,17 @@
                       <div class="badge-top-left">
                         <div class="badge badge-telegram">
                           <span class="badge-dot"></span>
-                          <span>зібрано з Telegram</span>
+                          <span>{% trans "зібрано з Telegram" %}</span>
                         </div>
                       </div>
                     {% endif %}
 
-                    {% if item.first_image %}
+                    {% if item.source == 'telegram' and i.has_photo %}
+                      <img src="https://pusto.sk/media/telegram_previews/{{ item.chat_id }}_{{ item.message_id }}/1.jpg"alt="" class="image" loading="lazy" decoding="async">
+                    {% elif item.img_bazos %}
+                      <img src="{{ item.img_bazos }}"alt="" class="image" loading="lazy" decoding="async">
+                    {% elif item.first_image %}
                       <img src="{{ item.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
-                    {% elif item.preview_image %}
-                      <img src="/media/{{ item.preview_image }}" alt="" class="image" loading="lazy" decoding="async">
                     {% else %}
                       <img src="{% static 'ads/images/stub.png' %}" alt="" class="image" loading="lazy" decoding="async">
                     {% endif %}
@@ -83,7 +79,17 @@
                   </div>
 
                   <h3 class="title{% if item.source_telegram %} True{% endif %}">
-                    {{ item.title }}
+                    {% if item.title == '<без текста>' %}
+                      {% trans 'текста нажаль немає(' %}
+                    {% else %}
+                      {% if LANGUAGE_CODE == 'sk' %}
+                        {{ item.title_sk|default:item.title }}
+                      {% elif LANGUAGE_CODE|slice:":2" == "en" %}
+                        {{ item.title_en|default:item.title }}
+                      {% else %}
+                        {{ item.title }}
+                      {% endif %}
+                    {% endif %}
                   </h3>
 
                   <h5 class="info{% if item.source_telegram %} True{% endif %}">
@@ -96,8 +102,8 @@
           </div>
         </div>
       {% else %}
-        <div class="fav-empty">Поки нічого немає</div>
+        <div class="fav-empty">{% trans "Поки нічого немає" %}</div>
       {% endif %}
 </section>
-<a href="https://pusto.sk/uk/things/all/" class="seeAll">переглянути всі речі</a>
+<a href="https://pusto.sk/uk/things/all/" class="seeAll">{% trans "переглянути всі речі" %}</a>
 {% endblock %}

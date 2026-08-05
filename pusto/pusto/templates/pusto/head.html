@@ -1,6 +1,10 @@
 {% load static %}
 {% load i18n %}
 
+{% if noindex %}
+<meta name="robots" content="noindex, follow">
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="en">
 <!--<div class="promo-bar"> -->
@@ -281,6 +285,10 @@
                 {{ support_form.subject }}
                 {{ support_form.message }}
 
+                <div class="cf-turnstile"
+                     data-sitekey="{{ TURNSTILE_SITE_KEY }}">
+                </div>
+
                 <button class="sendForm" type="submit">{% trans 'надіслати' %}</button>
               </div>
             </form>
@@ -306,8 +314,8 @@
                 <!-- <li><a href="/contacts">Контакти</a></li> -->
                 <!--<li><a href="/support">Підтримка</a></li> -->
 
-                <li><a href="#" class="openModal" data-type="ads">{% trans 'реклама на сайті' %}</a></li>
-                <li><a href="#" class="openModal" data-type="partners">{% trans 'партнерство' %}</a></li>
+                <li><a href="{% url 'select_adv' %}" data-type="ads">{% trans 'реклама на сайті' %}</a></li>
+                <li><a href="{% url 'partnership' %}" data-type="partners">{% trans 'партнерство' %}</a></li>
 
                   <li><a href="{% url 'rent_seo' 'Presov' %}" data-type="partners">{% trans 'Квартири в Пряшеві' %}</a></li>
                   <li><a href="{% url 'rent_seo' 'Kosice' %}" data-type="partners">{% trans 'Квартири в Кошицях' %}</a></li>
@@ -508,6 +516,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 </script>
+
 <script>
 (function() {
   // включаем dev-режим через URL или вручную
@@ -560,10 +569,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const query = input ? input.value.trim() : "";
 
     trackEvent("search", {
-      search_term: query
+        search_term: query
     });
 
+    if (typeof fbq === "function") {
+        fbq("track", "Search", {
+            search_string: query
+        });
+    }
+
     return true;
-  }
+    }
 </script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </html>

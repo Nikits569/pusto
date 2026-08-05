@@ -20,6 +20,7 @@ categories = {
     30: "побутова техніка",
     31: "інше",
 }
+
 prompt = """
 
 Ты работаешь как интеллектуальный классификатор объявлений платформы pusto.sk.
@@ -397,7 +398,7 @@ forbidden_texts = {
         "руб", "рублей", "зарплата от $2000 до $3000 — ставка + бонусы",
         "покупаю usdt", "продаю usdt", "стабільна робота — стабільне життя", "куплю u.s.d.t",
         "usdt", "u.s.d.t", "btc", "руб.", "уютная офисная работа",
-        "http", "www", ".io", ".wuaze", "легально", "легальный",
+        "http", ".io", ".wuaze", "легально", "легальный",
         "паспорт", "загранпаспорт", "id карта", "водительские права", "свидетельство о рождении",
         "фальшивка", "поддельный документ", "копия паспорта", "куплю паспорт", "продам паспорт",
         "куплю документы", "продам документы", "документы на продажу",
@@ -454,6 +455,7 @@ forbidden_texts = {
         "job", "job offer", "vacancy", "part-time", "full-time", "hiring", "we are hiring",
         "courier", "chat operator", "manager position", "salary", "flexible schedule",
         "official employment", "looking for work", "side income", "earn money",
+        "вакансії", "вакансій", "вакансію",
     ],
 
     'services': [
@@ -476,6 +478,7 @@ forbidden_texts = {
         "permanent makeup", "tattoo", "haircut", "barber", "hairdresser", "photographer",
         "eyelash extensions", "yoga class", "fitness club", "english course", "masterclass",
         "travel agency", "beauty salon", "seminar",
+        "стрижки", "стрижку", "стрижок", "стригу", "барбершоп",
     ],
 
     'question_patterns': [
@@ -486,5 +489,6 @@ forbidden_texts = {
         "poradíte", "vie niekto", "má niekto otázku", "kde nájdem", "je tu niekto",
         # EN
         "anyone know", "does anyone know", "any advice", "where can i find", "is there anyone",
+        "хто здає", "хто дасть в оренду", "кто сдает", "кто сдаёт",
     ]
 }

@@ -24,35 +24,43 @@ ALLOWED_FIELDS = {
     "maxAge",
 }
 
-client = OpenAI(api_key=secret_key)
+client = OpenAI(api_key=secret_key[0])
 total = 0
 blocked = 0
 gpt_processed = 0
 
-
-
 def extract_rooms_regex(text: str):
     t = text.lower()
-    # 1. Цифра + любой разделитель (дефис любого вида, точка, пробел) + "комн"/"izbov"/"izba"
-    m = re.search(r'(\d+)[^\w\d]{0,3}(комн|izbov|izba)', t)
+
+    # 1. Дробные "1.5", "2,5" — ПРОВЕРЯЕМ ПЕРВЫМ ДЕЛОМ.
+    # Критично: если проверять паттерн "цифра+комн/izbov" раньше этого,
+    # то для "2,5-izbov..." regex не находит совпадение на "2" (мешает запятая),
+    # сдвигается вправо и матчит на хвостовой "5" перед "-izbov",
+    # возвращая 5 вместо 2. Именно это и было причиной вашего бага.
+    m = re.search(r'(\d+)[.,]5\b', t)
     if m:
         return int(m.group(1))
 
-    # 2. Дробные "1.5", "2,5"
-    m = re.search(r'(\d+)[.,]5\b', t)
-    if m:
+    # 2. Цифра + любой разделитель (дефис любого вида, точка, пробел) + "комн"/"кімн"/"izbov"/"izba"
+    # Доп. защита: пропускаем совпадение, если найденная цифра сама является
+    # дробным хвостом (стоит сразу после "." или "," и перед ними ещё цифра).
+    for m in re.finditer(r'(\d+)[^\w\d]{0,3}(комн|кімн|izbov|izba)', t):
+        start = m.start(1)
+        if start >= 2 and t[start - 1] in '.,' and t[start - 2].isdigit():
+            continue
         return int(m.group(1))
 
     # 3. Словесные числительные
     m = re.search(r'(одно|одна|дву[хс]?|трёх|трех|четырёх|четырех|пяти)\s*[-]?\s*(комнатн|комн)', t)
     if m:
-        for key, val in {"одно":1,"одна":1,"дву":2,"трёх":3,"трех":3,"четырёх":4,"четырех":4,"пяти":5}.items():
+        for key, val in {"одно": 1, "одна": 1, "дву": 2, "трёх": 3, "трех": 3, "четырёх": 4, "четырех": 4,
+                         "пяти": 5}.items():
             if m.group(1).startswith(key):
                 return val
 
     m = re.search(r'(jedno|dvoj|troj|štvor|pät)\s*izbov', t)
     if m:
-        for key, val in {"jedno":1,"dvoj":2,"troj":3,"štvor":4,"pät":5}.items():
+        for key, val in {"jedno": 1, "dvoj": 2, "troj": 3, "štvor": 4, "pät": 5}.items():
             if m.group(1) == key:
                 return val
 
@@ -110,8 +118,8 @@ def get_matched_keywords(text: str, keywords: list[str]):
 def is_question(text):
     text = text.lower()
 
-    if "?" in text:
-        return True
+    #if "?" in text:
+    #    return True
 
     for pattern in forbidden_texts["question_patterns"]:
         if pattern in text:

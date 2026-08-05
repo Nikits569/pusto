@@ -275,6 +275,11 @@ try:
                         print(f"NeighborPost CREATED #{obj.id}")
                     else:
                         print(f"NeighborPost EXISTS #{obj.id}")
+                else:
+                    print(
+                        f"Категория '{category}' не подошла ни под THINGS, ни под NEIGHBOR "
+                        f"(chat_id={common_data['chat_id']}, message_id={common_data['message_id']})"
+                    )
 
 
             except Exception as e:

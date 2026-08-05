@@ -4,33 +4,33 @@
 
 {% block rent_SEO %}
 
-<title>Квартири в {{ city }} - оренда та пошук житла</title>
+<title>{% blocktrans %}Квартири в {{ city }} - оренда та пошук житла{% endblocktrans %}</title>
 <link type="text/css" href="{% static 'SEO/css/SEO.css' %}" rel="stylesheet" />
 
 <section id="SEO" aria-labelledby="seo-title">
-    <h1 id="seo-title">Орендуй квартири в {{ city }}</h1>
+    <h1 id="seo-title">{% blocktrans %}Орендуй квартири в {{ city }}{% endblocktrans %}</h1>
 
-    <h2>Шукаєте квартири в {{ city }} для довгострокової або короткострокової оренди?</h2>
+    <h2>{% blocktrans %}Шукаєте квартири в {{ city }} для довгострокової або короткострокової оренди?{% endblocktrans %}</h2>
 
-    <p>На платформі pusto.sk ви можете швидко знайти житло для студентів, працівників, сімей та всіх, хто планує переїзд або вже проживає у місті.</p>
+    <p>{% trans "На платформі pusto.sk ви можете швидко знайти житло для студентів, працівників, сімей та всіх, хто планує переїзд або вже проживає у місті." %}</p>
 
-    <p>Ми збираємо актуальні оголошення про оренду квартир, кімнат та житла в різних районах {{ city }}, щоб зробити пошук максимально простим і зручним.</p>
+    <p>{% blocktrans %}Ми збираємо актуальні оголошення про оренду квартир, кімнат та житла в різних районах {{ city }}, щоб зробити пошук максимально простим і зручним.{% endblocktrans %}</p>
 
-    <h3>У каталозі доступні:</h3>
+    <h3>{% trans "У каталозі доступні:" %}</h3>
 
     <ul>
-        <li>1-кімнатні квартири;</li>
-        <li>2-кімнатні квартири;</li>
-        <li>квартири для студентів;</li>
-        <li>житло без посередників;</li>
-        <li>кімнати в спільних квартирах;</li>
-        <li>недорога оренда житла;</li>
-        <li>сучасні квартири в новобудовах.</li>
+        <li>{% trans "1-кімнатні квартири;" %}</li>
+        <li>{% trans "2-кімнатні квартири;" %}</li>
+        <li>{% trans "квартири для студентів;" %}</li>
+        <li>{% trans "житло без посередників;" %}</li>
+        <li>{% trans "кімнати в спільних квартирах;" %}</li>
+        <li>{% trans "недорога оренда житла;" %}</li>
+        <li>{% trans "сучасні квартири в новобудовах." %}</li>
     </ul>
 
-    <p>Користувачі можуть переглядати фотографії, опис житла, ціну оренди, умови проживання та контакти власників або орендодавців.</p>
+    <p>{% trans "Користувачі можуть переглядати фотографії, опис житла, ціну оренди, умови проживання та контакти власників або орендодавців." %}</p>
 
-    <p>Це допомагає швидше знайти квартиру в {{ city }}, яка відповідає бюджету та потребам.</p>
+    <p>{% blocktrans %}Це допомагає швидше знайти квартиру в {{ city }}, яка відповідає бюджету та потребам.{% endblocktrans %}</p>
 
 
 
@@ -50,26 +50,42 @@
                       <div class="badge-top-left">
                         <div class="badge badge-telegram">
                           <span class="badge-dot"></span>
-                          <span>зібрано з Telegram</span>
+                          <span>{% trans "зібрано з Telegram" %}</span>
                         </div>
                       </div>
                     {% endif %}
 
-                    {% if item.first_image %}
-                      <img src="{{ item.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
-                    {% elif item.preview_image %}
-                      <img src="/media/{{ item.preview_image }}" alt="" class="image" loading="lazy" decoding="async">
-                    {% else %}
-                      <img src="{% static 'ads/images/stub.png' %}" alt="" class="image" loading="lazy" decoding="async">
-                    {% endif %}
+                      {% if item.source == 'telegram' and i.has_photo %}
+                        <img src="https://pusto.sk/media/telegram_previews/{{ item.chat_id }}_{{ item.message_id }}/1.jpg"alt="" class="image" loading="lazy" decoding="async">
+                      {% elif item.source == 'reality.sk' %}
+                        <img src="https://pusto.sk/photos/reality/{{ item.ad_id }}/1.jpg"alt="" class="image" loading="lazy" decoding="async">
+                      {% elif item.source == 'topreality' %}
+                        <img src="https://pusto.sk/photos/topreality/{{ item.ad_id }}/1.jpg"alt="" class="image" loading="lazy" decoding="async">
+                      {% elif item.img_bazos %}
+                        <img src="{{ item.img_bazos }}"alt="" class="image" loading="lazy" decoding="async">
+                      {% elif item.first_image %}
+                        <img src="{{ item.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
+                      {% else %}
+                        <img src="{% static 'ads/images/stub.png' %}" alt="" class="image" loading="lazy" decoding="async">
+                      {% endif %}
                   </div>
 
                   <div class="price-wrap">
-                      <h3 class="price">{{ item.budget }} € / місяць</h3>
+                      <h3 class="price">{% blocktrans with budget=item.budget %}{{ budget }} € / місяць{% endblocktrans %}</h3>
                   </div>
 
                   <h3 class="title{% if item.source_telegram %} True{% endif %}">
-                    {{ item.title }}
+                    {% if item.title == '<без текста>' %}
+                      {% trans 'текста нажаль немає(' %}
+                    {% else %}
+                      {% if LANGUAGE_CODE|slice:":2" == 'en' %}
+                        {{ item.title_en|default:item.title }}
+                      {% elif LANGUAGE_CODE|slice:":2" == 'sk' %}
+                        {{ item.title_sk|default:item.title }}
+                      {% else %}
+                        {{ item.title }}
+                      {% endif %}
+                    {% endif %}
                   </h3>
 
                   <h5 class="info{% if item.source_telegram %} True{% endif %}">
@@ -82,8 +98,8 @@
           </div>
         </div>
       {% else %}
-        <div class="fav-empty">Поки нічого немає</div>
+        <div class="fav-empty">{% trans "Поки нічого немає" %}</div>
       {% endif %}
 </section>
-<a href="https://pusto.sk/uk/neighbors/rent/" class="seeAll">переглянути всі квартири</a>
+<a href="https://pusto.sk/uk/neighbors/rent/" class="seeAll">{% trans "переглянути всі квартири" %}</a>
 {% endblock %}

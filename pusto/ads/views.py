@@ -34,22 +34,26 @@ import json
 from urllib.parse import quote
 from django.core.cache import cache
 import requests
+from interactions.forms import *
 
 TG_SUPERGROUP_PREFIX = 1000000000000
 
 chat_invite = {
-    "1175233956": 'https://telegram.me/baraholka_presov_kosice',
-    "1386423654": 'https://telegram.me/tuke_hack',
-    "1274583303": 'https://telegram.me/kosice_hack',
-    "2766446415": 'https://telegram.me/NashaBratislava',
-    "1666679455": 'https://telegram.me/zhytlo_robota_sk',
-    '1840072195': 'https://telegram.me/bratislava_slovakia_arenda',
-    '1956832493': 'https://telegram.me/kosiceflats',
-    '2091082928': 'https://telegram.me/arenda_nitra',
-    '2101692521': 'https://telegram.me/baraholka_nitra',
-    '1912835249': 'https://telegram.me/nitra_hack',
-    '2240457831': 'https://telegram.me/DreamCityGroupSro',
-    '1764112838': 'https://telegram.me/GoldKeyBratislava',
+    '1175233956': 'https://t.me/baraholka_presov_kosice',
+    '1956832493': 'https://t.me/kosiceflats',
+    '2091082928': 'https://t.me/arenda_nitra',
+    '2101692521': 'https://t.me/baraholka_nitra',
+    '1912835249': 'https://t.me/nitra_hack',
+    '1386423654': 'https://t.me/tuke_hack',
+    '1274583303': 'https://t.me/kosice_hack',
+    '2240457831': 'https://t.me/DreamCityGroupSro',
+    '1764112838': 'https://t.me/GoldKeyBratislava',
+    '2766446415': 'https://t.me/NashaBratislava',
+    '1840072195': 'https://t.me/rent_slovakia',
+    '1974415585': 'https://t.me/GoldKeyKosice',
+    '2149548602': 'https://t.me/prenajom_v_Kosice',
+    '2013028399': 'https://t.me/rent_kosice',
+    '1612101159': 't.me/realestateSlovensko',
 }
 
 class GlobalSearchView(View):
@@ -225,7 +229,7 @@ def apply_common_filters(queryset, params):
     return queryset
 
 class BaseListMixin:
-    paginate_by = 20
+    paginate_by = 24
 
     def paginate_queryset(self, queryset):
         paginator = Paginator(queryset, self.paginate_by)
@@ -247,7 +251,7 @@ class BaseAdsList(BaseListMixin, TemplateView):
         "price": "price",
     }
     filters = {}
-    paginate_by = 20
+    paginate_by = 24
 
     # Какие поля точно нужны в списке
     # На время оптимизации лучше оставить None.
@@ -349,8 +353,7 @@ class BaseAdsList(BaseListMixin, TemplateView):
                     then=Value(1),
                 ),
                 When(
-                    Q(preview_image__isnull=False) &
-                    ~Q(preview_image=""),
+                    has_photo=True,
                     then=Value(1),
                 ),
                 When(
@@ -366,6 +369,7 @@ class BaseAdsList(BaseListMixin, TemplateView):
     def apply_default_ordering(self, queryset):
         queryset = self.with_image_priority_annotation(queryset)
         return queryset.order_by("-has_any_image", "-created_at", "-id")
+
 
     def apply_user_sorting(self, queryset, sort, order):
         queryset = self.with_image_priority_annotation(queryset)
@@ -390,6 +394,48 @@ class BaseAdsList(BaseListMixin, TemplateView):
 
         return queryset.order_by("-has_any_image", f"-{sort_field}", "-id")
 
+    def get_active_banners(self):
+        now = timezone.now()
+        return advertisingBanner.objects.filter(
+            status='active'
+        ).filter(
+            Q(start_at__isnull=True) | Q(start_at__lte=now)
+        ).filter(
+            Q(end_at__isnull=True) | Q(end_at__gte=now)
+        )
+
+    def get_banners_for_page(self, request):
+        banners = list(self.get_active_banners())
+        if not banners:
+            return []
+
+        if len(banners) <= 2:
+            advertisingBanner.objects.filter(
+                id__in=[b.id for b in banners]
+            ).update(impressions_count=F('impressions_count') + 1)
+            return banners
+
+        # вес обратно пропорционален числу показов:
+        # чем меньше показов — тем выше шанс быть выбранным
+        weights = [1 / (b.impressions_count + 1) for b in banners]
+
+        chosen = []
+        pool = banners[:]
+        pool_weights = weights[:]
+
+        for _ in range(min(2, len(pool))):
+            picked = random.choices(pool, weights=pool_weights, k=1)[0]
+            chosen.append(picked)
+            idx = pool.index(picked)
+            pool.pop(idx)
+            pool_weights.pop(idx)
+
+        advertisingBanner.objects.filter(
+            id__in=[b.id for b in chosen]
+        ).update(impressions_count=F('impressions_count') + 1)
+
+        return chosen
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -397,6 +443,15 @@ class BaseAdsList(BaseListMixin, TemplateView):
         slug = self.kwargs.get("slug", "all")
         sort = params.get("sort")
         order = params.get("order", "desc")
+        search = params.get("search", "").strip()
+        page = params.get("page")
+
+        # определяем нужен ли noindex
+        noindex = bool(
+            search or
+            sort or
+            (page and page != "1")
+        )
 
         queryset = self.get_queryset()
 
@@ -421,7 +476,6 @@ class BaseAdsList(BaseListMixin, TemplateView):
 
         page_numbers = range(start, end + 1)
 
-
         context.update(
             {
                 "base": page_obj,
@@ -433,9 +487,12 @@ class BaseAdsList(BaseListMixin, TemplateView):
                 "type_slug": slug,
                 "slug": slug,
                 "page_numbers": page_numbers,
+                "noindex": noindex,  # ← добавили эту строку
                 "admin_categories": Category.objects.filter(
                     is_active=True
                 ),
+                "advertising_banners": self.get_banners_for_page(self.request),
+
                 **self.get_additional_context(params),
             }
         )
@@ -536,6 +593,7 @@ class things(BaseAdsList):
 
             'filter_condition': params.get('condition', ''),
             'source': params.get('source', ''),
+            'form': NotificationThingsForm,
         }
 
 # ===================== JOBS =====================
@@ -618,6 +676,7 @@ class neighbors(BaseAdsList):
             'filter_housing_type': params.get('housing_type', ''),
             'filter_rent_period': params.get('rent_period', ''),
             'source': params.get('source', ''),
+            'form': NotificationNeighborForm,
         }
 
 #class jobs(BaseAdsList):
@@ -732,11 +791,18 @@ class BaseCreatePostView(CreateView):
     def get_context_data(self, **kwargs):
         self.set_extra_fields_for_get()
         context = super().get_context_data(**kwargs)
-        context['formType'] = self.formType
-        context['formset'] = self.get_image_formset()
-        context['slug'] = self.kwargs.get('slug', 'all')
-        context['section'] = self.section
-        context['is_auth'] = self.request.user.is_authenticated
+
+        slug = self.kwargs.get("slug")
+
+        if slug == "rent":
+            context["formType"] = "rent"
+        else:
+            context["formType"] = self.formType
+
+        context["formset"] = self.get_image_formset()
+        context["slug"] = slug
+        context["section"] = self.section
+        context["is_auth"] = self.request.user.is_authenticated
 
         return context
 
@@ -880,10 +946,13 @@ class NeighborCreateView(BaseCreatePostView):
 
     post_case_map = {
         'findNeighbor': CaseTypeNeighbor.FIND_ROOMMATE,
+        'rent': CaseTypeNeighbor.RENT,
     }
     section_map = {
         'findNeighbor': 'findNeighbor',
+        'rent': 'rent',
     }
+
 
 from django.conf import settings
 
@@ -962,7 +1031,16 @@ class page(TemplateView):
 
         elif source == "topreality":
             slides.extend(self._get_remote_photos("topreality"))
-
+        elif source == 'telegram':
+            for i in range(1, 4):
+                url = f'https://pusto.sk/media/telegram_previews/{self.obj.chat_id}_{self.obj.message_id}/{i}.jpg'
+                try:
+                    resp = requests.head(url, timeout=2)
+                except requests.RequestException:
+                    break
+                if resp.status_code != 200:
+                    break
+                slides.append({"src": url})
         elif source == "bazos" and getattr(self.obj, "img_bazos", None):
             slides.append({
                 "src": self.obj.img_bazos,
@@ -1219,8 +1297,13 @@ def similar(request, section, slug):
     if not query:
         query = slug.replace("-", " ")
 
-    url = f"/things/?search={quote(query)}&section={section}"
+    url = f"/{section}/?search={quote(query)}&section={section}"
 
     return redirect(url)
 
-
+def banner_click(request, banner_id):
+    banner = get_object_or_404(advertisingBanner, id=banner_id)
+    advertisingBanner.objects.filter(id=banner.id).update(
+        clicks_count=F('clicks_count') + 1
+    )
+    return redirect(banner.url)

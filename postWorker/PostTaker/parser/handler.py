@@ -1,4 +1,5 @@
 import io
+import os
 import time
 import asyncio
 import imagehash
@@ -14,6 +15,13 @@ from helpers import pick_size, check_hash, normalization_text, extract_price, sc
 # Нужно потому, что текст и фотографии одного объявления
 # могут прийти отдельными сообщениями.
 albums = {}
+
+# Сколько фото максимум сохраняем в preview-папку на одно объявление.
+MAX_PREVIEW_PHOTOS = 3
+
+# Корневая папка для превью-изображений.
+PREVIEW_ROOT = "/var/www/app/pusto/postWorker/PostTaker/media/telegram_previews"
+
 
 def register_handlers(client):
     print("REGISTER HANDLERS")
@@ -91,6 +99,7 @@ def register_handlers(client):
                 "has_photo": False,
                 "photo_id": '',
                 "photo_hash": '',
+                "photos": [],  # байты фото для сохранения в preview (до MAX_PREVIEW_PHOTOS штук)
                 "text": None,
                 "price": None,
                 "contact_telegram": sender_name,
@@ -100,12 +109,13 @@ def register_handlers(client):
                 "chat_title": infoChats[chat_id][0],
                 "timePost": datetime.now(ZoneInfo("Europe/Bratislava")).strftime("%Y-%m-%d %H:%M:%S"),
                 "city": None,
+
             }
 
         album = albums[album_id]
 
-        # Если в сообщении есть фото, скачиваем только thumbnail.
-        # Этого достаточно для вычисления хэша и проверки дублей.
+        # Если в сообщении есть фото, скачиваем thumbnail для хэша,
+        # а также (пока не набрали лимит) фото среднего размера для preview-папки.
         if msg.photo:
             size, label = pick_size(getattr(msg.photo, "sizes", None) or [])
             if not size:
@@ -121,6 +131,21 @@ def register_handlers(client):
             print(f"  -> telegram://{event.chat_id}/{msg.id}/{label}")
 
             del data, img
+
+            # Отдельно скачиваем среднее (не оригинальное, не тонкое превью)
+            # качество фото для сохранения на диск, если лимит ещё не достигнут.
+            if len(album["photos"]) < MAX_PREVIEW_PHOTOS:
+                try:
+                    # thumb=-1 -> самый большой доступный "thumbnail" (не оригинал),
+                    # это и есть "среднее" по весу качество.
+                    preview_data = await event.client.download_media(
+                        msg.photo, file=bytes, thumb=-1
+                    )
+                    if preview_data:
+                        album["photos"].append(preview_data)
+                        print(f"  -> preview photo saved to buffer ({len(album['photos'])}/{MAX_PREVIEW_PHOTOS})")
+                except Exception as e:
+                    print("PREVIEW DOWNLOAD ERROR:", repr(e))
 
         # Сохраняем текст только один раз, если он ещё не записан.
         if text != "<без текста>":
@@ -161,6 +186,7 @@ def register_handlers(client):
             chat_title = album["chat_title"]
             photo_id = album["photo_id"]
             rooms = album["rooms"]
+            photos = album["photos"]
 
             dup_result = score_text(cursor, text, 'base', user_id, photo_hash)
 
@@ -209,6 +235,8 @@ def register_handlers(client):
                     print("ROWCOUNT:", cursor.rowcount)
                     print("LASTROWID:", cursor.lastrowid)
 
+                    base_id = cursor.lastrowid
+
                     if photo_hash:
                         print("INSERT HASH")
                         cursor.execute(
@@ -217,6 +245,21 @@ def register_handlers(client):
                         )
 
                     conn.commit()
+
+                    # Сохраняем на диск до MAX_PREVIEW_PHOTOS фото объявления
+                    # в telegram_preview/<id записи в base>/1.jpg, 2.jpg, 3.jpg
+                    if photos:
+                        try:
+                            save_dir = os.path.join(PREVIEW_ROOT, f"{chat_id}_{album['message_id']}")
+                            os.makedirs(save_dir, exist_ok=True)
+
+                            for idx, photo_bytes in enumerate(photos[:MAX_PREVIEW_PHOTOS], start=1):
+                                file_path = os.path.join(save_dir, f"{idx}.jpg")
+                                with open(file_path, "wb") as f:
+                                    f.write(photo_bytes)
+                            print(f"SAVED {len(photos[:MAX_PREVIEW_PHOTOS])} PREVIEW PHOTOS TO {save_dir}")
+                        except Exception as e:
+                            print("PREVIEW SAVE ERROR:", repr(e))
 
                     cursor.execute("""
                         SELECT id, message_id, text

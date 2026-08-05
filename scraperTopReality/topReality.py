@@ -1,45 +1,62 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Парсер объявлений АРЕНДЫ (prenájom) с topreality.sk по краям (regions) +
+Парсер объявлений АРЕНДЫ (prenájom) с topreality.sk по ГОРОДАМ (obec) +
 сохранение в MySQL.
 
-Сделан по ТОЙ ЖЕ схеме, что и reality_sk_parser.py:
+=== ИЗМЕНЕНИЕ ОТНОСИТЕЛЬНО ПРЕДЫДУЩЕЙ ВЕРСИИ ===
+
+    Раньше выборка строилась по КРАЯМ (regions) через параметры поиска
+    obec=c700-Prešovský kraj / region[0]=700 + список type[] с кодами всех
+    подтипов "Byty". Теперь выборка строится НЕПОСРЕДСТВЕННО ПО ГОРОДАМ
+    через "чистые" SEO-урлы вида:
+
+        https://www.topreality.sk/<city-slug>/byty/prenajom.html        -- страница 1
+        https://www.topreality.sk/<city-slug>/byty/prenajom2.html       -- страница 2
+        https://www.topreality.sk/<city-slug>/byty/prenajom3.html       -- страница 3
+        ...
+
+    Категория "byty" в самом урле уже ограничивает выборку одними только
+    квартирами (все подтипы: garsónka, 1-5 izbový, mezonet, apartmán,
+    loft и т.д.) -- отдельный список APARTMENT_TYPE_IDS и параметры
+    type[]/region[]/obec больше не нужны.
+
+    slug города -- это то же самое, что раньше было "region_key" (те же
+    8 ключей: bratislava, trnava, trencin, nitra, zilina,
+    banska-bystrica, presov, kosice), но теперь это ИМЕННО ГОРОД
+    (областной/районный центр), а не весь край целиком.
+
+    Дополнительно на всякий случай (страховка от того, что фильтр
+    "prenajom" в урле почему-то отдаст и объявления о продаже) каждая
+    карточка проверяется по тексту цены: если это явно "продажная" цена
+    (нет признаков аренды -- "mesiac"/"dohodou"/пусто, и т.п.) -- такая
+    карточка отбрасывается, см. is_rental_price().
+
+=== Остальная логика идентична предыдущей версии (по краям) ===
 
 Для КАЖДОГО НОВОГО (ещё не сохранённого в БД по content_hash) объявления
 скрипт дополнительно заходит на страницу самого объявления и вытаскивает:
 
-    1. ПОЛНОЕ описание (не обрезанный сниппет со страницы списка).
-       Это полное описание сохраняется в колонку text_sk (отдельной
-       колонки full_description больше НЕТ).
+    1. ПОЛНОЕ описание (не обрезанный сниппет со страницы списка) --
+       сохраняется в колонку text_sk.
     2. Первые 5 фото объявления -- СКАЧИВАЕТ ФАЙЛЫ НА ДИСК в
-       PHOTOS_DIR/<ad_id>/1.jpg .. 5.jpg. Никакой отдельной таблицы фото
-       в БД нет -- так же, как для reality.sk, фото это просто файлы на
-       диске, в БД идут только текстовые поля.
+       PHOTOS_DIR/<ad_id>/1.jpg .. 5.jpg. Отдельной таблицы фото в БД
+       нет -- только файлы на диске.
     3. Координаты (latitude/longitude), если сайт их отдаёт в HTML.
 
 Уже сохранённые объявления повторно на карточку НЕ заходят (проверка по
-content_hash, как и раньше).
+content_hash).
 
-=== ИЗМЕНЕНИЯ В СХЕМЕ БД (см. migration.sql) ===
-
-    ALTER TABLE topreality
-        ADD COLUMN latitude DOUBLE(10,7) NULL AFTER city,
-        ADD COLUMN longitude DOUBLE(10,7) NULL AFTER latitude;
-
-    (Колонка full_description больше не добавляется -- полное описание
-    пишется в уже существующую колонку text_sk.)
-
-Итоговые колонки topreality (после миграции) полностью аналогичны reality:
+Итоговые колонки topreality (после миграции, см. migration.sql):
     topreality_id, ad_id, source_url, text, price, image_url, created_at,
     city, latitude, longitude, text_en, text_sk, rooms, content_hash
 
 Запуск:
-    python3 topreality_sk_parser.py --no-db          # только проверка вывода
-    python3 topreality_sk_parser.py                  # с записью в БД
-    python3 topreality_sk_parser.py --regions presov kosice --pages 2
-    python3 topreality_sk_parser.py --no-details      # без захода на карточки (старое поведение)
-    python3 topreality_sk_parser.py --migrate --no-db # только применить ALTER и выйти
+    python3 topreality_sk_parser.py --no-db                # только проверка вывода
+    python3 topreality_sk_parser.py                         # с записью в БД
+    python3 topreality_sk_parser.py --cities presov kosice --pages 2
+    python3 topreality_sk_parser.py --no-details             # без захода на карточки
+    python3 topreality_sk_parser.py --migrate --no-db        # только применить ALTER и выйти
 
 Через cron:
     */15 * * * * cd /var/www/app/pusto/scraperTopReality && \
@@ -60,7 +77,7 @@ import hashlib
 import logging
 import argparse
 from datetime import datetime
-from urllib.parse import urlencode, urljoin
+from urllib.parse import urljoin
 
 import requests
 import pymysql
@@ -83,23 +100,20 @@ log = logging.getLogger("topreality_sk_parser")
 # ---------------------------------------------------------------------------
 
 BASE = "https://www.topreality.sk"
-SEARCH_PATH = "/vyhladavanie-nehnutelnosti.html"
-SEARCH_PATH_PAGED = "/vyhladavanie-nehnutelnosti-{page}.html"
 
-REGIONS = {
-    "bratislava": ("c100", "Bratislavský kraj", "100"),
-    "trnava": ("c200", "Trnavský kraj", "200"),
-    "trencin": ("c300", "Trenčiansky kraj", "300"),
-    "nitra": ("c400", "Nitriansky kraj", "400"),
-    "zilina": ("c500", "Žilinský kraj", "500"),
-    "banska-bystrica": ("c600", "Banskobystrický kraj", "600"),
-    "presov": ("c700", "Prešovský kraj", "700"),
-    "kosice": ("c800", "Košický kraj", "800"),
+# Города для парсинга. Ключ -- slug (используется в урле), значение --
+# человекочитаемое название (для логов/отчётов). Это те же 8 ключей, что
+# раньше были "региональными" -- теперь это конкретные города.
+CITIES = {
+    "bratislava": "Bratislava",
+    "trnava": "Trnava",
+    "trencin": "Trenčín",
+    "nitra": "Nitra",
+    "zilina": "Žilina",
+    "banska-bystrica": "Banská Bystrica",
+    "presov": "Prešov",
+    "kosice": "Košice",
 }
-
-# Подтипы категории "Byty" (квартиры) -- сужают выборку внутри аренды до
-# одних только квартир (без domov, pozemkov, priestorov и т.д.)
-APARTMENT_TYPE_IDS = [101, 108, 102, 103, 104, 105, 106, 109, 110, 107, 113]
 
 HEADERS = {
     "User-Agent": (
@@ -187,19 +201,38 @@ def make_content_hash(text: str, price, city: str) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
-def build_search_url(region_code: str, region_name: str, page: int) -> str:
-    params = [
-        ("form", "3"),
-        ("obec", f"{region_code}-{region_name}"),
-        ("region[0]", region_code.lstrip("c")),
-        ("searchType", "string"),
-        ("n_search", "search"),
-    ]
-    for type_id in APARTMENT_TYPE_IDS:
-        params.append(("type[]", type_id))
+def build_search_url(city_slug: str, page: int) -> str:
+    """
+    Страница 1:  https://www.topreality.sk/<city>/byty/prenajom.html
+    Страница N:  https://www.topreality.sk/<city>/byty/prenajomN.html
+    (N=2,3,4,... -- без знака "-" перед числом, в отличие от общего
+    поиска vyhladavanie-nehnutelnosti-N.html)
+    """
+    if page <= 1:
+        return f"{BASE}/{city_slug}/byty/prenajom.html"
+    return f"{BASE}/{city_slug}/byty/prenajom{page}.html"
 
-    path = SEARCH_PATH if page <= 1 else SEARCH_PATH_PAGED.format(page=page)
-    return f"{BASE}{path}?{urlencode(params, doseq=False)}"
+
+def is_rental_price(price_text: str) -> bool:
+    """
+    Строгая страховочная проверка: пропускаем карточку ТОЛЬКО если в её
+    цене явно есть признак аренды -- "mesiac"/"mesačne" (на сайте цена
+    аренды всегда отображается как "580,00 €/mesiac", см. скриншот
+    объявления). Это единственный надёжный признак -- слово "dohodou"
+    (цена по договорённости) встречается и у объявлений о ПРОДАЖЕ, а
+    отсутствие суффикса "/m2" НЕ гарантирует аренду (у карточек продажи
+    цена за м2 нередко лежит в отдельном соседнем элементе, а не в том
+    же price_text, поэтому старая версия проверки иногда пропускала
+    продажу как аренду).
+
+    По умолчанию -- ОТБРАСЫВАЕМ (False), если "mesiac" не найден, даже
+    если price_text пустой или "dohodou". Строже, зато гарантированно не
+    пропустит ни одной продажи.
+    """
+    if not price_text:
+        return False
+    low = price_text.lower().replace(" ", "")
+    return "mesiac" in low or "mesacne" in low.replace("č", "c")
 
 
 # ---------------------------------------------------------------------------
@@ -265,16 +298,13 @@ def extract_full_description(soup: BeautifulSoup) -> str:
 def extract_geo(soup: BeautifulSoup, html: str):
     """
     Пытается достать (latitude, longitude) несколькими способами, от
-    самого надёжного к самому "на всякий случай" -- та же логика, что и
-    в reality_sk_parser.py:
+    самого надёжного к самому "на всякий случай":
 
     1. JSON-LD (schema.org geo / latitude / longitude).
     2. Meta-теги geo.position / ICBM.
     3. Произвольный JSON в <script> с ключами lat/lng.
 
-    Если ничего не найдено -- (None, None). Значит карта, скорее всего,
-    рисуется отдельным JS-виджетом с отдельным XHR-запросом -- тогда
-    нужно смотреть DevTools -> Network на странице объявления.
+    Если ничего не найдено -- (None, None).
     """
     for script in soup.find_all("script", type="application/ld+json"):
         try:
@@ -330,9 +360,8 @@ def _gallery_url(source_url: str) -> str:
 def extract_gallery_photos(session: requests.Session, source_url: str, ad_id: str, limit: int = MAX_PHOTOS):
     """
     topreality.sk отдаёт полноразмерные фото прямыми ссылками на отдельной
-    странице .../galeria.html: <a href="/topfoto/<slug>-dN-XXX-<ad_id>_n.jpg">
-    (проверено на реальном объявлении). Ссылки на превью лежат в
-    /topfoto/t/... -- их отбрасываем.
+    странице .../galeria.html: <a href="/topfoto/<slug>-dN-XXX-<ad_id>_n.jpg">.
+    Ссылки на превью лежат в /topfoto/t/... -- их отбрасываем.
     """
     gallery_url = _gallery_url(source_url)
     try:
@@ -361,9 +390,7 @@ def extract_gallery_photos(session: requests.Session, source_url: str, ad_id: st
 def download_photos(photo_urls, ad_id: str, session: requests.Session):
     """
     Скачивает фото на диск в PHOTOS_DIR/<ad_id>/1.jpg, 2.jpg, ...
-    Никакой записи в БД -- только файлы на диске (как для reality.sk).
-    Возвращает список dict {"url", "local_path", "position"} -- пригодится
-    для логов/статистики, в БД не пишется.
+    Никакой записи в БД -- только файлы на диске.
     """
     result = []
     folder = os.path.join(PHOTOS_DIR, str(ad_id))
@@ -391,9 +418,8 @@ def fetch_detail(url: str, ad_id: str, session: requests.Session, download: bool
     Заходит на страницу объявления, возвращает
     {"full_description": str, "latitude": float|None, "longitude": float|None,
      "photos": [{"url", "local_path", "position"}, ...]}
-    "full_description" здесь -- ключ внутреннего словаря Python; при
-    сохранении в БД (save_listing) его значение кладётся в колонку
-    text_sk (отдельной колонки full_description в БД больше нет).
+    "full_description" -- ключ внутреннего словаря Python; при сохранении
+    в БД (save_listing) его значение кладётся в колонку text_sk.
     Никогда не бросает исключение наружу.
     """
     empty = {"full_description": "", "latitude": None, "longitude": None, "photos": []}
@@ -408,6 +434,11 @@ def fetch_detail(url: str, ad_id: str, session: requests.Session, download: bool
 
     full_description = extract_full_description(soup)
     latitude, longitude = extract_geo(soup, resp.text)
+    adress = extract_location(soup)
+    photo_urls = extract_gallery_photos(session, url, ad_id, MAX_PHOTOS)
+
+    full_description = extract_full_description(soup)
+    latitude, longitude = extract_geo(soup, resp.text)
     photo_urls = extract_gallery_photos(session, url, ad_id, MAX_PHOTOS)
     photos = download_photos(photo_urls, ad_id, session) if (download and photo_urls) else (
         [{"url": u, "local_path": None, "position": i} for i, u in enumerate(photo_urls, 1)]
@@ -417,6 +448,7 @@ def fetch_detail(url: str, ad_id: str, session: requests.Session, download: bool
         "full_description": full_description,
         "latitude": latitude,
         "longitude": longitude,
+        "adress": adress,
         "photos": photos,
     }
 
@@ -433,24 +465,25 @@ def save_listing(conn, data: dict) -> str:
             INSERT IGNORE INTO topreality
                 (ad_id, source_url, text_sk, price, image_url,
                  created_at, city, text_en, text, rooms, content_hash,
-                 latitude, longitude)
+                 latitude, longitude, adress)
             VALUES
-                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
-                data["topreality_id"],   # ad_id -- ID объявления с сайта
+                data["topreality_id"],
                 data["source_url"],
-                data.get("full_description") or None,  # text_sk -- сюда пишем полное описание
+                data.get("full_description") or None,
                 data["price"],
                 data["image_url"],
                 data["created_at"],
                 data["city"],
-                None,  # text_en -- перевод не делается в этом скрипте
+                None,
                 data["text"],
                 rooms,
                 data["content_hash"],
                 data.get("latitude"),
                 data.get("longitude"),
+                data.get("adress"),
             ),
         )
         inserted = cursor.rowcount == 1
@@ -517,9 +550,11 @@ def enrich_with_details(listings: list, session: requests.Session, delay: float,
             continue
         time.sleep(delay)
         detail = fetch_detail(ad["source_url"], ad["topreality_id"], session)
+
         ad["full_description"] = detail["full_description"]
         ad["latitude"] = detail["latitude"]
         ad["longitude"] = detail["longitude"]
+        ad["adress"] = detail["adress"]
         ad["photos"] = detail["photos"]
 
     return listings
@@ -550,6 +585,20 @@ def parse_price(price_text: str):
     fee = to_int(numbers[1]) if len(numbers) > 1 else None
     return price, fee
 
+
+def extract_location(soup: BeautifulSoup):
+    for li in soup.select("li.list-group-item"):
+        span = li.find("span")
+
+        if not span:
+            continue
+
+        if span.get_text(strip=True).lower() == "ulica":
+            strong = li.find("strong")
+            if strong:
+                return strong.get_text(" ", strip=True)
+
+    return None
 
 def extract_image(soup, topreality_id: str, href: str):
     id_re = re.compile(re.escape(topreality_id) + r"\.html")
@@ -601,6 +650,12 @@ def parse_card(h2, city: str, soup):
 
     price_el = card.select_one("div.prices strong.price")
     price_text = price_el.get_text(" ", strip=True) if price_el else ""
+
+    # Страховка: пропускаем карточку, если по тексту цены похоже, что
+    # это объявление о ПРОДАЖЕ, а не об аренде (см. is_rental_price).
+    if not is_rental_price(price_text):
+        return None
+
     price, energy_fee = parse_price(price_text)
 
     addr_el = card.select_one("span.location-address")
@@ -654,6 +709,8 @@ def parse_card(h2, city: str, soup):
         "latitude": None,
         "longitude": None,
         "photos": [],
+        "adress": None,
+
     }
 
 
@@ -679,11 +736,17 @@ def parse_page(html: str, city: str, seen_hashes: set):
     return listings
 
 
-def get_total_pages(html: str) -> int:
+def get_total_pages(html: str, city_slug: str) -> int:
+    """
+    Ищет ссылки вида /<city_slug>/byty/prenajomN.html и возвращает
+    максимальный номер страницы N (страница 1 = .../prenajom.html, без
+    номера, поэтому 1 всегда в списке "по умолчанию").
+    """
     soup = BeautifulSoup(html, "lxml")
+    page_re = re.compile(re.escape(city_slug) + r"/byty/prenajom(\d+)\.html")
     pages = [1]
     for a in soup.find_all("a", href=True):
-        m = re.search(r"vyhladavanie-nehnutelnosti-(\d+)\.html", a["href"])
+        m = page_re.search(a["href"])
         if m:
             n = int(m.group(1))
             if 0 < n < 500:
@@ -691,40 +754,39 @@ def get_total_pages(html: str) -> int:
     return max(pages)
 
 
-def fetch_region(region_key: str, max_pages: int, session: requests.Session, delay: float):
-    if region_key not in REGIONS:
-        log.warning("Неизвестный регион: %s (пропускаю)", region_key)
+def fetch_city(city_slug: str, max_pages: int, session: requests.Session, delay: float):
+    if city_slug not in CITIES:
+        log.warning("Неизвестный город: %s (пропускаю)", city_slug)
         return []
 
-    region_code, region_name, _ = REGIONS[region_key]
     all_listings = []
     seen_hashes = set()
 
-    first_url = build_search_url(region_code, region_name, page=1)
+    first_url = build_search_url(city_slug, page=1)
     resp = session.get(first_url, headers=HEADERS, timeout=20)
     resp.raise_for_status()
     html = resp.text
 
-    total_pages = get_total_pages(html)
+    total_pages = get_total_pages(html, city_slug)
     pages_to_fetch = min(total_pages, max_pages) if max_pages else total_pages
 
-    all_listings.extend(parse_page(html, region_key, seen_hashes))
+    all_listings.extend(parse_page(html, city_slug, seen_hashes))
 
     for page in range(2, pages_to_fetch + 1):
         time.sleep(delay)
-        page_url = build_search_url(region_code, region_name, page=page)
+        page_url = build_search_url(city_slug, page)
         try:
             r = session.get(page_url, headers=HEADERS, timeout=20)
         except requests.RequestException as e:
-            log.warning("Ошибка запроса страницы %s (%s): %s", page, region_key, e)
+            log.warning("Ошибка запроса страницы %s (%s): %s", page, city_slug, e)
             break
 
         if r.status_code != 200:
             log.warning("Страница %s (%s) вернула статус %s, останавливаемся",
-                        page, region_key, r.status_code)
+                        page, city_slug, r.status_code)
             break
 
-        all_listings.extend(parse_page(r.text, region_key, seen_hashes))
+        all_listings.extend(parse_page(r.text, city_slug, seen_hashes))
 
     return all_listings
 
@@ -734,8 +796,9 @@ def fetch_region(region_key: str, max_pages: int, session: requests.Session, del
 # ---------------------------------------------------------------------------
 
 def main():
-    parser = argparse.ArgumentParser(description="Парсер аренды topreality.sk")
-    parser.add_argument("--regions", nargs="+", default=list(REGIONS.keys()))
+    parser = argparse.ArgumentParser(description="Парсер аренды topreality.sk по городам")
+    parser.add_argument("--cities", nargs="+", default=list(CITIES.keys()),
+                         help=f"Slug'и городов из списка: {', '.join(CITIES.keys())}")
     parser.add_argument("--pages", type=int, default=1)
     parser.add_argument("--delay", type=float, default=1.0)
     parser.add_argument("--no-db", action="store_true")
@@ -753,14 +816,14 @@ def main():
     session = requests.Session()
     total_stats = {"inserted": 0, "skipped": 0, "errors": 0}
 
-    for region in args.regions:
+    for city in args.cities:
         log.info("=" * 80)
-        log.info("РЕГИОН: %s", region)
+        log.info("ГОРОД: %s (%s)", city, CITIES.get(city, "?"))
         log.info("=" * 80)
         try:
-            listings = fetch_region(region, args.pages, session, args.delay)
+            listings = fetch_city(city, args.pages, session, args.delay)
         except requests.RequestException as e:
-            log.error("Ошибка запроса для %s: %s", region, e)
+            log.error("Ошибка запроса для %s: %s", city, e)
             time.sleep(args.delay)
             continue
 
@@ -789,7 +852,6 @@ def main():
                 print(f"URL:         {ad['source_url']}")
                 print(f"Location:    {ad['location']}")
                 print(f"Price:       {ad['price']}  (+ energie: {ad['energy_fee']})")
-                #print(f"Full desc:   {(ad['full_description'] or '')[:200]}")
                 print(f"Lat/Lon:     {ad['latitude']}, {ad['longitude']}")
                 print(f"Photos:      {len(ad['photos'])}")
                 print(f"Hash:        {ad['content_hash']}")

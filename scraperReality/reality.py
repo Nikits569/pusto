@@ -293,6 +293,21 @@ def extract_full_description(soup: BeautifulSoup) -> str:
     full_text = "\n".join(p for p in parts if p)
     return full_text.strip()
 
+def extract_location(soup: BeautifulSoup):
+    location = soup.find("div", class_="d-inline-block ml-2")
+
+    if not location:
+        return None
+
+    a = location.find("a")
+    if a:
+        a.decompose()  # удаляем ссылку "Ukázať na mape"
+
+    address = location.get_text(" ", strip=True)
+    address = address.split("•")[0].strip()
+
+    return address
+
 
 def extract_geo(soup: BeautifulSoup, html: str):
     """
@@ -433,7 +448,7 @@ def fetch_detail(url: str, ad_id: str, session: requests.Session, download: bool
     Никогда не бросает исключение наружу -- при ошибке возвращает "пустой" результат,
     чтобы одно упавшее объявление не останавливало весь прогон.
     """
-    empty = {"full_description": "", "latitude": None, "longitude": None, "photos": []}
+    empty = {"full_description": "", "latitude": None, "longitude": None, "photos": [], 'adress': None}
     try:
         resp = session.get(url, headers=HEADERS, timeout=20)
         resp.raise_for_status()
@@ -442,6 +457,8 @@ def fetch_detail(url: str, ad_id: str, session: requests.Session, download: bool
         return empty
 
     soup = BeautifulSoup(resp.text, "lxml")
+
+    adress = extract_location(soup)
 
     full_description = extract_full_description(soup)
     latitude, longitude = extract_geo(soup, resp.text)
@@ -454,6 +471,7 @@ def fetch_detail(url: str, ad_id: str, session: requests.Session, download: bool
         "full_description": full_description,
         "latitude": latitude,
         "longitude": longitude,
+        "adress": adress,
         "photos": photos,
     }
 
@@ -475,15 +493,15 @@ def save_listing(conn, data: dict) -> str:
             INSERT IGNORE INTO reality
                 (ad_id, source_url, text, text_sk, price, image_url,
                  created_at, city, rooms, content_hash,
-                 latitude, longitude)
+                 latitude, longitude, adress)
             VALUES
-                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 data["ad_id"],
                 data["source_url"],
                 data["text"],
-                data.get("full_description") or None,  # text_sk -- сюда пишем полное описание
+                data.get("full_description") or None,
                 data["price"],
                 data["image_url"],
                 data["created_at"],
@@ -492,6 +510,7 @@ def save_listing(conn, data: dict) -> str:
                 data["content_hash"],
                 data.get("latitude"),
                 data.get("longitude"),
+                data.get("adress"),
             ),
         )
         inserted = cursor.rowcount == 1
@@ -618,6 +637,7 @@ def parse_card(h2, city: str):
         "title": title,
         "location": location,
         "params": params,
+        "adress": None,
         # заполняются позже, в enrich_with_details() -- "full_description"
         # уходит в колонку text_sk при сохранении (см. save_listing)
         "full_description": "",
@@ -713,6 +733,7 @@ def enrich_with_details(listings: list, session: requests.Session, delay: float,
         ad["full_description"] = detail["full_description"]
         ad["latitude"] = detail["latitude"]
         ad["longitude"] = detail["longitude"]
+        ad["adress"] = detail["adress"]
         ad["photos"] = detail["photos"]
 
     return listings

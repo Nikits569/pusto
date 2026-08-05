@@ -1,0 +1,86 @@
+cat > .dockerignore << 'EOF'
+# git
+.git
+.gitignore
+
+# секреты
+.env
+*.env
+!.env.example
+
+# telegram сессии и куки
+*.session
+*.session-journal
+*cookies*
+*.cookie
+credentials.json
+token.json
+
+# сертификаты и ключи
+*.pem
+*.key
+*.crt
+
+# виртуальные окружения — НЕ нужны в образе, ставим зависимости заново через pip
+venv/
+.venv/
+**/venv/
+**/.venv/
+
+# логи
+*.log
+gunicorn.log
+
+# Python
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.bak
+
+# Django — соберутся заново внутри контейнера через collectstatic
+staticfiles/
+media/
+**/media/
+db.sqlite3
+*.sql
+
+# ML модели / веса — тяжёлые, если Django-часть их не грузит напрямую
+models/
+**/models/
+**/.locks/
+*.pt
+*.pth
+*.onnx
+*.bin
+*.h5
+*.safetensors
+
+# скраперы — не нужны Django-контейнеру, остаются на хосте
+scraperReality/
+scraperTopReality/
+scraperBazos/
+
+# скачанные фото/датасеты скраперов
+photos/
+**/photos/
+filter/
+cat_filter/
+**/filter/
+**/cat_filter/
+postWorker/Документы/
+**/cache/
+
+# docker-compose и сам Dockerfile не нужны внутри образа
+docker-compose.yml
+Dockerfile
+EOF

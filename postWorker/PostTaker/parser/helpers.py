@@ -288,20 +288,22 @@ def extract_price(text):
     return None
 
 def pick_size(sizes):
-    # Выбирает подходящий размер thumbnail.
-    # Сначала пробуем medium, если его нет — small.
-    medium, small = [], []
+    medium, small, large = [], [], []
     for s in sizes or []:
         if isinstance(s, PhotoSize) and hasattr(s, "w"):
             if 300 <= s.w <= 700:
                 medium.append(s)
             elif s.w < 300:
                 small.append(s)
+            else:
+                large.append(s)
 
     if medium:
         return max(medium, key=lambda x: x.w), "medium"
     if small:
         return max(small, key=lambda x: x.w), "small"
+    if large:
+        return min(large, key=lambda x: x.w), "large"  # берём наименьший из крупных
     return None, None
 
 def check_hash(photo_hash: str) -> bool:

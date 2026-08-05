@@ -1,0 +1,528 @@
+<!--
+  Модалка підписки на сповіщення (укр. мова).
+
+  ВАЖЛИВО ПРО ІНТЕГРАЦІЮ З DJANGO — тепер усі поля рендеряться
+  напряму з форми (form.email, form.telegram, form.city, form.type_rent),
+  ніякого хардкоду немає.
+
+  1. Міста підтягнуться самі, бо form.city — це той самий Select
+     з вашої NotificationNeighborForm, де choices уже з бази.
+
+  2. Плейсхолдери ("you@example.com", "@username") і required
+     тепер потрібно задавати НЕ в HTML, а в forms.py через widget attrs,
+     інакше Django відрендерить голий select/input без них. Приклад:
+
+     class NotificationNeighborForm(forms.ModelForm):
+         class Meta:
+             model = notification
+             fields = ['email', 'telegram', 'city', 'type_rent',
+                       'budget_from', 'budget_to', 'rooms']
+             widgets = {
+                 'city': forms.Select(attrs={'class': 'form-select'}),
+                 'type_rent': forms.Select(attrs={'class': 'form-select'}),
+                 'email': forms.EmailInput(attrs={
+                     'placeholder': 'you@example.com', 'required': True
+                 }),
+                 'telegram': forms.TextInput(attrs={'placeholder': '@username'}),
+                 'budget_from': forms.NumberInput(attrs={'placeholder': 'від'}),
+                 'budget_to': forms.NumberInput(attrs={'placeholder': 'до'}),
+             }
+
+     required=True для email додатково продублюйте в самому полі моделі
+     (blank=False), щоб валідація спрацювала і на бекенді.
+
+  3. Для type_rent поміняйте choices у моделі на:
+     [('flat', 'Пошук квартири'), ('roommate', 'Пошук сусіда')]
+
+  4. CSS у файлі стилізує будь-який select/input всередині .ntf-field,
+     тож клас 'form-select' можна лишити — стилі накладуться автоматично.
+
+  5. Синє підсвічування опції у розкритому списку select — це нативний
+     рендер браузера/ОС, CSS його не стилізує. Якщо потрібен повністю
+     кастомний вигляд списку — знадобиться JS-компонент замість select.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink: #15161a;
+    --ink-soft: #6b6e76;
+    --ink-faint: #a4a7ae;
+    --surface: #ffffff;
+    --surface-muted: #f4f4f6;
+    --line: #e6e6ea;
+    --line-strong: #d3d4d9;
+    --brand: #2A3573;
+    --brand-hover: #232c5f;
+    --brand-tint: #EEF0F9;
+    --radius-lg: 22px;
+    --radius-md: 12px;
+    --font-display: 'Space Grotesk', 'Segoe UI', sans-serif;
+    --font-body: 'Inter', 'Segoe UI', sans-serif;
+  }
+
+  .ntf-trigger{
+    font-family: var(--font-body);
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    cursor: pointer;
+    transition: transform .15s ease, background .15s ease;
+  }
+  .ntf-trigger:hover{ background: var(--brand-hover); transform: translateY(-1px); }
+  .ntf-trigger:active{ transform: translateY(0); }
+
+  .ntf-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(15,17,36,0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease;
+  }
+  .ntf-overlay.active{ opacity: 1; visibility: visible; }
+
+  .ntf-modal{
+    width: 100%;
+    max-width: 440px;
+    max-height: 88vh;
+    overflow-y: auto;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 24px 60px -12px rgba(42,53,115,0.35), 0 2px 8px rgba(20,20,25,0.06);
+    position: relative;
+    transform: translateY(14px) scale(.97);
+    transition: transform .3s cubic-bezier(.2,.9,.25,1);
+    font-family: var(--font-body);
+  }
+  .ntf-overlay.active .ntf-modal{ transform: translateY(0) scale(1); }
+
+  .ntf-modal::-webkit-scrollbar{ width: 6px; }
+  .ntf-modal::-webkit-scrollbar-thumb{ background: var(--line-strong); border-radius: 4px; }
+
+  .ntf-close{
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .ntf-close:hover{ background: var(--brand); color:#fff; border-color: var(--brand); }
+
+  .ntf-head{
+    padding: 34px 32px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ntf-badge{
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--brand-tint);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .ntf-badge svg{ width: 20px; height: 20px; stroke: var(--brand); }
+
+  .ntf-title{
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 6px;
+    letter-spacing: -.01em;
+  }
+  .ntf-sub{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .ntf-form{ padding: 24px 32px 32px; display: flex; flex-direction: column; gap: 18px; }
+
+  .ntf-field{ position: relative; }
+
+  .ntf-field label{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 7px;
+  }
+
+  .ntf-required{ color: var(--brand); font-size: 13px; }
+  .ntf-optional{
+    text-transform: none;
+    font-weight: 500;
+    color: var(--ink-faint);
+    font-size: 11px;
+    letter-spacing: 0;
+  }
+
+  .ntf-field input[type="text"],
+  .ntf-field input[type="email"],
+  .ntf-field input[type="number"],
+  .ntf-field select{
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--ink);
+    background: var(--surface-muted);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .ntf-field input::placeholder{ color: var(--ink-faint); }
+
+  .ntf-field input:focus,
+  .ntf-field select:focus{
+    background: var(--surface);
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(42,53,115,0.12);
+  }
+
+  /* стилізація select, який рендерить Django (form.city / form.type_rent) */
+  .ntf-field select,
+  .ntf-field select.form-select{
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b6e76' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  .ntf-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .ntf-range{ display: flex; align-items: center; gap: 10px; }
+  .ntf-range span{ color: var(--ink-faint); font-size: 13px; flex-shrink: 0; }
+
+  /* Кімнати — сегментований вибір замість звичайного select */
+  .ntf-pills{ display: flex; gap: 8px; flex-wrap: wrap; }
+  .ntf-pill{ position: relative; }
+  .ntf-pill input{
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    cursor: pointer;
+  }
+  .ntf-pill label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--surface-muted);
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0;
+  }
+  .ntf-pill input:checked + label{
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+  }
+  .ntf-pill input:focus-visible + label{
+    box-shadow: 0 0 0 3px rgba(42,53,115,0.18);
+  }
+
+  .ntf-submit{
+    margin-top: 6px;
+    width: 100%;
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 14px;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background .15s ease, transform .1s ease;
+  }
+  .ntf-submit:hover{ background: var(--brand-hover); }
+  .ntf-submit:active{ transform: scale(.99); }
+
+  .ntf-foot{
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin: 2px 0 0;
+    line-height: 1.5;
+  }
+
+  .ntf-form-message{
+    font-size: 13px;
+    margin: -6px 0 0;
+    display: none;
+  }
+  .ntf-form-message:not(:empty){ display: block; }
+  .ntf-form-message.is-error{ color: #b3261e; }
+  .ntf-form-message.is-success{ color: var(--brand); }
+
+  .ntf-error{
+    font-size: 12px;
+    color: #b3261e;
+    margin: 6px 0 0;
+    display: none;
+  }
+  .ntf-error:not(:empty){ display: block; }
+
+  /* Екран підтвердження після успішної відправки */
+  .ntf-success{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 44px 32px 40px;
+    animation: ntfPop .35s cubic-bezier(.2,.9,.25,1);
+  }
+  .ntf-success.active{ display: flex; }
+
+  .ntf-success-icon{
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #E7F6EC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .ntf-success-icon svg{ width: 26px; height: 26px; stroke: #1E8E3E; }
+
+  .ntf-success-title{
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+  .ntf-success-text{
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin: 0 0 26px;
+    max-width: 300px;
+  }
+  .ntf-success-close{
+    background: var(--surface-muted);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 11px 22px;
+    font-size: 13.5px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .ntf-success-close:hover{ background: #ececee; border-color: var(--line-strong); }
+
+  @keyframes ntfPop{
+    from{ opacity: 0; transform: translateY(6px) scale(.98); }
+    to{ opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @media (max-width: 480px){
+    .ntf-head{ padding: 28px 22px 18px; }
+    .ntf-form{ padding: 20px 22px 26px; }
+    .ntf-row{ grid-template-columns: 1fr; }
+  }
+</style>
+
+<button class="ntf-trigger" onclick="ntfOpen()">🔔 сповіщення</button>
+
+<div class="ntf-overlay" id="ntfOverlay">
+  <div class="ntf-modal" role="dialog" aria-modal="true" aria-labelledby="ntfTitle">
+    <button class="ntf-close" onclick="ntfClose()" aria-label="Закрити">×</button>
+
+    <div class="ntf-head">
+      <div class="ntf-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <h2 class="ntf-title" id="ntfTitle">Сповіщення про нові оголошення</h2>
+      <p class="ntf-sub">Надішлемо повідомлення, щойно з'явиться відповідний варіант за вашими параметрами.</p>
+    </div>
+
+    <form class="ntf-form" id="ntfForm" method="post">
+      {% csrf_token %}
+
+      <div class="ntf-field">
+        <label for="id_email">Email <span class="ntf-required">*</span></label>
+        <!-- У формі email має бути required=True / blank=False -->
+        {{ form.email }}
+        <p class="ntf-error" data-error-for="email"></p>
+      </div>
+
+      <div class="ntf-field">
+        <label for="id_telegram">Telegram <span class="ntf-optional">(необов'язково)</span></label>
+        {{ form.telegram }}
+      </div>
+
+      <div class="ntf-row">
+        <div class="ntf-field">
+          <label for="id_city">Місто <span class="ntf-optional">(необов'язково)</span></label>
+          <!-- Вставляйте РЕАЛЬНЕ поле форми, а не статичний <select> нижче -->
+          {{ form.city }}
+        </div>
+        <div class="ntf-field">
+          <label for="id_type_rent">Тип пошуку <span class="ntf-optional">(необов'язково)</span></label>
+          <!-- choices у моделі поміняйте на: ('flat', 'Пошук квартири'), ('roommate', 'Пошук сусіда') -->
+          {{ form.type_rent }}
+        </div>
+      </div>
+
+      <div class="ntf-field">
+        <label>Бюджет, € <span class="ntf-optional">(необов'язково)</span></label>
+        <div class="ntf-range">
+          <input type="number" name="budget_from" placeholder="від">
+          <span>—</span>
+          <input type="number" name="budget_to" placeholder="до">
+        </div>
+      </div>
+
+      <div class="ntf-field">
+        <label>Кімнати <span class="ntf-optional">(необов'язково)</span></label>
+        <div class="ntf-pills">
+          <div class="ntf-pill"><input type="radio" name="rooms" id="r1" value="1"><label for="r1">1</label></div>
+          <div class="ntf-pill"><input type="radio" name="rooms" id="r2" value="2"><label for="r2">2</label></div>
+          <div class="ntf-pill"><input type="radio" name="rooms" id="r3" value="3"><label for="r3">3</label></div>
+          <div class="ntf-pill"><input type="radio" name="rooms" id="r4" value="4"><label for="r4">4+</label></div>
+        </div>
+      </div>
+
+      <p class="ntf-form-message" id="ntfFormMessage"></p>
+
+      <button type="submit" class="ntf-submit" id="ntfSubmitBtn">Увімкнути сповіщення</button>
+      <p class="ntf-foot">Відписатися можна будь-коли з листа або бота.</p>
+    </form>
+
+    <div class="ntf-success" id="ntfSuccess">
+      <div class="ntf-success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h3 class="ntf-success-title">Готово!</h3>
+      <p class="ntf-success-text">Ми повідомимо вас, щойно з'явиться відповідний варіант за вашими параметрами.</p>
+      <button type="button" class="ntf-success-close" onclick="ntfClose()">Закрити</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ntfOverlay = document.getElementById('ntfOverlay');
+  const ntfForm = document.getElementById('ntfForm');
+  const ntfSubmitBtn = document.getElementById('ntfSubmitBtn');
+  const ntfMessage = document.getElementById('ntfFormMessage');
+  const ntfSuccess = document.getElementById('ntfSuccess');
+
+  // ЗАМІНІТЬ на реальний url вашої view, напр. "{% url 'notification_create' %}"
+  const NTF_SUBMIT_URL = "{% url 'notification_create' %}";
+
+  function ntfOpen(){
+    ntfOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function ntfClose(){
+    ntfOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    // невеличка затримка, щоб не було "миготіння" форми під час анімації закриття
+    setTimeout(() => {
+      ntfSuccess.classList.remove('active');
+      ntfForm.style.display = '';
+      ntfMessage.textContent = '';
+      ntfMessage.classList.remove('is-error', 'is-success');
+    }, 250);
+  }
+  ntfOverlay.addEventListener('click', (e) => { if (e.target === ntfOverlay) ntfClose(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') ntfClose(); });
+
+  ntfForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    ntfMessage.textContent = '';
+    ntfMessage.classList.remove('is-error', 'is-success');
+    ntfSubmitBtn.disabled = true;
+    ntfSubmitBtn.textContent = 'Надсилаємо...';
+
+    const formData = new FormData(ntfForm);
+
+    try {
+      const res = await fetch(NTF_SUBMIT_URL, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: formData,
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        ntfForm.style.display = 'none';
+        ntfSuccess.classList.add('active');
+        ntfForm.reset();
+      } else {
+        const firstError = data.errors ? Object.values(data.errors)[0][0].message : 'Перевірте поля форми.';
+        ntfMessage.textContent = firstError;
+        ntfMessage.classList.add('is-error');
+      }
+    } catch (err) {
+      ntfMessage.textContent = 'Не вдалося надіслати. Спробуйте ще раз.';
+      ntfMessage.classList.add('is-error');
+    } finally {
+      ntfSubmitBtn.disabled = false;
+      ntfSubmitBtn.textContent = 'Увімкнути сповіщення';
+    }
+  });
+</script>

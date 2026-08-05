@@ -9,14 +9,54 @@ from django.db.models import F
 from django.contrib.contenttypes.models import ContentType
 from .models import TrackedLink
 from django.http import HttpResponseRedirect
+import logging
+from .utils import check_support_rate_limit
+import requests
+
+def verify_turnstile(request):
+    token = request.POST.get("cf-turnstile-response")
+
+    if not token:
+        return False
+
+    response = requests.post(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        data={
+            "secret": settings.TURNSTILE_SECRET_KEY,
+            "response": token,
+            "remoteip": request.META.get("HTTP_CF_CONNECTING_IP"),
+        },
+        timeout=10,
+    )
+
+    result = response.json()
+
+    return result.get("success", False)
 
 def support_submit(request):
+
+    blocked = check_support_rate_limit(request)
+
+    if blocked:
+        return blocked
+    
+    if not verify_turnstile(request):
+        messages.error(
+            request,
+            "Капча не пройдена. Доступ заборонен"
+        )
+        return redirect("/")
+
     if request.method == 'POST':
         form = SupportTicketForm(request.POST)
         if form.is_valid():
-            form.save()
+            ticket = form.save(commit=False)
+            ticket.ip_address = request.META.get("HTTP_CF_CONNECTING_IP")
+            ticket.user_agent = request.META.get("HTTP_USER_AGENT", "")
+            ticket.save()
 
-    return redirect('success')
+    return redirect("success")
+
 
 def support_create(request):
     if request.method == 'POST':
@@ -24,11 +64,15 @@ def support_create(request):
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
+            ticket.ip_address = request.META.get("HTTP_CF_CONNECTING_IP")
+            ticket.user_agent = request.META.get("HTTP_USER_AGENT", "")
             ticket.save()
             return redirect('success')
     else:
         form = SupportTicketForm()
+
     return render(request, 'support/support.html', {'form': form})
+
 
 def success(request):
     user = request.user

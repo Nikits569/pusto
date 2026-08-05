@@ -46,4 +46,7 @@ urlpatterns = [
 
     path('similar/<str:section>/<slug:slug>/', similar, name='similar'),
 
+    path('banner/<int:banner_id>/click/', banner_click, name='banner_click'),
+
+
 ]

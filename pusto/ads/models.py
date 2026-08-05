@@ -55,8 +55,8 @@ class Gender(models.IntegerChoices):
 
 class HousingType(models.TextChoices):
     ANY = 'any', _('будь-яке житло')
-    ROOM = 'room', _('кімнату')
-    APARTMENT = 'apartment', _('квартиру')
+    ROOM = 'room', _('кімната')
+    APARTMENT = 'apartment', _('квартира')
     DORM = 'dorm', _('гуртожиток')
 
 
@@ -78,6 +78,10 @@ class Lifestyle(models.Model):
 class Condition(models.TextChoices):
     NEW = 'new', _('нове')
     USED = 'used', _('б/У')
+    NORMAL = 'normal', _('нормальний')
+    LIKE_NEW = 'like_new', _('як нове')
+    BAD = 'bad', _('поганий')
+
 
 
 class City(models.TextChoices):
@@ -409,6 +413,8 @@ class NeighborPost(models.Model):
 
     preview_image = models.CharField(max_length=250, null=True, blank=True, verbose_name=_('Preview image'))
 
+    adress = models.CharField(max_length=250, null=True, blank=True, verbose_name=_('Adress'))
+
     ad_id = models.CharField(max_length=100, null=True, blank=True, verbose_name=_('Ad ID'))
     def __str__(self):
         return f'{self.city} — {self.user}'
@@ -565,3 +571,25 @@ class NeighborPostImage(models.Model):
     class Meta:
         verbose_name = _('Neighbor post image')
         verbose_name_plural = _('Neighbor post images')
+
+
+class advertisingBanner(models.Model):
+
+    image_uk = models.ImageField(upload_to='banners/uk/', null=True)
+    image_en = models.ImageField(upload_to='banners/en/', null=True)
+    image_sk = models.ImageField(upload_to='banners/sk/', null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    start_at = models.DateTimeField(null=True, blank=True)
+    end_at = models.DateTimeField(null=True, blank=True)
+    url = models.URLField()
+
+    alt_uk = models.CharField(max_length=150, null=True)
+    alt_en = models.CharField(max_length=150, null=True)
+    alt_sk = models.CharField(max_length=150, null=True)
+
+    status = models.CharField(max_length=20, choices=StatusAdv.choices, default=StatusAdv.PENDING)
+
+    impressions_count = models.PositiveIntegerField(default=0)
+    clicks_count = models.PositiveIntegerField(default=0)
+

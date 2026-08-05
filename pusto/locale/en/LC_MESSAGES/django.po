@@ -1,28 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: pusto.sk\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-30 17:08+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: pusto/settings.py:42
 msgid "Ukrainian"
 msgstr ""
 
-#: pusto/settings.py:43
 msgid "English"
 msgstr ""
 
@@ -101,12 +89,8 @@ msgstr "post ownership confirmation"
 msgid "Підтвердження володіння постами"
 msgstr "Post Ownership Confirmation"
 
-msgid ""
-"Щоб підтвердити, що ці пости належать вам, перейдіть у Telegram-бота з того "
-"акаунта, з якого вони були опубліковані."
-msgstr ""
-"To confirm that these posts belong to you, go to the Telegram bot using the "
-"account from which they were published."
+msgid "Щоб підтвердити, що ці пости належать вам, перейдіть у Telegram-бота з того акаунта, з якого вони були опубліковані."
+msgstr "To confirm that these posts belong to you, go to the Telegram bot using the account from which they were published."
 
 msgid "Після підтвердження ви зможете:"
 msgstr "After confirmation, you will be able to:"
@@ -198,8 +182,7 @@ msgstr "submit request"
 msgid "верифікація студента"
 msgstr "student verification"
 
-msgid ""
-"введіть свою студентську електронну пошту, щоб підтвердити статус студента."
+msgid "введіть свою студентську електронну пошту, щоб підтвердити статус студента."
 msgstr "enter your student email address to confirm your student status"
 
 msgid "відправити лист"
@@ -325,12 +308,8 @@ msgstr "company or business confirmation"
 msgid "Дякуємо за інтерес!"
 msgstr "Thank you for your interest!"
 
-msgid ""
-"Наразі функція придбання реклами тимчасово недоступна у зв’язку із запуском "
-"платформи."
-msgstr ""
-"The advertising purchase feature is currently temporarily unavailable due to "
-"the platform launch."
+msgid "Наразі функція придбання реклами тимчасово недоступна у зв’язку із запуском платформи."
+msgstr "The advertising purchase feature is currently temporarily unavailable due to the platform launch."
 
 msgid "Запуск очікується 15.04.2026."
 msgstr "Launch is expected on 15.04.2026."
@@ -347,18 +326,11 @@ msgstr "edit"
 msgid "Ви впевнені, що хочете видалити це оголошення?"
 msgstr "Are you sure you want to delete this listing?"
 
-msgid "Закрити"
-msgstr "Close"
-
 msgid "Просування оголошення"
 msgstr "Listing promotion"
 
-msgid ""
-"Оберіть тривалість підняття. Ваше оголошення отримає більше видимості у "
-"списку."
-msgstr ""
-"Choose the promotion duration. Your listing will get more visibility in the "
-"list."
+msgid "Оберіть тривалість підняття. Ваше оголошення отримає більше видимості у списку."
+msgstr "Choose the promotion duration. Your listing will get more visibility in the list."
 
 msgid "Старт"
 msgstr "Start"
@@ -468,14 +440,8 @@ msgstr "Amount to pay"
 msgid "Перепрошуємо за незручності"
 msgstr "We apologize for the inconvenience"
 
-msgid ""
-"Наразі онлайн-оплата тимчасово недоступна, тому просимо здійснити оплату "
-"банківським переказом. Функцію онлайн-оплати буде впроваджено до 20 травня "
-"включно."
-msgstr ""
-"Online payment is currently temporarily unavailable, so please make the "
-"payment by bank transfer. The online payment feature will be implemented by "
-"May 20 inclusive."
+msgid "Наразі онлайн-оплата тимчасово недоступна, тому просимо здійснити оплату банківським переказом. Функцію онлайн-оплати буде впроваджено до 20 травня включно."
+msgstr "Online payment is currently temporarily unavailable, so please make the payment by bank transfer. The online payment feature will be implemented by May 20 inclusive."
 
 msgid "Отримувач"
 msgstr "Recipient"
@@ -483,12 +449,8 @@ msgstr "Recipient"
 msgid "Сума"
 msgstr "Amount"
 
-msgid ""
-"Після оплати, будь ласка, надішліть нам підтвердження в Telegram або "
-"напишіть на електронну пошту."
-msgstr ""
-"After payment, please send us confirmation in Telegram or write to us by "
-"email."
+msgid "Після оплати, будь ласка, надішліть нам підтвердження в Telegram або напишіть на електронну пошту."
+msgstr "After payment, please send us confirmation in Telegram or write to us by email."
 
 msgid "Перейти в Telegram"
 msgstr "Go to Telegram"
@@ -502,20 +464,14 @@ msgstr "Card details"
 msgid "Оплатити"
 msgstr "Pay"
 
-msgid ""
-"Натискаючи “Оплатити”, ви підтверджуєте платіж за підняття оголошення в ТОП."
-msgstr ""
-"By clicking “Pay”, you confirm the payment for promoting the listing to TOP."
+msgid "Натискаючи “Оплатити”, ви підтверджуєте платіж за підняття оголошення в ТОП."
+msgstr "By clicking “Pay”, you confirm the payment for promoting the listing to TOP."
 
 msgid "Платіж успішний"
 msgstr "Payment successful"
 
-msgid ""
-"Ваш платіж успішно оброблено. На вашу електронну пошту надіслано "
-"підтвердження покупки."
-msgstr ""
-"Your payment has been successfully processed. A purchase confirmation has "
-"been sent to your email."
+msgid "Ваш платіж успішно оброблено. На вашу електронну пошту надіслано підтвердження покупки."
+msgstr "Your payment has been successfully processed. A purchase confirmation has been sent to your email."
 
 msgid "Ви можете продовжити роботу з оголошенням."
 msgstr "You can continue working with the listing."
@@ -1024,11 +980,8 @@ msgstr "confirm your email"
 msgid "Ми надіслали лист на адресу"
 msgstr "we sent an email to"
 
-msgid ""
-"Перейдіть за посиланням у листі, щоб підтвердити пошту та опублікувати "
-"оголошення."
-msgstr ""
-"follow the link in the email to verify your address and publish your listing"
+msgid "Перейдіть за посиланням у листі, щоб підтвердити пошту та опублікувати оголошення."
+msgstr "follow the link in the email to verify your address and publish your listing"
 
 msgid "Перейти на головну"
 msgstr "go to homepage"
@@ -1271,7 +1224,7 @@ msgid "Пост має бути унікальним і не скопійова�
 msgstr "The post must be unique and not copied from other websites or groups."
 
 msgid "Унікальність і якість оголошення перевіряються вручну адміністрацією."
-msgstr "The uniqueness and quality of the listing are checked manually by the администрация."
+msgstr "The uniqueness and quality of the listing are checked manually by the administration."
 
 msgid "Один користувач може отримати одну книгу в межах акції."
 msgstr "One user can receive one book within the promotion."
@@ -1301,7 +1254,7 @@ msgid "Додавати товари або послуги, заборонені
 msgstr "Adding goods or services prohibited by the site rules or law."
 
 msgid "Використовувати чужі фото, тексти або вводити користувачів в оману."
-msgstr "Using чужие photos, texts, or misleading users."
+msgstr "Using other people's photos, texts, or misleading users."
 
 msgid "Створювати кілька акаунтів для повторної участі в акції."
 msgstr "Creating multiple accounts to participate in the promotion again."
@@ -1372,13 +1325,13 @@ msgstr "number of rooms"
 msgid "Відкрити фільтри"
 msgstr "Open filters"
 
-msgid "речі в Братиславі"
+msgid "Речі в Братиславі"
 msgstr "things in Bratislava"
 
-msgid "речі в Пряшеві"
+msgid "Речі в Пряшеві"
 msgstr "things in Presov"
 
-msgid "речі в Кошицях"
+msgid "Речі в Кошицях"
 msgstr "things in Kosice"
 
 msgid "Квартири в Братиславі"
@@ -1392,3 +1345,679 @@ msgstr "Apartments in Kosice"
 
 msgid "депозит"
 msgstr "deposit"
+
+msgid "сповіщення"
+msgstr "notifications"
+
+msgid "Сповіщення про нові оголошення"
+msgstr "Notifications about new listings"
+
+msgid "Надішлемо повідомлення, щойно з'явиться відповідний варіант за вашими параметрами."
+msgstr "We'll notify you as soon as a matching listing becomes available."
+
+msgid "(необов'язково)"
+msgstr "(optional)"
+
+msgid "від"
+msgstr "from"
+
+msgid "Увімкнути сповіщення"
+msgstr "Turn on notifications"
+
+msgid "Відписатися можна будь-коли з листа або бота."
+msgstr "You can unsubscribe anytime via email or the bot."
+
+msgid "Готово!"
+msgstr "Done!"
+
+msgid "Ми повідомимо вас, щойно з'явиться відповідний варіант за вашими параметрами."
+msgstr "We'll let you know as soon as a matching listing becomes available."
+
+msgid "Закрити"
+msgstr "Close"
+
+msgid "Кімнати"
+msgstr "rooms"
+
+msgid "Тип пошуку"
+msgstr "Search type"
+
+msgid "невизначана стать"
+msgstr "unspecified gender"
+
+msgid "чоловічий"
+msgstr "male"
+
+msgid "жіночий"
+msgstr "female"
+
+msgid "будь який період"
+msgstr "any period"
+
+msgid "день"
+msgstr "day"
+
+msgid "неділю"
+msgstr "week"
+
+msgid "місяць"
+msgstr "month"
+
+msgid "рік"
+msgstr "year"
+
+msgid "б/У"
+msgstr "used"
+
+msgid "безскоштовно"
+msgstr "free"
+
+msgid "оренда"
+msgstr "rent"
+
+msgid "кімнату"
+msgstr "a room"
+
+msgid "квартиру"
+msgstr "an apartment"
+
+msgid "гуртожиток"
+msgstr "a dorm"
+
+msgid "Кошиця"
+msgstr "Košice"
+
+msgid "Прешов"
+msgstr "Prešov"
+
+msgid "Братислава"
+msgstr "Bratislava"
+
+msgid "Трнава"
+msgstr "Trnava"
+
+msgid "Жиліна"
+msgstr "Žilina"
+
+msgid "Нітра"
+msgstr "Nitra"
+
+msgid "Тренчин"
+msgstr "Trenčín"
+
+msgid "Банска-Бистрица"
+msgstr "Banská Bystrica"
+
+msgid "Попрад"
+msgstr "Poprad"
+
+msgid "Сповіщення про нові речі"
+msgstr "Notifications about new items"
+
+msgid "Надішлемо повідомлення, щойно з'явиться відповідний товар за вашими параметрами."
+msgstr "We will send you a notification as soon as a product matching your criteria becomes available."
+
+msgid "Тип оголошення"
+msgstr "Ad type"
+
+msgid "Ціна"
+msgstr "Price"
+
+msgid "Квартири в %(city)s - оренда та пошук житла"
+msgstr "Apartments in %(city)s - rent and search for housing"
+
+msgid "Купівля та продаж речей в %(city)s"
+msgstr "Buying and selling items in %(city)s"
+
+msgid "Шукаєте де купити або продати речі в %(city)s?"
+msgstr "Looking for where to buy or sell items in %(city)s?"
+
+msgid "На платформі pusto.sk ви можете швидко знайти оголошення про продаж та купівлю речей у %(city)s. Користувачі публікують актуальні пропозиції з різних категорій: електроніка, меблі, одяг, техніка, товари для дому, велосипеди, аксесуари та багато іншого."
+msgstr "On the pusto.sk platform you can quickly find listings for selling and buying items in %(city)s. Users post current offers in various categories: electronics, furniture, clothing, appliances, household goods, bicycles, accessories and much more."
+
+msgid "На платформі pusto.sk ви можете швидко знайти житло для студентів, працівників, сімей та всіх, хто планує переїзд або вже проживає у місті."
+msgstr "On the pusto.sk platform you can quickly find housing for students, workers, families and anyone who is planning to move or already lives in the city."
+
+
+msgid "Сервіс допомагає легко купувати та продавати речі без посередників. Ви можете переглядати фотографії, опис товарів, ціни та напряму зв’язуватись із продавцями."
+msgstr "The service helps you easily buy and sell items without intermediaries. You can view photos, product descriptions, prices and contact sellers directly."
+
+msgid "У каталозі доступні:"
+msgstr "Available in the catalog:"
+
+msgid "електроніка та гаджети;"
+msgstr "electronics and gadgets;"
+
+msgid "меблі та товари для дому;"
+msgstr "furniture and home goods;"
+
+msgid "одяг та взуття;"
+msgstr "clothing and footwear;"
+
+msgid "велосипеди та спорттовари;"
+msgstr "bicycles and sports goods;"
+
+msgid "побутова техніка;"
+msgstr "household appliances;"
+
+msgid "дитячі товари;"
+msgstr "children's products;"
+
+msgid "аксесуари та інші речі."
+msgstr "accessories and other items."
+
+msgid "На pusto.sk можна знайти як нові, так і вживані речі за доступними цінами. Оголошення регулярно оновлюються, тому користувачі швидко знаходять потрібні товари у %(city)s."
+msgstr "On pusto.sk you can find both new and used items at affordable prices. Listings are updated regularly, so users quickly find the products they need in %(city)s."
+
+msgid "Якщо ви хочете купити або продати речі в %(city)s, переглядайте актуальні оголошення, публікуйте власні пропозиції та знаходьте вигідні покупки поруч."
+msgstr "If you want to buy or sell items in %(city)s, browse current listings, post your own offers and find great deals nearby."
+
+msgid "переглянути всі речі"
+msgstr "view all items"
+
+msgid "Орендуй квартири в %(city)s"
+msgstr "Rent apartments in %(city)s"
+
+msgid "Шукаєте квартири в %(city)s для довгострокової або короткострокової оренди?"
+msgstr "Looking for apartments in %(city)s for long-term or short-term rent?"
+
+
+msgid "Ми збираємо актуальні оголошення про оренду квартир, кімнат та житла в різних районах %(city)s, щоб зробити пошук максимально простим і зручним."
+msgstr "We collect current listings for renting apartments, rooms and housing in various districts of %(city)s to make your search as simple and convenient as possible."
+
+msgid "1-кімнатні квартири;"
+msgstr "1-room apartments;"
+
+msgid "2-кімнатні квартири;"
+msgstr "2-room apartments;"
+
+msgid "квартири для студентів;"
+msgstr "apartments for students;"
+
+msgid "житло без посередників;"
+msgstr "housing without intermediaries;"
+
+msgid "кімнати в спільних квартирах;"
+msgstr "rooms in shared apartments;"
+
+msgid "недорога оренда житла;"
+msgstr "affordable housing rent;"
+
+msgid "сучасні квартири в новобудовах."
+msgstr "modern apartments in new buildings."
+
+msgid "Користувачі можуть переглядати фотографії, опис житла, ціну оренди, умови проживання та контакти власників або орендодавців."
+msgstr "Users can view photos, housing descriptions, rental prices, living conditions and contacts of owners or landlords."
+
+msgid "Це допомагає швидше знайти квартиру в %(city)s, яка відповідає бюджету та потребам."
+msgstr "This helps you find an apartment in %(city)s faster that matches your budget and needs."
+
+msgid "%(budget)s € / місяць"
+msgstr "%(budget)s € / month"
+
+msgid "переглянути всі квартири"
+msgstr "view all apartments"
+
+msgid "пошук житла та сусідів"
+msgstr "searching for housing and roommates"
+
+msgid "Показати все"
+msgstr "Show all"
+
+msgid "pusto.sk · партнерство"
+msgstr "pusto.sk · partnership"
+
+msgid "Ваш бізнес там,<br>де щодня шукають,<br>наймають і винаймають"
+msgstr "Your business right where people search,<br>hire, and rent every day"
+
+msgid "Pusto.sk — майданчик оголошень для української спільноти у Словаччині: речі, сусіди, житло. Замість разової реклами пропонуємо співпрацю з умовами, підібраними під ваш бізнес."
+msgstr "Pusto.sk is a classifieds platform for the Ukrainian community in Slovakia: items, neighbors, housing. Instead of a one-off ad, we offer a partnership with terms tailored to your business."
+
+msgid "до контактів ↓"
+msgstr "to contacts ↓"
+
+msgid "де нам цікава співпраця"
+msgstr "where we're interested in cooperation"
+
+msgid "Сфери, які ми зараз розглядаємо"
+msgstr "Areas we're currently considering"
+
+msgid "нерухомість та оренда"
+msgstr "real estate and rentals"
+
+msgid "магазини та роздрібна торгівля"
+msgstr "shops and retail"
+
+msgid "юридичні та візові послуги"
+msgstr "legal and visa services"
+
+msgid "переклад і легалізація документів"
+msgstr "translation and document legalization"
+
+msgid "мовні курси та освіта"
+msgstr "language courses and education"
+
+msgid "кафе та доставка їжі"
+msgstr "cafes and food delivery"
+
+msgid "перевезення та переїзд"
+msgstr "transportation and moving"
+
+msgid "фінансові та банківські послуги"
+msgstr "financial and banking services"
+
+msgid "it та фріланс-послуги"
+msgstr "IT and freelance services"
+
+msgid "Не знайшли свою сферу в списку? Це не означає відмову — просто напишіть, яким бізнесом займаєтесь, і ми разом подивимось, чи є сенс."
+msgstr "Didn't find your field in the list? That's not a refusal — just tell us what business you're in, and we'll figure out together if it makes sense."
+
+msgid "на дошці оголошень"
+msgstr "on the classifieds board"
+
+msgid "Умови співпраці"
+msgstr "Terms of cooperation"
+
+msgid "Ціну та формат розміщення підбираємо під ваш бюджет і цілі, а не видаємо з прайс-листа під копірку."
+msgstr "We tailor the price and placement format to your budget and goals, instead of handing you a copy-paste price list."
+
+msgid "Спільні акції"
+msgstr "Joint promotions"
+
+msgid "Тематичні добірки, розсилки та промо разом із вашим брендом під сезонні кампанії й розпродажі."
+msgstr "Themed selections, newsletters, and promos together with your brand for seasonal campaigns and sales."
+
+msgid "Персональний менеджер"
+msgstr "Personal manager"
+
+msgid "Один контакт, який веде співпрацю від старту до продовження — без пересилання між відділами."
+msgstr "One contact who manages the cooperation from start to renewal — no bouncing between departments."
+
+msgid "Фіксуємо умови на квартал чи рік наперед — стабільна ціна замість щомісячного перегляду."
+msgstr "We lock in terms for a quarter or a year ahead — a stable price instead of monthly reviews."
+
+msgid "формати"
+msgstr "formats"
+
+msgid "Варіанти співпраці"
+msgstr "Cooperation options"
+
+msgid "Бартер"
+msgstr "Barter"
+
+msgid "Обмін вашими товарами чи послугами на рекламне розміщення — без грошей на старті."
+msgstr "Exchange your goods or services for ad placement — no money upfront."
+
+msgid "Щомісячна підписка"
+msgstr "Monthly subscription"
+
+msgid "Фіксоване розміщення оголошень або банера щомісяця зі знижкою за постійність."
+msgstr "Fixed placement of ads or a banner every month with a discount for consistency."
+
+msgid "Разова кампанія"
+msgstr "One-time campaign"
+
+msgid "Під конкретну подію: відкриття, розпродаж, сезонну акцію чи запуск нового продукту."
+msgstr "For a specific event: opening, sale, seasonal promotion, or a new product launch."
+
+msgid "Ексклюзив категорії"
+msgstr "Category exclusive"
+
+msgid "Єдиний партнер у своїй ніші — наприклад, один юрист чи один перевізник на сайті."
+msgstr "The sole partner in your niche — for example, one lawyer or one mover on the site."
+
+msgid "останній пункт"
+msgstr "last point"
+
+msgid "Напишіть нам напряму"
+msgstr "Write to us directly"
+
+msgid "Розкажіть коротко, чим займаєтесь і що маєте на увазі — відповідаємо особисто, без ботів і форм на 12 полів."
+msgstr "Briefly tell us what you do and what you have in mind — we reply personally, no bots or 12-field forms."
+
+msgid "Партнерство з Pusto.sk"
+msgstr "Partnership with Pusto.sk"
+
+msgid "Обери рекламу"
+msgstr "Choose advertising"
+
+msgid "Порівняй формати просування та обери термін, який підходить саме вам"
+msgstr "Compare promotion formats and choose the duration that suits you best"
+
+msgid "Реклама"
+msgstr "Advertisement"
+
+msgid "Ремонт ноутбуків по низьким цінам"
+msgstr "Laptop repair at low prices"
+
+msgid "Рекламний пост"
+msgstr "Advertising post"
+
+msgid "Ваша пропозиція публікується у стрічці як звичайний пост із фото, описом та ціною — виглядає органічно і викликає більше довіри у покупців або клієнтів."
+msgstr "Your offer is published in the feed as a regular post with a photo, description, and price — it looks natural and creates more trust among buyers or customers."
+
+msgid "Детальний опис пропозиції"
+msgstr "Detailed offer description"
+
+msgid "Кілька фото у галереї"
+msgstr "Multiple photos in the gallery"
+
+msgid "Органічний вигляд у стрічці"
+msgstr "Natural appearance in the feed"
+
+msgid "! Публікується тільки в одну із вибраних категорій (речі або житло)!"
+msgstr "! Published only in one selected category (items or housing)!"
+
+msgid "Оптимально"
+msgstr "Optimal"
+
+msgid "днів"
+msgstr "days"
+
+msgid "Рекламний банер"
+msgstr "Advertising banner"
+
+msgid "alt: «Знижки до -30% на всі товари цього тижня»"
+msgstr "alt: \"Discounts up to -30% on all products this week\""
+
+msgid "Яскравий візуальний блок розміщується на видному місці сайту — головна сторінка, каталог або сторінка пошуку. Максимальна кількість переглядів."
+msgstr "A bright visual block placed in a prominent location on the website — homepage, catalog, or search page. Maximum number of views."
+
+msgid "Видне розміщення на сайті"
+msgstr "Visible placement on the website"
+
+msgid "Яскравий візуал, привертає увагу"
+msgstr "Eye-catching visual design"
+
+msgid "Найбільше переглядів"
+msgstr "Maximum views"
+
+msgid "Підходить для акцій та розпродажів"
+msgstr "Suitable for promotions and sales"
+
+msgid "Партнерство"
+msgstr "Partnership"
+
+msgid "Довгострокова співпраця для брендів та магазинів: індивідуальні умови розміщення, спільні акції та пріоритетна підтримка."
+msgstr "Long-term cooperation for brands and stores: individual placement conditions, joint promotions, and priority support."
+
+msgid "Індивідуальні умови"
+msgstr "Individual conditions"
+
+msgid "Спільні акції та промо"
+msgstr "Joint promotions and campaigns"
+
+msgid "Довгостроковий контракт"
+msgstr "Long-term contract"
+
+msgid "Дізнатись більше"
+msgstr "Learn more"
+
+msgid "Заявка на рекламу"
+msgstr "Advertising request"
+
+msgid "Заповніть форму нижче — після цього наш адміністратор зв’яжеться з вами щодо оплати."
+msgstr "Fill out the form below — our administrator will contact you regarding payment."
+
+msgid "Фото реклами"
+msgstr "Advertisement image"
+
+msgid "Текст оголошення"
+msgstr "Advertisement text"
+
+msgid "Alt текст банера (не відображається на зображенні)"
+msgstr "Banner alt text (not displayed on the image)"
+
+msgid "Наприклад: iPhone 13 Pro, ідеальний стан, повний комплект, торг доречний"
+msgstr "Example: iPhone 13 Pro, perfect condition, full set, price negotiable"
+
+msgid "Наприклад: Знижки до -30% на всі товари цього тижня"
+msgstr "Example: Discounts up to -30% on all products this week"
+
+msgid "Цей текст не показується на самому банері — він потрібен як alt-текст зображення (для доступності та SEO). Сам текст акції додайте прямо на зображення банера."
+msgstr "This text is not displayed on the banner itself — it is used as image alt text (for accessibility and SEO). Add the actual promotion text directly to the banner image."
+
+msgid "Посилання (необов’язково)"
+msgstr "Link (optional)"
+
+msgid "Наприклад: посилання на ваш магазин чи товар"
+msgstr "Example: link to your store or product"
+
+msgid "Наприклад: посилання на сторінку акції"
+msgstr "Example: link to the promotion page"
+
+msgid "Контакт (email, Telegram @нік або телефон)"
+msgstr "Contact (email, Telegram @username, or phone)"
+
+msgid "Наприклад: user@mail.com або @username"
+msgstr "Example: user@mail.com or @username"
+
+msgid "Так виглядатиме на сайті"
+msgstr "This is how it will look on the website"
+
+msgid "Фото ще не завантажено"
+msgstr "No image uploaded yet"
+
+msgid "Текст оголошення зʼявиться тут"
+msgstr "Advertisement text will appear here"
+
+msgid "Alt-текст зʼявиться тут"
+msgstr "Alt text will appear here"
+
+msgid "Дякуємо! Заявку прийнято. Очікуйте, адміністратор незабаром зв'яжеться з вами щодо оплати."
+msgstr "Thank you! Your request has been accepted. The administrator will contact you soon regarding payment."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+msgid "Підтвердіть Email"
+msgstr "Confirm Email"
+
+msgid "Перейдіть за посиланням для підтвердження: %(url)s"
+msgstr "Follow the link to confirm your email: %(url)s"
+
+msgid "Ваш email не підтверджений. Ми надіслали вам новий лист для підтвердження."
+msgstr "Your email is not verified. We have sent you a new confirmation email."
+
+msgid "Ви вже пройшли студентську верифікацію."
+msgstr "You have already completed student verification."
+
+msgid "Ви вже пройшли верифікацію користувача."
+msgstr "You have already completed user verification."
+
+msgid "Ви вже надсилали заявку. Статус: %(status)s"
+msgstr "You have already submitted a request. Status: %(status)s"
+
+msgid "Студентська верифікація"
+msgstr "Student verification"
+
+msgid "Верифікація користувача"
+msgstr "User verification"
+
+msgid "Заявку надіслано. Статус: %(status)s"
+msgstr "Application sent. Status: %(status)s"
+
+msgid "Для проходження верифікації потрібно мати хоча б одне опубліковане оголошення."
+msgstr "To complete verification, you need to have at least one published listing."
+
+msgid "Підтвердьте, що ви не робот."
+msgstr "Please confirm that you are not a robot."
+
+msgid "Вітаємо, %(name)s!"
+msgstr "Hello, %(name)s!"
+
+msgid "Дякуємо за використання нашого сервісу."
+msgstr "Thank you for using our service."
+
+msgid "Спосіб оплати"
+msgstr "Payment method"
+
+msgid "Змінити тариф"
+msgstr "Change plan"
+
+msgid "Крипта"
+msgstr "Crypto"
+
+msgid "Картка"
+msgstr "Card"
+
+msgid "(@нік) або телефон"
+msgstr "(@username) or phone number"
+
+msgid "Адміністратор зв'яжеться з вами для оплати цим способом."
+msgstr "The administrator will contact you to arrange payment using this method."
+
+msgid "Оплатити криптою"
+msgstr "Pay with crypto"
+
+msgid "Надіслати запит"
+msgstr "Send a request"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+msgid "3 дні — €2.99"
+msgstr "3 days — €2.99"
+
+msgid "Оплата USDT (TRC20)"
+msgstr "USDT payment (TRC20)"
+
+msgid "QR code"
+msgstr "QR code"
+
+msgid "Сума до оплати (точно)"
+msgstr "Exact payment amount"
+
+msgid "Копіювати"
+msgstr "Copy"
+
+msgid "Адреса (мережа TRC20)"
+msgstr "Address (TRC20 network)"
+
+msgid "Очікуємо надходження платежа…"
+msgstr "Waiting for payment confirmation…"
+
+
+msgid "Крипта (USDT) — миттєве підтвердження"
+msgstr "Crypto (USDT) — instant confirmation"
+
+msgid "Revolut"
+msgstr "Revolut"
+
+msgid "Українська картка"
+msgstr "Ukrainian card"
+
+msgid "Залиште контакт"
+msgstr "Leave your contact"
+
+msgid "Ми зв'яжемось з вами, щоб оформити оплату через"
+msgstr "We will contact you to arrange payment via"
+
+msgid "Telegram, телефон або email"
+msgstr "Telegram, phone or email"
+
+msgid "← інший спосіб оплати"
+msgstr "← another payment method"
+
+msgid "Заявку надіслано"
+msgstr "Request sent"
+
+msgid "Ми зв'яжемось найближчим часом для підтвердження оплати"
+msgstr "We will contact you shortly to confirm the payment"
+
+msgid "Не вдалося надіслати заявку. Спробуйте ще раз."
+msgstr "Failed to send request. Please try again."
+
+msgid "Оберіть спосіб оплати"
+msgstr "Choose payment method"
+
+msgid "← назад до тарифів"
+msgstr "← back to plans"
+
+msgid "Ми звʼяжемось з вами, щоб оформити оплату через"
+msgstr "We will contact you to arrange payment via"
+
+msgid "Надсилаємо…"
+msgstr "Sending…"
+
+msgid "Помилка: не визначено оголошення"
+msgstr "Error: advertisement not found"
+
+msgid "Сталася помилка"
+msgstr "An error occurred"
+
+msgid "стан"
+msgstr "condition"
+
+msgid "джерело"
+msgstr "source"
+
+msgid "б/у"
+msgstr "used"
+
+msgid "нормальний"
+msgstr "normal"
+
+msgid "як нове"
+msgstr "like new"
+
+msgid "поганий"
+msgstr "bad"
+
+msgid "я"
+msgstr "i am"
+
+msgid "тип житла"
+msgstr "housing type"
+
+msgid "чоловіка"
+msgstr "man"
+
+msgid "жінку"
+msgstr "woman"
+
+msgid "будь-кого"
+msgstr "anyone"
+
+msgid "Локація"
+msgstr "location"

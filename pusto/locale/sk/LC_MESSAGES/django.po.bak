@@ -1,0 +1,1508 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-30 17:08+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+#: pusto/settings.py:42
+msgid "Ukrainian"
+msgstr "Ukrajinčina"
+
+#: pusto/settings.py:43
+msgid "English"
+msgstr "Angličtina"
+
+msgid "вхід"
+msgstr "prihlásenie"
+
+msgid "мій профіль"
+msgstr "môj profil"
+
+msgid "пошук"
+msgstr "vyhľadávanie"
+
+msgid "потрібна допомога?"
+msgstr "Potrebujete pomoc?"
+
+msgid "відповімо протягом 24 годин."
+msgstr "Odpovieme do 24 hodín."
+
+msgid "надіслати"
+msgstr "odoslať"
+
+msgid "користувачам"
+msgstr "pre používateľov"
+
+msgid "Усі оголошення"
+msgstr "všetky inzeráty"
+
+msgid "Робота"
+msgstr "práca"
+
+msgid "Житло"
+msgstr "bývanie"
+
+msgid "Речі"
+msgstr "veci"
+
+msgid "Обране"
+msgstr "obľúbené"
+
+msgid "компанія"
+msgstr "spoločnosť"
+
+msgid "реклама на сайті"
+msgstr "reklama na stránke"
+
+msgid "партнерство"
+msgstr "partnerstvo"
+
+msgid "правова інформація"
+msgstr "právne informácie"
+
+msgid "умови користування"
+msgstr "podmienky používania"
+
+msgid "політика конфіденційності"
+msgstr "zásady ochrany osobných údajov"
+
+msgid "політика cookies"
+msgstr "zásady používania cookies"
+
+msgid "правила спільноти"
+msgstr "pravidlá komunity"
+
+msgid "скарги та видалення контенту"
+msgstr "sťažnosti a odstránenie obsahu"
+
+msgid "платні полсуги"
+msgstr "platené služby"
+
+msgid "Будь ласка, увійдіть до облікового запису або зареєструйтесь"
+msgstr "Prosím, prihláste sa alebo sa zaregistrujte"
+
+msgid "підтвердження володіння постами"
+msgstr "potvrdenie vlastníctva príspevkov"
+
+msgid "Підтвердження володіння постами"
+msgstr "Potvrdenie vlastníctva príspevkov"
+
+msgid ""
+"Щоб підтвердити, що ці пости належать вам, перейдіть у Telegram-бота з того "
+"акаунта, з якого вони були опубліковані."
+msgstr ""
+"Aby ste potvrdili, že tieto príspevky patria vám, prejdite do Telegram bota "
+"z účtu, z ktorého boli zverejnené."
+
+msgid "Після підтвердження ви зможете:"
+msgstr "Po potvrdení budete môcť:"
+
+msgid "видалити пости"
+msgstr "vymazať príspevky"
+
+msgid "або перенести їх на свій обліковий запис"
+msgstr "alebo ich presunúť na svoj účet"
+
+msgid "Перейти в Telegram-бот"
+msgstr "Prejsť do Telegram bota"
+
+msgid "⚠️ Переконайтесь, що ви увійшли в правильний Telegram-акаунт"
+msgstr "⚠️ Uistite sa, že ste prihlásení do správneho Telegram účtu"
+
+msgid "скарга на оголошення"
+msgstr "nahlásiť inzerát"
+
+msgid "Скарга"
+msgstr "Nahlásenie"
+
+msgid "Подати скаргу"
+msgstr "Odoslať nahlásenie"
+
+msgid "Коротко опишіть проблему, щоб модерація могла її перевірити."
+msgstr "Stručne opíšte problém, aby ho moderácia mohla skontrolovať."
+
+msgid "Оголошення"
+msgstr "inzerát"
+
+msgid "Назад"
+msgstr "späť"
+
+msgid "Надіслати"
+msgstr "odoslať"
+
+msgid "дякуємо за ваш час!"
+msgstr "ďakujeme za váš čas!"
+
+msgid "заявку надіслано"
+msgstr "žiadosť odoslaná"
+
+msgid "дякую! Ми отримали вашу заявку і незабаром зв'яжемося з вами."
+msgstr "ďakujeme! Vašu žiadosť sme prijali a čoskoro vás kontaktujeme."
+
+msgid "на головну"
+msgstr "na hlavnú stránku"
+
+msgid "веріфікація користувача"
+msgstr "overenie používateľa"
+
+msgid "верифікація користувача"
+msgstr "overenie používateľa"
+
+msgid "що потрібно для успішної верифікації"
+msgstr "čo je potrebné na úspešné overenie"
+
+msgid "підтверджена електронна пошта"
+msgstr "overený e-mail"
+
+msgid "Email має бути підтверджений у профілі"
+msgstr "E-mail musí byť potvrdený v profile"
+
+msgid "Мінімум 1 пост"
+msgstr "minimálne 1 príspevok"
+
+msgid "оголошення має бути опубліковане з вашим email"
+msgstr "inzerát musí byť zverejnený s vaším e-mailom"
+
+msgid "як проходить перевірка"
+msgstr "ako prebieha kontrola"
+
+msgid "1. ви надсилаєте заявку"
+msgstr "1. odošlete žiadosť"
+
+msgid "2. ми перевіряємо акаунт"
+msgstr "2. skontrolujeme účet"
+
+msgid "3. отримуєте статус"
+msgstr "3. získate status"
+
+msgid "Я підтверджую, що я не робот"
+msgstr "Potvrdzujem, že nie som robot"
+
+msgid "надіслати заявку"
+msgstr "odoslať žiadosť"
+
+msgid "верифікація студента"
+msgstr "overenie študenta"
+
+msgid ""
+"введіть свою студентську електронну пошту, щоб підтвердити статус студента."
+msgstr "zadajte svoj študentský e-mail na potvrdenie statusu študenta"
+
+msgid "відправити лист"
+msgstr "odoslať e-mail"
+
+msgid "профіль користувача"
+msgstr "profil používateľa"
+
+msgid "на платформі з"
+msgstr "na platforme od"
+
+msgid "email веріфікован"
+msgstr "e-mail overený"
+
+msgid "перевірений користувач"
+msgstr "overený používateľ"
+
+msgid "перевірений студент"
+msgstr "overený študent"
+
+msgid "перевірений роботодавець"
+msgstr "overený zamestnávateľ"
+
+msgid "поділитися профілем"
+msgstr "zdieľať profil"
+
+msgid "написати"
+msgstr "napísať"
+
+msgid "Прив'язка Telegram"
+msgstr "prepojenie Telegramu"
+
+msgid "скопіюйте цей код і відправте його боту в Telegram"
+msgstr "skopírujte tento kód a odošlite ho botovi v Telegrame"
+
+msgid "код діє до"
+msgstr "kód platí do"
+
+msgid "відкрити Telegram-бота"
+msgstr "otvoriť Telegram bota"
+
+msgid "всі оголошення"
+msgstr "všetky inzeráty"
+
+msgid "зібрано з Telegram"
+msgstr "získané z Telegramu"
+
+msgid "У користувача немає оголошень"
+msgstr "Používateľ nemá žiadne inzeráty"
+
+msgid "Ссылка скопирована!"
+msgstr "Odkaz skopírovaný!"
+
+msgid "код прив'язки Telegram:"
+msgstr "prepojovací kód Telegramu:"
+
+msgid "згенерувати заново"
+msgstr "vygenerovať znova"
+
+msgid "діє до:"
+msgstr "platí do:"
+
+msgid "вийти з аккаунту"
+msgstr "odhlásiť sa"
+
+msgid "Скопіюйте цей код і відправте його боту в Telegram:"
+msgstr "Skopírujte tento kód a odošlite ho botovi v Telegrame:"
+
+msgid "Код діє до"
+msgstr "Kód platí do"
+
+msgid "Відкрити Telegram-бота"
+msgstr "Otvoriť Telegram bota"
+
+msgid "відновити оголошення за email"
+msgstr "obnoviť inzeráty podľa e-mailu"
+
+msgid "змінити профіль"
+msgstr "upraviť profil"
+
+msgid "пройти верифікацію"
+msgstr "prejsť overením"
+
+msgid "купити рекламу"
+msgstr "kúpiť reklamu"
+
+msgid "редагування профілю"
+msgstr "úprava profilu"
+
+msgid "оновіть основну інформацію вашого профілю"
+msgstr "aktualizujte základné informácie profilu"
+
+msgid "зберегти зміни"
+msgstr "uložiť zmeny"
+
+msgid "Верифікація"
+msgstr "Overenie"
+
+msgid "оберіть тип верифікації"
+msgstr "vyberte typ overenia"
+
+msgid "👤 користувач"
+msgstr "👤 používateľ"
+
+msgid "підтвердження особистого профілю"
+msgstr "potvrdenie osobného profilu"
+
+msgid "пройти"
+msgstr "pokračovať"
+
+msgid "🎓 студент"
+msgstr "🎓 študent"
+
+msgid "підтвердження студентського статусу"
+msgstr "potvrdenie študentského statusu"
+
+msgid "💼 роботодавець"
+msgstr "💼 zamestnávateľ"
+
+msgid "підтвердження компанії або бізнесу"
+msgstr "potvrdenie spoločnosti alebo podnikania"
+
+msgid "Дякуємо за інтерес!"
+msgstr "Ďakujeme za záujem!"
+
+msgid ""
+"Наразі функція придбання реклами тимчасово недоступна у зв’язку із запуском "
+"платформи."
+msgstr ""
+"Funkcia nákupu reklamy je momentálne dočasne nedostupná kvôli spusteniu platformy."
+
+msgid "Запуск очікується 15.04.2026."
+msgstr "Spustenie sa očakáva 15.04.2026."
+
+msgid "мої оголошення"
+msgstr "moje inzeráty"
+
+msgid "підняти"
+msgstr "zvýrazniť"
+
+msgid "редагувати"
+msgstr "upraviť"
+
+msgid "Ви впевнені, що хочете видалити це оголошення?"
+msgstr "Ste si istý, že chcete odstrániť tento inzerát?"
+
+msgid "Просування оголошення"
+msgstr "Zvýraznenie inzerátu"
+
+msgid ""
+"Оберіть тривалість підняття. Ваше оголошення отримає більше видимості у "
+"списку."
+msgstr ""
+"Vyberte dĺžku zvýraznenia. Váš inzerát získa väčšiu viditeľnosť v zozname."
+
+msgid "Старт"
+msgstr "Štart"
+
+msgid "3 дні"
+msgstr "3 dni"
+
+msgid "Швидке підняття оголошення для короткого просування."
+msgstr "Rýchle zvýraznenie inzerátu na krátkodobú propagáciu."
+
+msgid "Обрати"
+msgstr "Vybrať"
+
+msgid "Популярний"
+msgstr "Populárne"
+
+msgid "7 днів"
+msgstr "7 dní"
+
+msgid "Оптимальний варіант для більш стабільного просування."
+msgstr "Optimálna možnosť pre stabilnejšiu propagáciu."
+
+msgid "Максимум"
+msgstr "Maximum"
+
+msgid "14 днів"
+msgstr "14 dní"
+
+msgid "Найкраще рішення для довшого та помітнішого розміщення."
+msgstr "Najlepšie riešenie pre dlhšie a viditeľnejšie umiestnenie."
+
+msgid "у вас поки що немає оголошень"
+msgstr "zatiaľ nemáte žiadne inzeráty"
+
+msgid "Посилання скопійовано!"
+msgstr "Odkaz skopírovaný!"
+
+msgid "Не вдалося визначити оголошення для просування."
+msgstr "Nepodarilo sa určiť inzerát na zvýraznenie."
+
+msgid "Помилка генерації коду"
+msgstr "Chyba generovania kódu"
+
+msgid "Помилка мережі"
+msgstr "Chyba siete"
+
+msgid "верифікація роботодавця"
+msgstr "overenie zamestnávateľa"
+
+msgid "заповніть дані компанії, щоб підтвердити статус роботодавця."
+msgstr "vyplňte údaje spoločnosti na potvrdenie statusu zamestnávateľa"
+
+msgid "надіслати на перевірку"
+msgstr "odoslať na kontrolu"
+
+msgid "зміна оголошення"
+msgstr "úprava inzerátu"
+
+msgid "редагування оголошення"
+msgstr "úprava inzerátu"
+
+msgid "поточні зображення"
+msgstr "aktuálne obrázky"
+
+msgid "видалити"
+msgstr "vymazať"
+
+msgid "немає зображень"
+msgstr "žiadne obrázky"
+
+msgid "додати зображення"
+msgstr "pridať obrázky"
+
+msgid "підняття оголошення в ТОП"
+msgstr "zvýraznenie inzerátu v TOP"
+
+msgid "Підняття оголошення в ТОП"
+msgstr "Zvýraznenie inzerátu v TOP"
+
+msgid "Оплатіть послугу безпечно через Stripe"
+msgstr "Zaplatiť bezpečne cez Stripe"
+
+msgid "Оплата тимчасово доступна лише через банківський переказ"
+msgstr "Platba je dočasne dostupná iba bankovým prevodom"
+
+msgid "Розділ"
+msgstr "Sekcia"
+
+msgid "речі"
+msgstr "veci"
+
+msgid "Пост"
+msgstr "Príspevok"
+
+msgid "Цей пост вже у TOP"
+msgstr "Tento príspevok je už v TOP"
+
+msgid "Повторна оплата не потрібна."
+msgstr "Opakovaná platba nie je potrebná."
+
+msgid "Повернутися в профіль"
+msgstr "Späť na profil"
+
+msgid "Сума до оплати"
+msgstr "Suma na zaplatenie"
+
+msgid "Перепрошуємо за незручності"
+msgstr "Ospravedlňujeme sa za nepríjemnosti"
+
+msgid ""
+"Наразі online-platba je dočasne nedostupná, preto prosíme o bankový prevod. Funkcia bude spustená do 20. mája."
+msgstr ""
+"Online platba je momentálne nedostupná, prosíme o bankový prevod. Funkcia bude dostupná do 20. mája."
+
+msgid "Отримувач"
+msgstr "Príjemca"
+
+msgid "Сума"
+msgstr "Suma"
+
+msgid ""
+"Після оплати, будь ласка, надішліть нам підтвердження в Telegram або "
+"напишіть на електронну пошту."
+msgstr ""
+"Po platbe pošlite potvrdenie cez Telegram alebo e-mail."
+
+msgid "Перейти в Telegram"
+msgstr "Prejsť do Telegramu"
+
+msgid "Написати на пошту"
+msgstr "Napísať e-mailom"
+
+msgid "Дані картки"
+msgstr "Údaje karty"
+
+msgid "Оплатити"
+msgstr "Zaplatiť"
+
+msgid ""
+"Натискаючи “Оплатити”, ви potvrzujete platbu za zvýraznenie inzerátu v TOP."
+msgstr ""
+"Kliknutím na „Zaplatiť“ potvrdzujete platbu za zvýraznenie inzerátu v TOP."
+
+msgid "Платіж úspešný"
+msgstr "Platba úspešná"
+
+msgid ""
+"Vaša platba bola úspešne spracovaná. Potvrdenie bolo odoslané na e-mail."
+msgstr ""
+"Vaša platba bola úspešne spracovaná. Potvrdenie bolo odoslané na e-mail."
+
+msgid "Ви можете продовжити роботу з оголошенням."
+msgstr "Môžete pokračovať v práci s inzerátom."
+
+msgid "SELECT payment"
+msgstr "Vybrať platbu"
+
+msgid "Рекламный банер"
+msgstr "Reklamný banner"
+
+msgid "Рекламный пост"
+msgstr "Reklamný príspevok"
+
+msgid "обери рекламу"
+msgstr "vyber reklamu"
+
+msgid "оберіть тривалість рекламного"
+msgstr "vyberte dĺžku reklamy"
+
+msgid "поста"
+msgstr "príspevku"
+
+msgid "банера"
+msgstr "banneru"
+
+msgid "підвищена видимість"
+msgstr "vyššia viditeľnosť"
+
+msgid "швидкий запуск"
+msgstr "rýchle spustenie"
+
+msgid "обрати"
+msgstr "vybrať"
+
+msgid "30 днів"
+msgstr "30 dní"
+
+msgid "більше переглядів"
+msgstr "viac zhliadnutí"
+
+msgid "кращий результат"
+msgstr "lepší výsledok"
+
+msgid "оптимальний варіант"
+msgstr "optimálna možnosť"
+
+msgid "90 днів"
+msgstr "90 dní"
+
+msgid "максимальне охоплення"
+msgstr "maximálny dosah"
+
+msgid "довгий період"
+msgstr "dlhé obdobie"
+
+msgid "оплата реклами"
+msgstr "platba reklamy"
+
+msgid "оплатити"
+msgstr "zaplatiť"
+
+msgid "Оплата autorisovaná (HOLD). Čaká na potvrdenie administrátorom."
+msgstr "Platba autorizovaná (HOLD). Čaká na potvrdenie administrátorom."
+
+msgid "Оплата завершена (succeeded)."
+msgstr "Platba dokončená (úspešná)."
+
+msgid "Platba sa spracováva. Stav sa aktualizuje po webhooku."
+msgstr "Platba sa spracováva. Stav sa aktualizuje po webhooku."
+
+msgid "Potreba 3DS autorizácie. Postupujte podľa Stripe inštrukcií."
+msgstr "Vyžaduje sa 3DS autorizácia. Postupujte podľa Stripe inštrukcií."
+
+msgid "Platba nebola potvrdená: iný spôsob platby je potrebný."
+msgstr "Platba nebola potvrdená: je potrebný iný spôsob platby."
+
+msgid "Platba vytvorená. Stripe status:"
+msgstr "Platba vytvorená. Stripe status:"
+
+msgid "kupівля банera"
+msgstr "kúpa banneru"
+
+msgid "kupівля рекламного постu"
+msgstr "kúpa reklamného príspevku"
+
+msgid "днів за"
+msgstr "dní za"
+
+msgid "розміщення у стрічці оголошень"
+msgstr "umiestnenie v zozname inzerátov"
+
+msgid "завантажте банер"
+msgstr "nahrajte banner"
+
+msgid "до 1MB"
+msgstr "do 1 MB"
+
+msgid "файл не обран"
+msgstr "súbor nebol vybraný"
+
+msgid "вибрати"
+msgstr "vybrať"
+
+msgid "Приклад у стрічці"
+msgstr "Príklad v zozname"
+
+msgid "Завантажте зображення посту"
+msgstr "Nahrajte obrázok príspevku"
+
+msgid "приклад"
+msgstr "príklad"
+
+msgid "Надіслати заявку"
+msgstr "Odoslať žiadosť"
+
+msgid "Заголовок объявления"
+msgstr "Názov inzerátu"
+
+msgid "мої обрані"
+msgstr "moje obľúbené"
+
+msgid "збережені оголошення"
+msgstr "uložené inzeráty"
+
+msgid "завантаження…"
+msgstr "načítavanie…"
+
+msgid "проживання"
+msgstr "bývanie"
+
+msgid "заванатження…"
+msgstr "načítavanie…"
+
+msgid "💼 робота / працівники"
+msgstr "💼 práca / pracovníci"
+
+msgid "Поки нічого немає"
+msgstr "Zatiaľ nič"
+
+msgid "верифікований"
+msgstr "overený"
+
+msgid "студент"
+msgstr "študent"
+
+msgid "роботодавець"
+msgstr "zamestnávateľ"
+
+msgid "Видалити з обраного"
+msgstr "Odstrániť z obľúbených"
+
+msgid "Завантаження…"
+msgstr "Načítavanie…"
+
+msgid "Не вдалося завантажити обране"
+msgstr "Nepodarilo sa načítať obľúbené"
+
+msgid "продаж"
+msgstr "predaj"
+
+msgid "купівля"
+msgstr "kúpa"
+
+msgid "безкоштовно"
+msgstr "zadarmo"
+
+msgid "всі міста"
+msgstr "všetky mestá"
+
+msgid "ціна від"
+msgstr "cena od"
+
+msgid "ціна до"
+msgstr "cena do"
+
+msgid "всі джерела"
+msgstr "všetky zdroje"
+
+msgid "будь-який стан"
+msgstr "akýkoľvek stav"
+
+msgid "Все"
+msgstr "Všetko"
+
+msgid "усі в категорії"
+msgstr "všetko v kategórii"
+
+msgid "немає підкатегорій"
+msgstr "žiadne podkategórie"
+
+msgid "застосувати"
+msgstr "použiť"
+
+msgid "скинути"
+msgstr "resetovať"
+
+msgid "Сортировка"
+msgstr "Triedenie"
+
+msgid "Дате ↑"
+msgstr "Dátum ↑"
+
+msgid "Дате ↓"
+msgstr "Dátum ↓"
+
+msgid "Дате"
+msgstr "Dátum"
+
+msgid "Цене ↑"
+msgstr "Cena ↑"
+
+msgid "Цене ↓"
+msgstr "Cena ↓"
+
+msgid "Цене"
+msgstr "Cena"
+
+msgid "додати оголошення"
+msgstr "pridať inzerát"
+
+msgid "знайдено"
+msgstr "nájdené"
+
+msgid "оголошень"
+msgstr "inzerátov"
+
+msgid "Активно"
+msgstr "Aktívne"
+
+msgid "Закрыто"
+msgstr "Zatvorené"
+
+msgid "Додати в обране"
+msgstr "Pridať do obľúbených"
+
+msgid "нове"
+msgstr "nové"
+
+msgid "текста нажаль немає("
+msgstr "žiaľ, nie je žiadny text"
+
+msgid "Б/У або нові"
+msgstr "Použité alebo nové"
+
+msgid "купуй або продавай речі серед студентів"
+msgstr "kupuj alebo predávaj veci medzi študentmi"
+
+msgid "робота"
+msgstr "práca"
+
+msgid "робота або працівники"
+msgstr "práca alebo pracovníci"
+
+msgid "студенти шукають роботу, а роботодавці — студентів"
+msgstr "študenti hľadajú prácu a zamestnávatelia študentov"
+
+msgid "сусіди"
+msgstr "bývanie"
+
+msgid "пошук сусідів та заміни в гуртожитку"
+msgstr "hľadanie spolubývajúcich a náhrad v internáte"
+
+msgid "за"
+msgstr "za"
+
+msgid "в"
+msgstr "v"
+
+msgid "Оголошення на pusto.sk — речі, робота, житло та сусіди в Словаччині."
+msgstr "Inzeráty na pusto.sk — veci, práca, bývanie a spolubývajúci na Slovensku."
+
+msgid "Фото"
+msgstr "Fotka"
+
+msgid "Зібрано з Telegram"
+msgstr "Získané z Telegramu"
+
+msgid "сусідів"
+msgstr "spolubývajúcich"
+
+msgid "Я"
+msgstr "Ja"
+
+msgid "чоловічої"
+msgstr "mužskej"
+
+msgid "жіночої"
+msgstr "ženskej"
+
+msgid "статі"
+msgstr "pohlavia"
+
+msgid "Шукаю сусіда"
+msgstr "Hľadám spolubývajúceho"
+
+msgid "чоловічої статі"
+msgstr "mužského pohlavia"
+
+msgid "жіночої статі"
+msgstr "ženského pohlavia"
+
+msgid "будь-якої статі"
+msgstr "akéhokoľvek pohlavia"
+
+msgid "шукаю"
+msgstr "hľadám"
+
+msgid "бажаний вік сусіда(ів) від"
+msgstr "preferovaný vek spolubývajúcich od"
+
+msgid "до"
+msgstr "do"
+
+msgid "на"
+msgstr "na"
+
+msgid "перевірено адміном"
+msgstr "overené administrátorom"
+
+msgid "опису немає"
+msgstr "žiadny popis"
+
+msgid "Показать всё"
+msgstr "Zobraziť všetko"
+
+msgid "перейти в джерело"
+msgstr "prejsť na zdroj"
+
+msgid "Я вже в групі — перейти до оголошення"
+msgstr "Už som v skupine — prejsť na inzerát"
+
+msgid "Зв’язатися з автором"
+msgstr "Kontaktovať autora"
+
+msgid "Повідомлення"
+msgstr "Správa"
+
+msgid "Відправити"
+msgstr "Odoslať"
+
+msgid "це моє оголошення?"
+msgstr "je toto môj inzerát?"
+
+msgid "скожі оголошення"
+msgstr "podobné inzeráty"
+
+msgid "поскаржитись на оголошення"
+msgstr "nahlásiť inzerát"
+
+msgid "шукаю сусіда"
+msgstr "hľadám spolubývajúceho"
+
+msgid "шукаю квартиру"
+msgstr "hľadám byt"
+
+msgid "Всі міста"
+msgstr "Všetky mestá"
+
+msgid "Пошук"
+msgstr "Vyhľadávanie"
+
+msgid "Бюджет від"
+msgstr "Rozpočet od"
+
+msgid "Бюджет до"
+msgstr "Rozpočet do"
+
+msgid "Всі джерела"
+msgstr "Všetky zdroje"
+
+msgid "К-сть сусідів"
+msgstr "Počet spolubývajúcich"
+
+msgid "Вік від"
+msgstr "Vek od"
+
+msgid "Вік до"
+msgstr "Vek do"
+
+msgid "будь-який період"
+msgstr "akékoľvek obdobie"
+
+msgid "будь-яке житло"
+msgstr "akýkoľvek typ bývania"
+
+msgid "бюджет ↑"
+msgstr "rozpočet ↑"
+
+msgid "бюджет ↓"
+msgstr "rozpočet ↓"
+
+msgid "бюджет"
+msgstr "rozpočet"
+
+msgid "Не вдалося змінити статус"
+msgstr "Nepodarilo sa zmeniť status"
+
+msgid "шукаю роботу"
+msgstr "hľadám prácu"
+
+msgid "шукаю працівника"
+msgstr "hľadám zamestnanca"
+
+msgid "підробіток"
+msgstr "brigáda"
+
+msgid "Пошук вакансії"
+msgstr "Vyhľadávanie práce"
+
+msgid "Зарплата від"
+msgstr "Plat od"
+
+msgid "Зарплата до"
+msgstr "Plat do"
+
+msgid "будь-яка зайнятість"
+msgstr "akýkoľvek typ úväzku"
+
+msgid "сортування"
+msgstr "triedenie"
+
+msgid "дате ↑"
+msgstr "dátum ↑"
+
+msgid "дате ↓"
+msgstr "dátum ↓"
+
+msgid "дате"
+msgstr "dátum"
+
+msgid "зарплата ↑"
+msgstr "plat ↑"
+
+msgid "зарплата ↓"
+msgstr "plat ↓"
+
+msgid "зарплата"
+msgstr "plat"
+
+msgid "зібрано з Facebook"
+msgstr "získané z Facebooku"
+
+msgid "створити оголошення"
+msgstr "vytvoriť inzerát"
+
+msgid "дані оголошення"
+msgstr "údaje inzerátu"
+
+msgid "особисті дані"
+msgstr "osobné údaje"
+
+msgid "основні параметри"
+msgstr "základné parametre"
+
+msgid "про мене"
+msgstr "o mne"
+
+msgid "мій стиль життя"
+msgstr "môj životný štýl"
+
+msgid "кого шукаю"
+msgstr "koho hľadám"
+
+msgid "стиль життя сусіда"
+msgstr "životný štýl spolubývajúceho"
+
+msgid "додати фото"
+msgstr "pridať fotku"
+
+msgid "опублікувати"
+msgstr "zverejniť"
+
+msgid "Опублікувати"
+msgstr "Zverejniť"
+
+msgid "підкатегорії"
+msgstr "podkategórie"
+
+msgid "Удалить"
+msgstr "Vymazať"
+
+msgid "реєстрація"
+msgstr "registrácia"
+
+msgid "створіть обліковий запис за хвилину"
+msgstr "vytvorte účet za minútu"
+
+msgid "війти"
+msgstr "prihlásiť sa"
+
+msgid "головна сторінка"
+msgstr "hlavná stránka"
+
+msgid "увійдіть, щоб керувати своїми оголошеннями"
+msgstr "prihláste sa na správu inzerátov"
+
+msgid "надіслати посилання повторно"
+msgstr "znova odoslať odkaz"
+
+msgid "підтвердження електронної пошти"
+msgstr "potvrdenie e-mailu"
+
+msgid "Підтвердіть електронну пошту"
+msgstr "Potvrďte e-mail"
+
+msgid "Ми надіслали лист на адресу"
+msgstr "Odoslali sme e-mail na adresu"
+
+msgid ""
+"Перейдіть за посиланням у листі, щоб підтвердити пошту та опублікувати "
+"оголошення."
+msgstr ""
+"Kliknite na odkaz v e-maile na potvrdenie adresy a zverejnenie inzerátu."
+
+msgid "Перейти на головну"
+msgstr "Prejsť na hlavnú stránku"
+
+msgid "електронну пошту підтверджено"
+msgstr "e-mail bol potvrdený"
+
+msgid "перейти на сторінку входу"
+msgstr "prejsť na prihlasovaciu stránku"
+
+msgid "ваш email"
+msgstr "váš e-mail"
+
+msgid "тема (наприклад: Скарга на оголошення)"
+msgstr "predmet (napr. Nahlásenie inzerátu)"
+
+msgid "опишіть проблему або поставте запитання"
+msgstr "opíšte problém alebo položte otázku"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Тема"
+msgstr "Predmet"
+
+msgid "Сообщение"
+msgstr "Správa"
+
+msgid "Причина"
+msgstr "Dôvod"
+
+msgid "Описание"
+msgstr "Popis"
+
+msgid "Опишите проблему"
+msgstr "Opíšte problém"
+
+msgid "IČO компанії"
+msgstr "IČO spoločnosti"
+
+msgid "Назва компанії"
+msgstr "Názov spoločnosti"
+
+msgid "оберіть місто"
+msgstr "vyberte mesto"
+
+msgid "заголовок"
+msgstr "nadpis"
+
+msgid "опис"
+msgstr "popis"
+
+msgid "заголовок который будет отображаться при наведении"
+msgstr "nadpis zobrazovaný pri nabehnutí kurzorom"
+
+msgid "https://example.com"
+msgstr "https://example.com"
+
+msgid "Заголовок"
+msgstr "Nadpis"
+
+msgid "Изображение"
+msgstr "Obrázok"
+
+msgid "Ссылка"
+msgstr "Odkaz"
+
+msgid "заголовок*"
+msgstr "nadpis*"
+
+msgid "telegram"
+msgstr "telegram"
+
+msgid "email*"
+msgstr "e-mail*"
+
+msgid "категорія"
+msgstr "kategória"
+
+msgid "підкатегорія"
+msgstr "podkategória"
+
+msgid "оберіть стан"
+msgstr "vyberte stav"
+
+msgid "ціна(€)*"
+msgstr "cena (€)*"
+
+msgid "зарплата від"
+msgstr "plat od"
+
+msgid "зарплата до"
+msgstr "plat do"
+
+msgid "назва компанії"
+msgstr "názov spoločnosti"
+
+msgid "Назва вакансії"
+msgstr "Názov pozície"
+
+msgid "Опис"
+msgstr "Popis"
+
+msgid "Місто"
+msgstr "Mesto"
+
+msgid "Тип зайнятості"
+msgstr "Typ úväzku"
+
+msgid "Період зарплати"
+msgstr "Obdobie platu"
+
+msgid "Telegram"
+msgstr "Telegram"
+
+msgid "кількість сусідів"
+msgstr "počet spolubývajúcich"
+
+msgid "мінімальний вік"
+msgstr "minimálny vek"
+
+msgid "максимальний вік"
+msgstr "maximálny vek"
+
+msgid "Кількість сусідів"
+msgstr "Počet spolubývajúcich"
+
+msgid "Моя стать"
+msgstr "Moje pohlavie"
+
+msgid "Стать сусіда"
+msgstr "Pohlavie spolubývajúceho"
+
+msgid "Мій вік"
+msgstr "Môj vek"
+
+msgid "Мінімальний вік"
+msgstr "Minimálny vek"
+
+msgid "Максимальний вік"
+msgstr "Maximálny vek"
+
+msgid "Бюджет"
+msgstr "Rozpočet"
+
+msgid "Період оренди"
+msgstr "Obdobie prenájmu"
+
+msgid "Мій стиль життя"
+msgstr "Môj životný štýl"
+
+msgid "Стиль життя сусіда"
+msgstr "Životný štýl spolubývajúceho"
+
+msgid "Тип житла"
+msgstr "Typ bývania"
+
+msgid "Дата заселення"
+msgstr "Dátum nasťahovania"
+
+msgid "будь-яке місто"
+msgstr "akékoľvek mesto"
+
+msgid "бюджет (з людини € )"
+msgstr "rozpočet (na osobu €)"
+
+msgid "пароль"
+msgstr "heslo"
+
+msgid "повторіть пароль"
+msgstr "zopakujte heslo"
+
+msgid "Пароль"
+msgstr "Heslo"
+
+msgid "Повторіть пароль"
+msgstr "Zopakujte heslo"
+
+msgid "email"
+msgstr "e-mail"
+
+msgid "Ім'я"
+msgstr "Meno"
+
+msgid "прізвище"
+msgstr "priezvisko"
+
+msgid "користувач із таким email вже існує"
+msgstr "používateľ s týmto e-mailom už existuje"
+
+msgid "паролі не збігаються"
+msgstr "heslá sa nezhodujú"
+
+msgid "Акція"
+msgstr "AKCIA"
+
+msgid "1 пост = 1 книга безкоштовно"
+msgstr "1 príspevok = 1 kniha zadarmo"
+
+msgid "Розмісти унікальне оголошення на pusto.sk та отримай книги. Кількість обмежена."
+msgstr "Zverejni jedinečný inzerát na pusto.sk a získaj knihy. Množstvo je obmedzené."
+
+msgid "Отримання локально в Прешові/Кошице"
+msgstr "Osobný odber v Prešove/Košiciach"
+
+msgid "книг залишилось"
+msgstr "zostáva kníh"
+
+msgid "до кінця акції"
+msgstr "do konca akcie"
+
+msgid "розмістити пост"
+msgstr "zverejniť príspevok"
+
+msgid "я вже розмістив (забрати книгу)"
+msgstr "už som zverejnil (vyzdvihnúť knihu)"
+
+msgid "АКЦІЯ - БЕЗКОШТОВНА КНИГА"
+msgstr "AKCIA - KNIHA ZADARMO"
+
+msgid "1 пост = 1 безкоштовна книга"
+msgstr "1 príspevok = 1 kniha zadarmo"
+
+msgid "Розмісти якісне оголошення на pusto.sk та отримай книгу безкоштовно."
+msgstr "Zverejni kvalitný inzerát na pusto.sk a získaj knihu zadarmo."
+
+msgid "Кількість книг обмежена."
+msgstr "Počet kníh je obmedzený."
+
+msgid "Умови участі"
+msgstr "Podmienky účasti"
+
+msgid "Оголошення має бути повністю заповнене."
+msgstr "Inzerát musí byť úplne vyplnený."
+
+msgid "Обов’язково мають бути: заголовок, опис, ціна, категорія та фотографії."
+msgstr "Musí obsahovať: nadpis, popis, cenu, kategóriu a fotografie."
+
+msgid "Пост має бути унікальним і не скопійованим з інших сайтів або груп."
+msgstr "Príspevok musí byť jedinečný a nesmie byť skopírovaný."
+
+msgid "Унікальність і якість оголошення перевіряються вручну адміністрацією."
+msgstr "Jedinečnosť a kvalita sú kontrolované administrátorom."
+
+msgid "Один користувач може отримати одну книгу в межах акції."
+msgstr "Jeden používateľ môže získať jednu knihu."
+
+msgid "Акція діє лише за наявності книг."
+msgstr "Akcia platí len do vypredania zásob."
+
+msgid "Отримання книги"
+msgstr "Získanie knihy"
+
+msgid "Книгу можна отримати локально в Пряшеві або Кошицях."
+msgstr "Knihu je možné vyzdvihnúť v Prešove alebo Košiciach."
+
+msgid "Час, місце та точну локацію видачі вказує адміністратор."
+msgstr "Čas a miesto určuje administrátor."
+
+msgid "Перед отриманням потрібно написати адміністратору в Telegram."
+msgstr "Pred vyzdvihnutím je potrebné kontaktovať administrátora na Telegrame."
+
+msgid "Заборонено"
+msgstr "Zakázané"
+
+msgid "Публікувати фейкові, дубльовані або неповні оголошення."
+msgstr "Zverejňovať falošné, duplicitné alebo neúplné inzeráty."
+
+msgid "Додавати товари або послуги, заборонені правилами сайту či zákonom."
+msgstr "Pridávať zakázané tovary alebo služby podľa pravidiel alebo zákona."
+
+msgid "Використовувати чужі фото, тексти або вводити користувачів do omylu."
+msgstr "Používať cudzie fotografie alebo zavádzať používateľov."
+
+msgid "Створювати кілька акаунтів для повторної účasti v akcii."
+msgstr "Vytvárať viac účtov na opakovanú účasť v akcii."
+
+msgid "Адміністрація залишає za sebou právo odmietnuť vydanie knihy, ak inzerát nespĺňa podmienky."
+msgstr "Administrácia si vyhradzuje právo odmietnuť knihu, ak inzerát nespĺňa podmienky."
+
+msgid "Написати адміністратору в Telegram"
+msgstr "Napísať administrátorovi na Telegram"
+
+msgid "Без реєстрації та входу"
+msgstr "Bez registrácie a prihlásenia"
+
+msgid "Сусіди в Словаччині - оголошення"
+msgstr "Susedia na Slovensku - inzeráty"
+
+msgid "Шукаю сусіда в Словаччині"
+msgstr "Hľadám suseda na Slovensku"
+
+msgid "Оренда житла в Словаччині - шукаю квартиру"
+msgstr "Prenájom domu na Slovensku - hľadám byt"
+
+msgid "Продаж товарів в Словаччині - pusto.sk"
+msgstr "Predaj tovaru na Slovensku - pusto.sk"
+
+msgid "Купівля товарів в Словаччині - pusto.sk"
+msgstr "Nákup tovaru na Slovensku - pusto.sk"
+
+msgid "Безкоштовні оголошення в Словаччині - pusto.skтиру"
+msgstr "Bezplatné inzeráty na Slovensku - pusto.sktyru"
+
+msgid "Оголошення в Словаччині - pusto.sk"
+msgstr "Inzercia na Slovensku - pusto.sk"
+
+msgid "Оголошення в Словаччині"
+msgstr "Inzeráty na Slovensku"
+
+msgid "Оголошення про продаж товарів в Словаччині"
+msgstr "Inzeráty na predaj tovaru na Slovensku"
+
+msgid "Оголошення про купівлю товарів в Словаччині"
+msgstr "Inzeráty o nákupe tovaru na Slovensku"
+
+msgid "Сусіди в Словаччині"
+msgstr "Susedia na Slovensku"
+
+msgid "Оренда житла в Словаччині"
+msgstr "Prenájom ubytovania na Slovensku"
+
+msgid "Пошук сусіда в Словаччині"
+msgstr "Hľadanie suseda na Slovensku"
+
+msgid "житло"
+msgstr "obydlie"
+
+msgid "сусіди та житло"
+msgstr "susedia a bývanie"
+
+msgid "кількість кімнат"
+msgstr "počet izieb"
+
+msgid "Зібрано з"
+msgstr "Prevzaté z"
+
+msgid "кімнат"
+msgstr "počet izieb"
+
+msgid "Відкрити фільтри"
+msgstr "Otvoriť filtre"
+
+msgid "речі в Братиславі"
+msgstr "Aktivity v Bratislave"
+
+msgid "речі в Пряшеві"
+msgstr "Aktivity v Prešove"
+
+msgid "речі в Кошицях"
+msgstr "Aktivity v Košice"
+
+msgid "Квартири в Братиславі"
+msgstr "Apartmány v Bratislave"
+
+msgid "Квартири в Пряшеві"
+msgstr "Apartmány v Prešove"
+
+msgid "Квартири в Кошицях"
+msgstr "Apartmány v Košice"
+
+msgid "депозит"
+msgstr "záloha"
+
+msgid "сповіщення"
+msgstr "oznámenie"
+
+msgid "Сповіщення про нові оголошення"
+msgstr "Upozornenia na nové ponuky"
+
+msgid "Надішлемо повідомлення, щойно з'явиться відповідний варіант за вашими параметрами."
+msgstr "Oznámenie vám zašleme hneď, ako bude k dispozícii vhodná možnosť zodpovedajúca vašim kritériám."
+
+msgid "(необов'язково)"
+msgstr "(voliteľné)"
+
+msgid "від"
+msgstr "od"
+
+
+msgid "Увімкнути сповіщення"
+msgstr "Zapnúť upozornenia"
+
+msgid "Відписатися можна будь-коли з листа або бота."
+msgstr "Z odberu sa môžete kedykoľvek odhlásiť prostredníctvom e-mailu alebo bota."
+
+msgid "Готово!"
+msgstr "Hotovo!"
+
+msgid "Ми повідомимо вас, щойно з'явиться відповідний варіант за вашими параметрами."
+msgstr "Budeme vás informovať hneď, ako bude k dispozícii vhodná možnosť zodpovedajúca vašim kritériám."
+
+msgid "Закрити"
+msgstr "Zatvoriť"
+
+msgid "Кімнати"
+msgstr "izeb"
+
+msgid "Тип пошуку"
+msgstr "Typ vyhľadávania"
+
+msgid "невизначана стать"
+msgstr "neurčené pohlavie"
+
+msgid "чоловічий"
+msgstr "mužské"
+
+msgid "жіночий"
+msgstr "ženské"
+
+msgid "будь який період"
+msgstr "akékoľvek obdobie"
+
+msgid "день"
+msgstr "deň"
+
+msgid "неділю"
+msgstr "týždeň"
+
+msgid "місяць"
+msgstr "mesiac"
+
+msgid "рік"
+msgstr "rok"
+
+msgid "б/У"
+msgstr "použité"
+
+msgid "безскоштовно"
+msgstr "zadarmo"
+
+msgid "оренда"
+msgstr "prenájom"
+
+msgid "кімнату"
+msgstr "izbu"
+
+msgid "квартиру"
+msgstr "byt"
+
+msgid "гуртожиток"
+msgstr "internát"
+
+msgid "Кошиця"
+msgstr "Košice"
+
+msgid "Прешов"
+msgstr "Prešov"
+
+msgid "Братислава"
+msgstr "Bratislava"
+
+msgid "Трнава"
+msgstr "Trnava"
+
+msgid "Жиліна"
+msgstr "Žilina"
+
+msgid "Нітра"
+msgstr "Nitra"
+
+msgid "Тренчин"
+msgstr "Trenčín"
+
+msgid "Банска-Бистрица"
+msgstr "Banská Bystrica"
+
+msgid "Попрад"
+msgstr "Poprad"
+
+msgid "Сповіщення про нові речі"
+msgstr "Upozornenia na nové položky"
+
+msgid "Сповіщення про нові оголошення"
+msgstr "Upozornenia na nové ponuky"
+
+msgid "Надішлемо повідомлення, щойно з'явиться відповідний товар за вашими параметрами."
+msgstr "Pošleme vám upozornenie hneď, ako bude k dispozícii produkt zodpovedajúci vašim kritériám."
+
+msgid "Ми повідомимо вас, щойно з'явиться відповідний варіант за вашими параметрами."
+msgstr "Budeme vás informovať hneď, ako bude k dispozícii vhodná možnosť zodpovedajúca vašim kritériám."
+
+msgid "Тип оголошення"
+msgstr "Typ reklamy"
+
+msgid "Ціна"
+msgstr "Cena"

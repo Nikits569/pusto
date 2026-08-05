@@ -6,5 +6,9 @@ Disallow: /accounts/
 Disallow: /payments/
 Disallow: /support/
 Disallow: /search/
+Disallow: /*?search=
+Disallow: /*&search=
+Disallow: /*?*sort=
+Disallow: /*?*page=
 
 Sitemap: https://pusto.sk/sitemap.xml

@@ -434,11 +434,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </button>
                                 <button type="button" class="pm-btn" data-method="revolut">
                                     <span class="pm-btn__icon">💳</span>
-                                    Картка EU Revolut/Tatra
+                                    {% trans 'Картка' %} EU Revolut/Tatra
                                 </button>
                                 <button type="button" class="pm-btn" data-method="card_ua">
                                     <span class="pm-btn__icon">🇺🇦</span>
-                                    {% trans 'Картка UA' %}
+                                    {% trans 'Картка' %} UA
                                 </button>
                             </div>
 
@@ -448,7 +448,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <form id="manualPaymentForm" class="manual-contact__form">
                                     {% csrf_token %}
                                     <label class="manual-contact__label" for="manualContactInput">
-                                        {% trans "Email, Telegram (@нік) або телефон" %}
+                                        Email, Telegram {% trans "(@нік) або телефон" %}
                                     </label>
                                     <input
                                         type="text"
@@ -483,6 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             </div>
+
 
             <div class="contact-modal" id="contactModal">
     <div class="contact-modal__overlay"></div>
@@ -850,6 +851,47 @@ document.addEventListener("DOMContentLoaded", () => {
         regenerateBtn.addEventListener('click', regenerateCode);
     }
 })();
+</script>
+
+<script>
+window.i18n = {
+    // profile
+    copied: "{% trans 'Посилання скопійовано!' %}",
+
+    // payment
+    choose_payment: "{% trans 'Оберіть спосіб оплати' %}",
+    crypto: "{% trans 'Крипта (USDT) — миттєве підтвердження' %}",
+    revolut: "Revolut",
+    card_ua: "{% trans 'Українська картка' %}",
+
+    back_plans: "{% trans '← назад до тарифів' %}",
+    back_payment: "{% trans '← інший спосіб оплати' %}",
+
+    leave_contact: "{% trans 'Залиште контакт' %}",
+    contact_description: "{% trans 'Ми звʼяжемось з вами, щоб оформити оплату через' %}",
+
+    telegram_phone_email: "{% trans 'Telegram, телефон або email' %}",
+    send_request: "{% trans 'Надіслати заявку' %}",
+    sending: "{% trans 'Надсилаємо…' %}",
+
+    request_sent: "{% trans 'Заявку надіслано' %}",
+    contact_soon: "{% trans 'Ми звʼяжемось найближчим часом для підтвердження оплати' %}",
+
+    // errors
+    no_ad: "{% trans 'Помилка: не визначено оголошення' %}",
+    general_error: "{% trans 'Сталася помилка' %}",
+    network_error: "{% trans 'Помилка мережі' %}",
+    generate_error: "{% trans 'Помилка генерації коду' %}",
+
+
+    // crypto widget
+    crypto_title: "{% trans 'Оплата USDT (TRC20)' %}",
+    qr_code: "{% trans 'QR code' %}",
+    exact_amount: "{% trans 'Сума до оплати (точно)' %}",
+    copy: "{% trans 'Копіювати' %}",
+    address: "{% trans 'Адреса (мережа TRC20)' %}",
+    waiting_payment: "{% trans 'Очікуємо надходження платежа…' %}"
+};
 </script>
 
 {% endblock %}

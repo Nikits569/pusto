@@ -33,6 +33,9 @@ class SupportTicket(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created at'))
 
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.TextField(blank=True)
+
     class Meta:
         verbose_name = _('Support ticket')
         verbose_name_plural = _('Support tickets')

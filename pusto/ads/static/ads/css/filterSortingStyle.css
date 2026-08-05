@@ -1,7 +1,3 @@
-
-
-hover
-
 :root{
   --text:#0f172a;
   --muted:#64748b;
@@ -10,15 +6,12 @@ hover
   --line: rgba(15,23,42,.10);
 }
 
-
-
 #chooseType {
     display: flex;
     gap: 30px;
-    align-items: center; /* вертикальное центрирование ссылок */
+    align-items: center;
     justify-content: center;
     margin-top: 30px;
-
 }
 
 #chooseType a {
@@ -32,8 +25,6 @@ hover
     color: black;
     font-size: 23px;
     font-weight: 400;
-
-  /* Плавная анимация для этих свойств */
     transition:
         opacity 0.3s ease,
         font-weight 0.2s ease;
@@ -49,7 +40,6 @@ hover
   color: white;
 }
 
-/* Активная ссылка */
 #chooseType .is-active {
   width: calc(100% + 160px);
   height: 50px;
@@ -58,20 +48,17 @@ hover
   font-size: 23px;
 }
 
-/* контейнер фильтров: никаких рамок/теней */
 #filters{
     margin: 60px 0 8px;
     padding: 0;
     background: transparent;
     border: 0;
     box-shadow: none;
-    white-space: nowrap;      /* запрещает перенос строки */
-    overflow: hidden;         /* скрывает всё лишнее */
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
-
 }
 
-/* сетка: плотная, но читаемая */
 #filters .filters-top,
 #filters .filters-secondary{
   display: flex;
@@ -80,7 +67,6 @@ hover
   align-items: center;
 }
 
-/* если нет этих классов — применим к прямым детям */
 #filters > select,
 #filters > input[type="text"],
 #filters > input[type="number"],
@@ -89,7 +75,6 @@ hover
   margin: 0;
 }
 
-/* поля: без рамок, только нижняя линия при фокусе */
 #filters select,
 #filters input[type="text"],
 #filters input[type="number"]{
@@ -101,7 +86,6 @@ hover
     color: var(--text);
     font-size: 14px;
     outline: none;
-
 }
 .price-group {
     display: flex;
@@ -131,7 +115,6 @@ hover
   border-bottom-color: var(--accent);
 }
 
-/* checkbox — тоже без коробки вокруг */
 #filters label{
   display: inline-flex;
   align-items: center;
@@ -141,15 +124,11 @@ hover
   margin: 0;
 }
 
-/* radio: сделать “текстовыми табами” */
 #filters input[type="radio"]{
   transform: scale(1.05);
   accent-color: var(--accent);
 }
 
-
-
-/* чипы категорий: без обводки — только легкая заливка при active */
 .category-badges,
 .subcategory-badges{
     display: flex;
@@ -160,7 +139,6 @@ hover
 
 .category-badges {
     margin-top: 15px;
-
     font-weight: 600;
 }
 
@@ -168,7 +146,6 @@ hover
     font-weight: 400;
     font-size: 16px;
 }
-
 
 .subcategory-badges .badge {
     font-size: 13px;
@@ -186,8 +163,6 @@ hover
     text-decoration: none;
 }
 
-
-
 .badge.active{
   color: white;
   background: #202B6C;
@@ -202,7 +177,6 @@ hover
     margin-right: 50px;
     border-radius: 50px;
     text-align: center;
-
     transition: opacity 0.3s ease, font-weight 0.2s ease;
 }
 
@@ -211,16 +185,13 @@ hover
     opacity: 1;
 }
 
-/* кнопка применить: текстовая, без прямоугольника */
 #filters button[type="submit"]{
     height: 34px;
     border: 0;
     background: transparent;
     cursor: pointer;
-
 }
 
-/* сброс: приглушенный текст */
 #filters .reset-button{
     height: 34px;
     display: inline-flex;
@@ -236,7 +207,6 @@ hover
   text-decoration: underline;
 }
 
-
 #sorting .addPageBtn {
     display: inline-flex;
     align-items: center;
@@ -250,7 +220,6 @@ hover
     transition: 0.2s ease;
     height: 50px;
     width: 300px;
-    margin-left: auto;
     text-align: center;
     justify-content: center;
 }
@@ -270,8 +239,6 @@ hover
     line-height: 1;
 }
 
-
-/* сортировка: тоже “текст + активный чип” без рамок */
 #sorting{
     margin: 40px 0 14px;
     padding: 0;
@@ -279,7 +246,6 @@ hover
     background: transparent;
     box-shadow: none;
     display: flex;
-
     gap: 10px;
     flex-wrap: wrap;
     align-items: flex-end;
@@ -303,8 +269,6 @@ hover
       font-weight 0.2s ease;
 }
 
-
-
 #sorting a:hover{
     font-weight: 700;
 }
@@ -323,9 +287,7 @@ hover
     margin-top: 50px;
 }
 
-/* мелочь */
 .muted{ color: var(--muted); font-size: 13px; }
-
 
 .filters-bottom {
     display: grid;
@@ -339,11 +301,9 @@ hover
 #filters .filters-bottom select.ui-field.type1,
 #filters .filters-bottom select.ui-field.type2 {
     width: 245px;
-
 }
 input[type="date"] {
     box-sizing: border-box;
-
     height: 45px;
     padding: 0 18px;
     border-radius: 12px;
@@ -357,14 +317,16 @@ input[type="date"] {
     width: 250px;
 }
 
+.toggle-filters-btn{
+    display: none;
+}
+
 select option {
     background: #F2F3F8;
 }
 
-
 /* =========================
    FILTERS ADAPTIVE
-   вставь в самый конец CSS
    ========================= */
 
 /* laptop / tablet */
@@ -453,12 +415,57 @@ select option {
   .category-badges .badges {
     font-size: 15px;
   }
+
+  #chooseType {
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  #chooseType a {
+    min-width: 130px;
+    padding: 0 18px;
+    height: 42px;
+    font-size: 20px;
+  }
+
+  #chooseType .is-active {
+    min-width: 150px;
+    height: 46px;
+    font-size: 20px;
+  }
+
+  #sorting {
+    margin: 36px 0 24px;
+    gap: 8px;
+  }
+
+  #sorting a {
+    font-size: 13px;
+    padding: 6px 9px;
+  }
+
+  #sorting .addPageBtn {
+    width: 260px;
+    min-width: 200px;
+    min-height: 46px;
+    font-size: 18px;
+    padding: 0 18px;
+  }
+
+  #sorting .addPageBtn__icon {
+    font-size: 21px;
+  }
 }
 
 /* mobile */
 @media (max-width: 768px) {
   #filters {
     margin: 24px 0 8px;
+    display: none !important;
+  }
+
+  #filters.filters-open{
+    display: block !important;
   }
 
   #filters .filters-top,
@@ -542,6 +549,135 @@ select option {
     padding: 0;
     font-size: 14px;
   }
+
+  /* --- компактные табы типа объявления --- */
+  #chooseType {
+    display: flex;
+    gap: 4px;
+    background: #eef0f6;
+    border-radius: 999px;
+    padding: 4px;
+    margin-top: 16px;
+  }
+
+  #chooseType a,
+  #chooseType .is-active {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    height: 36px;
+    padding: 0 8px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* --- компактный бар: фильтры + сортировка + колокольчик --- */
+  #sorting {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0 14px;
+  }
+
+  #sorting .sorting__label {
+    display: none;
+  }
+
+  #sorting .sorting__links {
+    order: 2;
+    display: flex;
+    gap: 4px;
+    flex: 1;
+  }
+
+  #sorting .sorting__links a {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .toggle-filters-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #d8dce8;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--text);
+    font-size: 16px;
+    cursor: pointer;
+    order: 1;
+  }
+
+  #sorting .ntf-trigger {
+    order: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #d8dce8;
+    border-radius: 50%;
+    background: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .toggle-filters-btn .btn-label,
+  #sorting .ntf-trigger .btn-label {
+    display: none;
+  }
+
+  #sorting .count {
+    order: 4;
+    width: 100%;
+    font-size: 13px;
+    margin-top: 4px;
+    opacity: 0.6;
+  }
+
+  /* --- FAB "додати оголошення" --- */
+  #sorting .addPageBtn {
+      order: 0;
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      left: 16px;
+      z-index: 500;
+      width: auto;
+      height: 54px;
+      min-height: 0;
+      padding: 0 20px;
+      margin: 0;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(32,43,108,.35);
+  }
+  
+  #sorting .addPageBtn .btn-label {
+      display: inline;
+      font-size: 16px;
+      font-weight: 600;
+  }
+  
+  #sorting .addPageBtn .icon-glyph {
+      font-size: 20px;
+      line-height: 1;
+  }
 }
 
 /* small mobile */
@@ -575,185 +711,30 @@ select option {
     gap: 6px;
     font-size: 13px;
   }
-}
 
-/* tablet */
-@media (max-width: 992px) {
   #chooseType {
-    gap: 16px;
-    margin-top: 24px;
-  }
-
-  #chooseType a {
-    min-width: 130px;
-    padding: 0 18px;
-    height: 42px;
-    font-size: 20px;
-  }
-
-  #chooseType .is-active {
-    min-width: 150px;
-    height: 46px;
-    font-size: 20px;
-  }
-}
-
-/* mobile */
-@media (max-width: 768px) {
-  #chooseType {
-    gap: 12px;
-    justify-content: stretch;
+    gap: 3px;
+    padding: 3px;
   }
 
   #chooseType a,
   #chooseType .is-active {
-    flex: 1 1 calc(50% - 12px);
-    min-width: 0;
-    width: auto;
-    padding: 0 14px;
-    font-size: 17px;
-    height: 42px;
+    font-size: 11px;
+    height: 34px;
+    padding: 0 4px;
   }
 
-  #chooseType .is-active {
-    height: 44px;
-  }
-}
-
-/* small mobile */
-@media (max-width: 480px) {
-  #chooseType {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  #chooseType a,
-  #chooseType .is-active {
-    width: 100%;
-    min-width: 0;
-    flex: initial;
-    height: 44px;
-    font-size: 16px;
-    padding: 0 16px;
-  }
-
-  #chooseType .is-active {
-    height: 46px;
-  }
-}
-
-/* tablet */
-@media (max-width: 992px) {
-  #sorting {
-    margin: 36px 0 24px;
-    gap: 8px;
-  }
-
-  #sorting a {
-    font-size: 13px;
-    padding: 6px 9px;
-  }
-
-  #sorting .addPageBtn {
-    width: 260px;
-    min-width: 200px;
-    min-height: 46px;
-    font-size: 18px;
-    padding: 0 18px;
-  }
-
-  #sorting .addPageBtn__icon {
-    font-size: 21px;
-  }
-}
-
-/* mobile */
-@media (max-width: 768px) {
-  #sorting {
-    align-items: stretch;
-    gap: 10px;
-    margin: 28px 0 20px;
-  }
-
-  #sorting .sorting__label,
-  #sorting .badge {
-    width: 100%;
-    margin-bottom: 2px;
-  }
-
-  #sorting a {
-    font-size: 12px;
-    padding: 7px 10px;
-  }
-
-  #sorting .addPageBtn {
-    order: 99;
-    width: 100%;
-    min-width: 0;
-    margin-left: 0;
-    margin-top: 8px;
-    font-size: 17px;
-    min-height: 44px;
-  }
-
-  #sorting .addPageBtn__icon {
-    font-size: 20px;
-  }
-}
-
-/* small mobile */
-@media (max-width: 480px) {
   #sorting {
     gap: 8px;
     margin: 24px 0 18px;
   }
 
-  #sorting a {
+  #sorting .sorting__links a {
     font-size: 12px;
     padding: 6px 9px;
   }
 
-  #sorting a.active {
+  #sorting a.active{
     margin-right: 0;
   }
-
-  #sorting .addPageBtn {
-    font-size: 16px;
-    min-height: 42px;
-    padding: 0 16px;
-  }
-
-  #sorting .addPageBtn__icon {
-    font-size: 18px;
-  }
 }
-
-@media (max-width: 768px){
-  #filters{
-    display: none !important;
-  }
-
-  #filters.filters-open{
-    display: block !important;
-  }
-
-  .toggle-filters-btn{
-    display: block;
-    width: 100%;
-    height: 42px;
-    margin-top: 16px;
-    border: 1px solid #d8dce8;
-    border-radius: 10px;
-    background: #ffffff;
-    color: var(--text);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-}
-
-
-
-..

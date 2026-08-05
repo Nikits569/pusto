@@ -4,6 +4,7 @@ from .models import SupportTicket, ClaimRequest, Reason
 
 
 class SupportTicketForm(forms.ModelForm):
+
     class Meta:
         model = SupportTicket
         fields = ('email', 'subject', 'message')

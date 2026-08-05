@@ -7,4 +7,5 @@ cd /var/www/app/pusto/scraperBazos
 
 python main.py
 python translate.py
+python GPTfilter/main.py
 python tunel.py

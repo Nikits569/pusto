@@ -89,120 +89,163 @@
       </div>
 
       <div class="dateTime">
-          <div class="badges">
+        <div class="badges">
+            {% if obj.budget %}
+                <span class="badge price">
+                    {{ obj.budget }}€
+                </span>
+            {% endif %}
 
-              {% if obj.budget %}
-                  <span class="badge price">{{ obj.budget }}€</span>
-              {% endif %}
+            {% if obj.price %}
+                <span class="badge price">
+                    {{ obj.price }}€
+                </span>
+            {% endif %}
 
-              {% if obj.price %}
-                <span class="badge price">{{ obj.price }}€</span>
-              {% endif %}
+            {% if obj.adress or obj.city %}
+                <soan class="badge">
+                    📍 {{ obj.get_city_display|capfirst }}
+                    {% if obj.adress and obj.adress != '__NO_ADDRESS__' %} {{ obj.adress }} {% endif %}
+                </soan>
+            {% endif %}
 
-              {% if obj.source %}
-                  <span class="badge">{% trans 'Зібрано з' %} {{ obj.source }}</span>
-              {% endif %}
+            {% if obj.source %}
+                <span class="badge">
+                    {% trans "джерело" %} {{ obj.source }}
+                </span>
+            {% endif %}
 
-              {% if obj.condition %}
-                  <span class="badge">{{ obj.get_condition_display }}</span>
-              {% endif %}
 
-              {% if obj.private_status == "top" %}
-                  <span class="badge">TOP</span>
-              {% endif %}
+            {% if obj.condition %}
+                <span class="badge">
+                    {% trans "стан" %} {{ obj.get_condition_display }}
+                </span>
+            {% endif %}
 
-              {% if obj.category %}
-                  <span class="badge">{{ obj.category }}</span>
-              {% endif %}
 
-              {% if obj.condition %}
-                  <span class="badge">{{ obj.condition }}</span>
-              {% endif %}
+            {% if obj.private_status == "top" %}
+                <span class="badge">
+                    TOP
+                </span>
+            {% endif %}
 
-              {% if obj.rooms %}
-                  <span class="badge">{{ obj.rooms|floatformat:0 }} {% trans 'кімнат' %}</span>
-              {% endif %}
+            {% if obj.category %}
+                <span class="badge">
+                    {% trans "категорія" %}
+                    {% get_current_language as LANGUAGE_CODE %}
 
-              {% if obj.deposit %}
-                  <span class="badge">депозит {{ obj.deposit }}</span>
-              {% endif %}
+                    {% if LANGUAGE_CODE|slice:":2" == "en" %}
+                        {{ obj.category.title_en|default:obj.category.title_uk }}
+                    {% elif LANGUAGE_CODE|slice:":2" == "sk" %}
+                        {{ obj.category.title_sk|default:obj.category.title_uk }}
+                    {% else %}
+                        {{ obj.category.title_uk }}
+                    {% endif %}
+                </span>
+            {% endif %}
 
-              {% if obj.move_in_date %}
-                <span class="badge">заселення {{ obj.move_in_date|date:"d.m.Y" }}</span>
-              {% endif %}
+            {% if obj.rooms %}
+                <span class="badge">
+                    {{ obj.rooms|floatformat:0 }} {% trans "кімнат" %}
+                </span>
+            {% endif %}
 
-              {% if obj.caseType %}
-                  <span class="badge">{{ obj.get_caseType_display }}</span>
-              {% endif %}
 
-              {% if obj.caseType == "findNeighbor" %}
+            {% if obj.deposit %}
+                <span class="badge">
+                    {% trans "Депозит:" %} {{ obj.deposit }}€
+                </span>
+            {% endif %}
 
-                  {% if obj.count_neighbors %}
-                      <span class="badge">{{ obj.count_neighbors }} {% trans 'сусідів' %}</span>
-                  {% endif %}
 
-                  {% if obj.my_gender %}
-                      <span class="badge">
-                          {% trans 'Я' %}
-                          {% if obj.my_gender == 1 %}
-                              {% trans 'чоловічої' %}
-                          {% elif obj.my_gender == 2 %}
-                              {% trans 'жіночої' %}
-                          {% endif %}
-                          {% trans 'статі' %}
-                      </span>
-                  {% endif %}
+            {% if obj.move_in_date %}
+                <span class="badge">
+                    {% trans "Заселення:" %} {{ obj.move_in_date|date:"d.m.Y" }}
+                </span>
+            {% endif %}
 
-                  {% if obj.neighbor_gender %}
-                      <span class="badge">
-                          {% trans 'Шукаю сусіда' %}
-                          {% if obj.neighbor_gender == 1 %}
-                              {% trans 'чоловічої статі' %}
-                          {% elif obj.neighbor_gender == 2 %}
-                              {% trans 'жіночої статі' %}
-                          {% elif obj.neighbor_gender == 3 %}
-                              {% trans 'будь-якої статі' %}
-                          {% endif %}
-                      </span>
-                  {% endif %}
 
-                  {% if obj.housing_type != 'Unknown' and obj.housing_type %}
-                      <span class="badge">
-                          {% trans 'шукаю' %}
-                          {% if LANGUAGE_CODE|slice:":2" == "uk" %}
-                              {{ obj.get_housing_type_display }}
-                          {% else %}
-                              {{ obj.housing_type }}
-                          {% endif %}
-                      </span>
-                  {% endif %}
+            {% if obj.caseType %}
+                <span class="badge">
+                    {{ obj.get_caseType_display }}
+                </span>
+            {% endif %}
 
-                  {% if obj.max_age %}
-                      <span class="badge">
-                          {% trans 'бажаний вік сусіда(ів) від' %}
-                          {{ obj.min_age }}
-                          {% trans 'до' %}
-                          {{ obj.max_age }}
-                      </span>
-                  {% endif %}
 
-                  {% if obj.get_rent_period_display != 'Unknown' and obj.get_rent_period_display %}
-                      <span class="badge">
-                          {% trans 'на' %} {{ obj.get_rent_period_display }}
-                      </span>
-                  {% endif %}
+            {% if obj.caseType == "findNeighbor" %}
 
-                  {% if obj.is_verified %}
-                      <span class="badge">{% trans 'перевірено адміном' %}</span>
-                  {% endif %}
+                {% if obj.count_neighbors %}
+                    <span class="badge">
+                        {{ obj.count_neighbors }} {% trans "сусідів" %}
+                    </span>
+                {% endif %}
 
-              {% endif %}
 
-              {% if obj.city %}
-                  <span class="badge">{{ obj.get_city_display }}</span>
-              {% endif %}
+                {% if obj.my_gender %}
+                    <span class="badge">
+                        {% trans "я" %}
+                        {% if obj.my_gender == 1 %}
+                            {% trans "чоловік" %}
+                        {% elif obj.my_gender == 2 %}
+                            {% trans "жінка" %}
+                        {% endif %}
+                    </span>
+                {% endif %}
 
-          </div>
+
+                {% if obj.neighbor_gender %}
+                    <span class="badge">
+                        {% trans 'шукаю' %}
+                        {% if obj.neighbor_gender == 1 %}
+                            {% trans "чоловіка" %}
+                        {% elif obj.neighbor_gender == 2 %}
+                            {% trans "жінку" %}
+                        {% elif obj.neighbor_gender == 3 %}
+                            {% trans "будь-кого" %}
+                        {% endif %}
+                    </span>
+                {% endif %}
+
+
+                {% if obj.housing_type and obj.housing_type != "Unknown" %}
+                    <span class="badge">
+                        {% trans "тип житла" %}
+                        {% if LANGUAGE_CODE|slice:":2" == "uk" %}
+                            {{ obj.get_housing_type_display }}
+                        {% else %}
+                            {{ obj.get_housing_type_display }}
+                        {% endif %}
+                    </span>
+                {% endif %}
+
+
+                {% if obj.max_age %}
+                    <span class="badge">
+                        {% trans "Вік:" %}
+                        {{ obj.min_age }}–{{ obj.max_age }}
+                    </span>
+                {% endif %}
+
+
+                {% if obj.get_rent_period_display %}
+                    <span class="badge">
+                        {{ obj.get_rent_period_display }}
+                    </span>
+                {% endif %}
+
+
+                {% if obj.is_verified %}
+                    <span class="badge">
+                        {% trans "Перевірено адміном" %}
+                    </span>
+                {% endif %}
+
+            {% endif %}
+
+
+
+
+        </div>
       </div>
 
       {% get_current_language as LANGUAGE_CODE %}
@@ -329,7 +372,7 @@
         {% if obj.source_telegram %}
           <a href="{% url 'confirmation' %}"><span>{% trans 'це моє оголошення?' %}</span></a>
         {% endif %}
-        <a href="{% url 'ads:similar' section obj.slug_title %}">
+        <a href="{% url 'ads:similar' section obj.slug_title %}" rel="nofollow">
           <span>{% trans 'скожі оголошення' %}</span>
         </a>
         <a href="{% url 'create_claim' claim_app_label claim_model_name obj.id %}">
@@ -340,6 +383,29 @@
 
   </div>
 </div>
+
+<script>
+fbq('track', 'ViewContent', {
+    content_type: '{{ slug }}',
+    content_id: '{{ obj.id }}'
+});
+
+</script>
+<script>
+    document.querySelectorAll(".source-actions a").forEach(function(btn){
+    btn.addEventListener("click", function(){
+
+        if(typeof fbq === "function"){
+            fbq("track", "Lead", {
+                content_id: "{{ obj.id }}",
+                content_type: "{{ slug }}"
+            });
+        }
+
+        trackEvent("source_click");
+    });
+    });
+</script>
 
 <script>
   const caseTypeDisplay = "{{ obj.get_case_type_display|escapejs }}";
@@ -421,6 +487,10 @@ document.addEventListener("DOMContentLoaded", function () {
             event_callback: finishSubmit
           });
 
+          if (typeof fbq === "function") {
+              fbq("track", "Contact");
+          }
+
           setTimeout(finishSubmit, 800);
         } else {
           finishSubmit();
@@ -434,6 +504,9 @@ document.addEventListener("DOMContentLoaded", function () {
           button_name: "write"
         });
 
+        if (typeof fbq === "function") {
+            fbq("track", "Contact");
+        }
         modal.classList.add("active");
       });
     });
@@ -790,6 +863,14 @@ document.addEventListener("DOMContentLoaded", function () {
         button_name: "favorite",
         favorite_state: isActive ? "added" : "removed"
       });
+
+      if (typeof fbq === "function") {
+          fbq("trackCustom", "Favorite", {
+              content_id: objectId,
+              content_type: contentType,
+              favorite_state: isActive ? "added" : "removed"
+          });
+      }
 
       return true;
     }

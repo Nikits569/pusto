@@ -18,7 +18,7 @@ class ProfileAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Личная информация', {
-            'fields': ('first_name', 'last_name', 'city', 'avatar')
+            'fields': ('first_name', 'last_name', 'city', 'avatar', 'ip_address', 'user_agent')
         }),
         ('Верификация', {
             'fields': ('verification_user', 'verification_email', 'verification_student', 'verification_employer')

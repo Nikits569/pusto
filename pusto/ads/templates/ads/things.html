@@ -7,6 +7,13 @@
 
 <link type="text/css" href="{% static 'ads/css/catalogStyle.css' %}" rel="stylesheet" />
 <link type="text/css" href="{% static 'ads/css/filterSortingStyle.css' %}" rel="stylesheet" />
+
+<link type="text/css" href="{% static 'ads/css/ann.css' %}" rel="stylesheet" />
+
+<script>
+  window.NTF_SUBMIT_URL = "{% url 'notification_create' %}";
+</script>
+<link type="text/css" href="{% static 'ads/css/notification.css' %}" rel="stylesheet" />
 <title>
     {% if type_slug == 'sell' %}
         {% trans 'Продаж товарів в Словаччині - pusto.sk' %}
@@ -58,10 +65,6 @@
     {% endif %}
 </h1>
 
-<button type="button" id="toggleFiltersBtn" class="toggle-filters-btn">
-    {% trans 'Відкрити фільтри' %}
-</button>
-
 <form method="get" id="filters" class="filters">
 
     <input type="hidden" name="sort" value="{{ current_sort }}">
@@ -102,7 +105,7 @@
         <div class="ui-field type2">
             <select name="source" class="custom-select">
                 <option value="" {% if not source %}selected{% endif %}>
-                    Всі джерела
+                    {% trans 'Всі джерела' %}
                 </option>
 
                 <option value="pusto.sk" {% if source == 'pusto.sk' %}selected{% endif %}>
@@ -118,17 +121,6 @@
                 </option>
             </select>
         </div>
-        <!--
-        <select name="condition" class="ui-field type2">
-            <option value="">{% trans 'будь-який стан' %}</option>
-            {% for value, label in conditions %}
-                <option value="{{ value }}"
-                    {% if filter_condition == value %}selected{% endif %}>
-                    {{ label }}
-                </option>
-            {% endfor %}
-        </select>
-        --!>
     </div>
 
     <div class="category-badges">
@@ -153,7 +145,7 @@
 
     {% if categories|length > 10 %}
         <button type="button" id="showAllCategories" class="badge">
-            Показать все
+            {% trans 'Показати все' %}
         </button>
     {% endif %}
 
@@ -170,6 +162,10 @@
 </form>
 
 <div id="sorting" class="sorting">
+    <button type="button" id="toggleFiltersBtn" class="toggle-filters-btn">
+        <span class="icon-glyph">☰</span><span class="btn-label">{% trans 'Відкрити фільтри' %}</span>
+    </button>
+
   <span class="sorting__label">{% trans 'Сортировка' %}</span>
   <div class="sorting__links">
 
@@ -203,17 +199,86 @@
     {% endif %}
 
   </div>
+    <button class="ntf-trigger" onclick="ntfOpen()">
+        <span class="icon-glyph">🔔</span><span class="btn-label">{% trans 'сповіщення' %}</span>
+    </button>
     <a href="{% if type_slug == 'all' %}
                   {% url 'ads:things_add' 'sell' %}
                {% else %}
                   {% url 'ads:things_add' type_slug|default_if_none:'sell' %}
                {% endif %}"
          class="addPageBtn addPageBtn--primary">
-
-        <span>+ {% trans 'додати оголошення' %}</span>
-        <span class="addPageBtn__under">{% trans 'Без реєстрації та входу' %}</span>
+        <span class="icon-glyph">+</span><span class="btn-label">{% trans 'додати оголошення' %}</span>
     </a>
     <p class="count">{% trans 'знайдено' %} {{ count }} {% trans 'оголошень' %}</p>
+</div>
+<div class="ntf-overlay" id="ntfOverlay">
+  <div class="ntf-modal" role="dialog" aria-modal="true" aria-labelledby="ntfTitle">
+    <button class="ntf-close" onclick="ntfClose()" aria-label="Закрити">×</button>
+
+    <div class="ntf-head">
+      <div class="ntf-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </div>
+      <h2 class="ntf-title" id="ntfTitle">{% trans 'Сповіщення про нові речі' %}</h2>
+      <p class="ntf-sub">{% trans "Надішлемо повідомлення, щойно з'явиться відповідний товар за вашими параметрами." %}</p>
+    </div>
+
+    <form class="ntf-form" id="ntfForm" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="form_type" value="things">
+
+      <div class="ntf-field">
+        <label for="id_email">Email <span class="ntf-required">*</span></label>
+        {{ form.email }}
+        <p class="ntf-error" data-error-for="email"></p>
+      </div>
+
+      <div class="ntf-row">
+        <div class="ntf-field">
+          <label for="id_city">{% trans "Місто" %} <span class="ntf-optional">{% trans "(необов'язково)" %}</span></label>
+          {{ form.city }}
+        </div>
+        <div class="ntf-field">
+          <label for="id_category">{% trans "категорія" %} <span class="ntf-optional">{% trans "(необов'язково)" %}</span></label>
+          {{ form.category }}
+        </div>
+      </div>
+
+      <div class="ntf-field">
+        <label for="id_type_things">{% trans "Тип оголошення" %} <span class="ntf-optional">{% trans "*" %}</span></label>
+        {{ form.type }}
+      </div>
+
+      <div class="ntf-field">
+        <label>{% trans "Ціна" %}, € <span class="ntf-optional">{% trans "(необов'язково)" %}</span></label>
+        <div class="ntf-range">
+          <input type="number" name="budget_from" placeholder="{% trans 'від' %}">
+          <span>—</span>
+          <input type="number" name="budget_to" placeholder="{% trans 'до' %}">
+        </div>
+      </div>
+
+      <p class="ntf-form-message" id="ntfFormMessage"></p>
+
+      <button type="submit" class="ntf-submit" id="ntfSubmitBtn">{% trans 'Увімкнути сповіщення' %}</button>
+      <p class="ntf-foot">{% trans 'Відписатися можна будь-коли з листа або бота.' %}</p>
+    </form>
+
+    <div class="ntf-success" id="ntfSuccess">
+      <div class="ntf-success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h3 class="ntf-success-title">{% trans 'Готово!' %}</h3>
+      <p class="ntf-success-text">{% trans "Ми повідомимо вас, щойно з'явиться відповідний товар за вашими параметрами." %}</p>
+      <button type="button" class="ntf-success-close" onclick="ntfClose()">{% trans 'Закрити' %}</button>
+    </div>
+  </div>
 </div>
 
 <div id="catalog">
@@ -281,7 +346,7 @@
                 <div class="badge-top-left">
                   <div class="badge badge-{{ i.source }}">
                     <span class="badge-dot"></span>
-                    <span class="badge">{% trans 'Зібрано з ' %} {{ i.source }}</span>
+                    <span class="badge">{% trans 'Зібрано з' %} {{ i.source }}</span>
                   </div>
                 </div>
               {% endif %}
@@ -302,10 +367,10 @@
                   {% endif %}
 
                   {% if i.condition %}
-                    <div class="badge badge-condition">
-                        <span class="badge-icon">✨</span>
-                        <span>стан {{ i.condition }}</span>
-                    </div>
+                  <div class="badge badge-condition">
+                      <span class="badge-icon">✨</span>
+                      <span>{% trans "стан" %} {{ i.get_condition_display }}</span>
+                  </div>
                   {% endif %}
 
                   {% if i.user.verification_employer %}
@@ -321,12 +386,13 @@
                       </div>
                   {% endif %}
               </div>
-              {% if i.img_bazos %}
+
+              {% if i.source == 'telegram' and i.has_photo %}
+                <img src="https://pusto.sk/media/telegram_previews/{{ i.chat_id }}_{{ i.message_id }}/1.jpg"alt="" class="image" loading="lazy" decoding="async">
+              {% elif i.img_bazos %}
                 <img src="{{ i.img_bazos }}"alt="" class="image" loading="lazy" decoding="async">
               {% elif i.first_image %}
                 <img src="{{ i.first_image.image.url }}" alt="" class="image" loading="lazy" decoding="async">
-              {% elif i.preview_image %}
-                <img src="/media/{{ i.preview_image }}" alt="" class="image" loading="lazy" decoding="async">
               {% else %}
                 <img src="{% static 'ads/images/stub.png' %}" alt="" class="image" loading="lazy" decoding="async">
               {% endif %}
@@ -375,8 +441,30 @@
           </div>
         </a>
         </div>
-    {% endif %}
-    {% endif %}
+        {% if advertising_banners|length > 0 and forloop.counter == 8 %}
+            <div class="ann">
+                <a href="{% url 'ads:banner_click' advertising_banners.0.id %}"
+                   target="_blank" rel="nofollow sponsored noopener"
+                   class="banner-link">
+
+                    {% if LANGUAGE_CODE == 'en' and advertising_banners.0.image_en %}
+                        <img src="{{ advertising_banners.0.image_en.url }}"
+                             alt="{{ advertising_banners.0.alt_en|default:'' }}"
+                             class="banner-image" loading="lazy">
+                    {% elif LANGUAGE_CODE == 'sk' and advertising_banners.0.image_sk %}
+                        <img src="{{ advertising_banners.0.image_sk.url }}"
+                             alt="{{ advertising_banners.0.alt_sk|default:'' }}"
+                             class="banner-image" loading="lazy">
+                    {% elif advertising_banners.0.image_uk %}
+                        <img src="{{ advertising_banners.0.image_uk.url }}"
+                             alt="{{ advertising_banners.0.alt_uk|default:'' }}"
+                             class="banner-image" loading="lazy">
+                    {% endif %}
+                </a>
+            </div>
+        {% endif %}
+    {% endif %}  {# closes: i.caseType != 'other' (B) #}
+    {% endif %}  {# ДОБАВЬ ЭТУ СТРОКУ — closes: i.status == 'active' or user.is_staff (A) #}
     {% endfor %}
 </div>
 
@@ -513,10 +601,11 @@ function getCookie(name) {
   ]
 }
 </script>
-    <script>
+<script>
 document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.getElementById("toggleFiltersBtn");
     const filtersForm = document.getElementById("filters");
+    const labelSpan = toggleBtn ? toggleBtn.querySelector(".btn-label") : null;
 
     if (!toggleBtn || !filtersForm) return;
 
@@ -525,7 +614,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     toggleBtn.addEventListener("click", () => {
         const isOpen = filtersForm.classList.toggle("filters-open");
-        toggleBtn.textContent = isOpen ? closeText : openText;
+        if (labelSpan) {
+            labelSpan.textContent = isOpen ? closeText : openText;
+        }
     });
 });
 </script>
@@ -608,4 +699,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 </script>
+
+<script src="{% static 'ads/js/notification.js' %}"></script>
 {% endblock %}

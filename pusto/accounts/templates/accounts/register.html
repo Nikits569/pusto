@@ -14,6 +14,9 @@
       <form class="auth-form" method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <div class="cf-turnstile"
+          data-sitekey="{{ TURNSTILE_SITE_KEY }}">
+        </div>
         <button class="btn-primary" type="submit">{% trans 'реєстрація' %}</button>
       </form>
 
@@ -27,4 +30,5 @@
     </div>
   </div>
 </div>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 {% endblock %}

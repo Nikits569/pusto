@@ -15,5 +15,6 @@ DB_CONFIG = {
     "autocommit": False,
 }
 
-api_id = os.environ.get("API_ID")
-api_hash =  os.environ.get("TG_API_HASH")
+api_id = os.environ.get("TG_API_ID")
+api_hash = os.environ.get("TG_API_HASH")
+SESSION = 'PostParser'

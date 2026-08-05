@@ -15,6 +15,7 @@ from accounts.models import *
 from django.urls import reverse
 from django.http import JsonResponse
 import logging
+from django.utils.translation import gettext as _
 
 logger = logging.getLogger(__name__)
 
@@ -339,21 +340,35 @@ def EmployerVerificationView(request):
 
     return render(request, 'profiles/employerVerification.html', {'form': form})
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
+from django.urls import reverse
+from django.utils.translation import gettext as _
+
+from .models import Student, CommonUser
+from ads.models import NeighborPost, ThingsPost, JobPost
+
+
 def StudentVerificationView(request):
     if not request.user.is_authenticated:
         return redirect('select')
 
     user = request.user
 
-    # 1. Если email не подтвержден — шлем письмо повторно
+    # Якщо email не підтверджений
     if not user.verification_email:
+
         verify_url = request.build_absolute_uri(
             reverse('verify_email', args=[str(user.email_verification_token)])
         )
 
         send_mail(
-            'Підтвердіть Email',
-            f'Перейдіть за посиланням для підтвердження: {verify_url}',
+            _('Підтвердіть Email'),
+            _('Перейдіть за посиланням для підтвердження: %(url)s') % {
+                'url': verify_url
+            },
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
             fail_silently=False,
@@ -361,71 +376,82 @@ def StudentVerificationView(request):
 
         messages.error(
             request,
-            'Ваш email не підтверджений. Ми надіслали вам новий лист для підтвердження.'
+            _('Ваш email не підтверджений. Ми надіслали вам новий лист для підтвердження.')
         )
+
         return redirect('profiles:MyProfile')
 
-    # 2. Проверка существующей заявки
+
     existing = Student.objects.filter(user=user).first()
+
     if existing:
+
         if existing.status == 'verified':
             messages.error(
                 request,
-                'Ви вже пройшли студентську верифікацію.'
+                _('Ви вже пройшли студентську верифікацію.')
             )
         else:
             messages.info(
                 request,
-                f'Ви вже надсилали заявку. Статус: {existing.get_status_display()}'
+                _('Ви вже надсилали заявку. Статус: %(status)s') % {
+                    'status': existing.get_status_display()
+                }
             )
+
         return redirect('profiles:MyProfile')
 
-    # 3. Обработка POST
+
     if request.method == 'POST':
 
-        message = (
-            f'Вітаємо, {user.first_name}!\n\n'
+        message = _(
+            'Вітаємо, %(name)s!\n\n'
             'Для проходження студентської верифікації, будь ласка, відповідайте на цей лист '
             'та додайте підтвердження статусу студента.\n\n'
             'Ви можете надати один із наступних документів:\n'
             '- довідку з навчального закладу або\n'
             '- студентський квиток\n\n'
-            'Зверніть увагу:\n'
-            '- дозволяється приховати номер документа, штрих-код та інші чутливі дані;\n'
-            '- достатньо, щоб було видно ваше ім’я та факт навчання;\n'
-            '- не надсилайте документи, що містять надлишкові персональні дані.\n\n'
-            'Надані матеріали використовуються виключно для перевірки та '
-            'видаляються після завершення верифікації.\n\n'
-            'Після перевірки ви отримаєте окреме повідомлення з результатом.\n\n'
-            'З повагою,\n'
-            'Команда сервісу'
-        )
+            'Дозволяється приховати номер документа, штрих-код та інші чутливі дані.\n'
+            'Достатньо, щоб було видно ваше ім’я та факт навчання.'
+        ) % {
+            'name': user.first_name
+        }
+
 
         send_mail(
-            subject='Студентська верифікація',
-            message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[user.email],
+            _('Студентська верифікація'),
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
             fail_silently=False,
         )
 
+
         new_request = Student.objects.create(user=user)
+
 
         messages.success(
             request,
-            f'Заявку надіслано. Статус: {new_request.get_status_display()}'
+            _('Заявку надіслано. Статус: %(status)s') % {
+                'status': new_request.get_status_display()
+            }
         )
+
         return redirect('profiles:MyProfile')
+
 
     return render(request, 'profiles/studentVerification.html')
 
+
+
 def UserVerificationView(request):
+
     if not request.user.is_authenticated:
         return redirect('select')
 
     user = request.user
 
-    # 1. Якщо email НЕ підтверджений → відправити повторно
+
     if not user.verification_email:
 
         verify_url = request.build_absolute_uri(
@@ -433,76 +459,113 @@ def UserVerificationView(request):
         )
 
         send_mail(
-            'Підтвердіть Email',
-            f'Перейдіть за посиланням для підтвердження: {verify_url}',
+            _('Підтвердіть Email'),
+            _('Перейдіть за посиланням для підтвердження: %(url)s') % {
+                'url': verify_url
+            },
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
             fail_silently=False,
         )
 
+
         messages.error(
             request,
-            'Ваш email не підтверджений. Ми надіслали вам новий лист для підтвердження.'
+            _('Ваш email не підтверджений. Ми надіслали вам новий лист для підтвердження.')
         )
+
         return redirect('profiles:MyProfile')
 
-    # 2. Перевірка заявки
+
+
     existing = CommonUser.objects.filter(user=user).first()
+
     if existing:
+
         if existing.status == 'verified':
+
             messages.error(
                 request,
-                'Ви вже пройшли верифікацію користувача.'
+                _('Ви вже пройшли верифікацію користувача.')
             )
+
         else:
+
             messages.info(
                 request,
-                f'Ви вже надсилали заявку. Статус: {existing.get_status_display()}'
+                _('Ви вже надсилали заявку. Статус: %(status)s') % {
+                    'status': existing.get_status_display()
+                }
             )
+
         return redirect('profiles:MyProfile')
 
-    # 3. Перевірка оголошень
+
+
     has_post = (
-        NeighborPost.objects.filter(user=user).exists() or
-        ThingsPost.objects.filter(user=user).exists() or
-        JobPost.objects.filter(user=user).exists()
+        NeighborPost.objects.filter(user=user).exists()
+        or ThingsPost.objects.filter(user=user).exists()
+        or JobPost.objects.filter(user=user).exists()
     )
 
+
     if not has_post:
+
         messages.error(
             request,
-            'Для проходження верифікації потрібно мати хоча б одне опубліковане оголошення.'
+            _('Для проходження верифікації потрібно мати хоча б одне опубліковане оголошення.')
         )
+
         return redirect('profiles:MyProfile')
 
-    # 4. POST
+
+
     if request.method == 'POST':
+
         if request.POST.get('human_check') != 'yes':
-            messages.error(request, 'Підтвердьте, що ви не робот.')
+
+            messages.error(
+                request,
+                _('Підтвердьте, що ви не робот.')
+            )
+
             return redirect('profiles:verification')
 
-        message = (
-            f'Вітаємо, {user.first_name}!\n\n'
+
+
+        message = _(
+            'Вітаємо, %(name)s!\n\n'
             'Ваш запит на верифікацію акаунта успішно отримано та передано на розгляд.\n\n'
             'Наразі ваш акаунт проходить перевірку.\n\n'
             'Дякуємо за використання нашого сервісу.'
-        )
+        ) % {
+            'name': user.first_name
+        }
+
+
 
         send_mail(
-            subject='Верифікація користувача',
-            message=message,
-            from_email='verify@yourapp.com',
-            recipient_list=[user.email],
+            _('Верифікація користувача'),
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
             fail_silently=False,
         )
 
+
         new_request = CommonUser.objects.create(user=user)
+
 
         messages.success(
             request,
-            f'Заявку надіслано. Статус: {new_request.get_status_display()}'
+            _('Заявку надіслано. Статус: %(status)s') % {
+                'status': new_request.get_status_display()
+            }
         )
+
+
         return redirect('profiles:MyProfile')
+
 
     return render(request, 'profiles/userVerification.html')
 

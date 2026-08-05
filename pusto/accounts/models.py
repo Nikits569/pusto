@@ -103,6 +103,9 @@ class Profile(AbstractBaseUser, PermissionsMixin):
         verbose_name=_('Permissions')
     )
 
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
+    user_agent = models.TextField(blank=True)
+
     def __str__(self):
         return self.email
 

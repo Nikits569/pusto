@@ -34,6 +34,9 @@ BYBIT_API_SECRET = os.environ["BYBIT_API_SECRET"]
 BYBIT_TESTNET = os.environ.get("BYBIT_TESTNET", "False") == "True"
 PAYMENT_DEPOSIT_ADDRESS = os.environ["PAYMENT_DEPOSIT_ADDRESS"]
 
+TURNSTILE_SITE_KEY = os.environ["TURNSTILE_SITE_KEY"]
+TURNSTILE_SECRET_KEY = os.environ["TURNSTILE_SECRET_KEY"]
+
 DAILY_LIMITS = {
     'thingspost': 5,
     'neighborpost': 3,
@@ -49,6 +52,11 @@ LANGUAGES = [
     ("en", _("English")),
     ("sk", _("Slovak")),
 ]
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'uk'
+MODELTRANSLATION_LANGUAGES = ('uk', 'en', 'sk')
+MODELTRANSLATION_FALLBACK_LANGUAGES = {'default': ('uk',)}
+
 SITE_ID = 1
 
 # Quick-start development settings - unsuitable for production
@@ -59,7 +67,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = os.getenv("DEBUG")
-DEBUG = True
+DEBUG = 0
 
 ALLOWED_HOSTS = [
     "pusto.sk",
@@ -72,6 +80,8 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

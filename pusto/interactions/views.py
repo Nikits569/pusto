@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 from ads.models import ThingsPost, NeighborPost, JobPost
 from django.views.decorators.csrf import ensure_csrf_cookie
+from .forms import *
+from .forms import NotificationNeighborForm
 
 @ensure_csrf_cookie
 def favorites(request):
@@ -78,18 +80,18 @@ def resolve_favorites(request):
                 "salary_to": None,
             }
 
-        if ctype == "JobPost":
-            return {
-                "price": None,
-                "budget": None,
-                "salary_from": getattr(post, "salary_from", None),
-                "salary_to": getattr(post, "salary_to", None),
-            }
+        #if ctype == "JobPost":
+        #    return {
+        #        "price": None,
+        #        "budget": None,
+        #        "salary_from": getattr(post, "salary_from", None),
+        #        "salary_to": getattr(post, "salary_to", None),
+        #    }
 
         return {
             "price": None,
             "budget": None,
-            "salary_from": None,
+            #"salary_from": None,
             "salary_to": None,
         }
 
@@ -145,7 +147,11 @@ def resolve_favorites(request):
                 "price": price_data["price"],
                 "budget": price_data["budget"],
                 "salary_from": price_data["salary_from"],
+                "link_bazos": getattr(o, "img_bazos", []),
+                "source": getattr(o, "source", ""),
                 "salary_to": price_data["salary_to"],
+                "chat_id": getattr(o, "chat_id", ""),
+                "message_id": getattr(o, "message_id", ""),
             })
 
         order = {oid: idx for idx, oid in enumerate(ids)}
@@ -165,3 +171,48 @@ def resolve_favorites(request):
 
 def promotion(request):
     return render(request, "interactions/promotion.html")
+
+@require_POST
+def notification_create(request):
+    form_type = request.POST.get('form_type')
+
+    if form_type == 'things':
+        form = NotificationThingsForm(request.POST)
+    elif form_type == 'neighbor':
+        form = NotificationNeighborForm(request.POST)
+    else:
+        return JsonResponse(
+            {'success': False, 'errors': 'Invalid form type'},
+            status=400
+        )
+
+    if form.is_valid():
+        form.save()
+        return JsonResponse({'success': True})
+    return JsonResponse(
+        {'success': False, 'errors': form.errors.get_json_data()},
+        status=400
+    )
+
+# views.py
+@require_POST
+def notification_create_things(request):
+    form = NotificationThingsForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'errors': form.errors.get_json_data()}, status=400)
+
+
+@require_POST
+def notification_create_neighbor(request):
+    form = NotificationNeighborForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False, 'errors': form.errors.get_json_data()}, status=400)
+
+def modal(request):
+    form = NotificationNeighborForm
+
+    return render(request, 'interactions/modal.html', {'form': form})

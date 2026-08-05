@@ -7,17 +7,22 @@ from .models import *
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.http import require_POST
-
+from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from .models import Profile
 import hashlib
 import hmac
 from django.core.mail import send_mail
+from .utils import check_support_rate_limit
 
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('/select')
+
+    blocked = check_support_rate_limit(request)
+    if blocked:
+        return blocked
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -26,6 +31,10 @@ def register_view(request):
             user.is_active = False
             user.email_verification_token = uuid.uuid4()
             user.verification_email = False
+
+            user.ip_address = request.META.get("HTTP_CF_CONNECTING_IP")
+            user.user_agent = request.META.get("HTTP_USER_AGENT", "")
+
             user.save()
 
             verify_url = request.build_absolute_uri(
@@ -47,7 +56,7 @@ def register_view(request):
     else:
         form = RegisterForm()
 
-    return render(request, 'accounts/register.html', {'form': form})
+    return render(request, 'accounts/register.html', {'form': form, "TURNSTILE_SITE_KEY": settings.TURNSTILE_SITE_KEY})
 
 
 def login_view(request):

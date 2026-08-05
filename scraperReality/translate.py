@@ -31,9 +31,8 @@ try:
         cursor.execute("""
             SELECT reality_id, text_sk
             FROM reality
-
+            WHERE text_en IS NULL
         """)
-
         rows = cursor.fetchall()
 
         print(f"Need translate: {len(rows)}")

@@ -12,8 +12,34 @@ from .models import (
     NeighborPostImage,
     City,
     Condition,
+    Lifestyle,
 )
+from django.utils.translation import get_language
 
+class TranslatedModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        lang = get_language() or 'uk'
+        lang = lang.split('-')[0]
+        return (
+            getattr(obj, f'name_{lang}', None)
+            or getattr(obj, 'name_uk', None)
+            or str(obj)
+        )
+
+
+class TranslatedModelChoiceField(forms.ModelChoiceField):
+    """
+    Аналог TranslatedModelMultipleChoiceField, но для одиночного выбора
+    (используется для Category, у которой поля title_uk / title_en / title_sk).
+    """
+    def label_from_instance(self, obj):
+        lang = get_language() or 'uk'
+        lang = lang.split('-')[0]
+        return (
+            getattr(obj, f'title_{lang}', None)
+            or getattr(obj, 'title_uk', None)
+            or str(obj)
+        )
 
 class BasePostForm(forms.ModelForm):
     city = forms.ChoiceField(
@@ -29,7 +55,7 @@ class BasePostForm(forms.ModelForm):
             'case_type': forms.Select(),
             'title': forms.TextInput(attrs={'placeholder': _('заголовок*')}),
             'text': forms.Textarea(attrs={'placeholder': _('опис')}),
-            'telegram_username': forms.TextInput(attrs={'placeholder': _('telegram')}),
+            #'telegram_username': forms.TextInput(attrs={'placeholder': _('telegram')}),
             'email': forms.TextInput(attrs={'placeholder': _('email*')}),
         }
 
@@ -43,7 +69,7 @@ class BasePostForm(forms.ModelForm):
 
 
 class ThingsPostForm(BasePostForm):
-    category = forms.ModelChoiceField(
+    category = TranslatedModelChoiceField(
         queryset=Category.objects.filter(is_active=True).order_by("order"),
         widget=forms.RadioSelect,
         empty_label=None,
@@ -69,7 +95,7 @@ class ThingsPostForm(BasePostForm):
             'condition',
             'category',
             'email',
-            'telegram_username',
+            #'telegram_username',
         ]
 
     def __init__(self, *args, **kwargs):
@@ -106,7 +132,7 @@ class JobPostForm(BasePostForm):
             'salary_period',
             'company_name',
             'email',
-            'telegram_username',
+            #'telegram_username',
         ]
 
     def __init__(self, *args, **kwargs):
@@ -121,7 +147,7 @@ class JobPostForm(BasePostForm):
         self.fields['salary_period'].label = _('Період зарплати')
         self.fields['company_name'].label = _('Назва компанії')
         self.fields['email'].label = _('Email')
-        self.fields['telegram_username'].label = _('Telegram')
+        #self.fields['telegram_username'].label = _('Telegram')
 
         self.fields['employment_type'].required = False
         self.fields['salary_from'].required = False
@@ -131,6 +157,19 @@ class JobPostForm(BasePostForm):
 
 
 class NeighborPostForm(BasePostForm):
+    #my_lifestyles = TranslatedModelMultipleChoiceField(
+    #    queryset=Lifestyle.objects.all(),
+    #    widget=forms.CheckboxSelectMultiple,
+    #    required=False,
+    #    label=_('Мій стиль життя'),
+    #)
+    #neighbor_lifestyles = TranslatedModelMultipleChoiceField(
+    #    queryset=Lifestyle.objects.all(),
+    #    widget=forms.CheckboxSelectMultiple,
+    #    required=False,
+    #    label=_('Стиль життя сусіда'),
+    #)
+
     class Meta(BasePostForm.Meta):
         model = NeighborPost
         widgets = BasePostForm.Meta.widgets | {
@@ -141,74 +180,52 @@ class NeighborPostForm(BasePostForm):
             'max_age': forms.NumberInput(attrs={'placeholder': _('максимальний вік')}),
             'budget': forms.NumberInput(attrs={'placeholder': _('бюджет')}),
             'rent_period': forms.Select(),
-            'my_lifestyles': forms.CheckboxSelectMultiple(),
-            'neighbor_lifestyles': forms.CheckboxSelectMultiple(),
             'housing_type': forms.Select(),
-            #'move_in_date': forms.DateInput(attrs={'type': 'date'}),
         }
+        fields = [
+            'title', 'text', 'city', 'count_neighbors',
+            'my_gender', 'neighbor_gender', 'my_age', 'min_age', 'max_age',
+            'budget', 'rent_period',
+            #'my_lifestyles', 'neighbor_lifestyles',
+            'housing_type', 'email',
+        ]
+
+
+class RentPostForm(BasePostForm):
+    class Meta(BasePostForm.Meta):
+        model = NeighborPost
+
+        widgets = BasePostForm.Meta.widgets | {
+            'city': forms.Select(),
+
+            'housing_type': forms.Select(),
+
+            'budget': forms.NumberInput(attrs={
+                'placeholder': _('ціна за місяць (€)')
+            }),
+
+            'count_neighbors': forms.NumberInput(attrs={
+                'placeholder': _('кількість мешканців')
+            }),
+
+            'move_in_date': forms.DateInput(attrs={
+                'type': 'date'
+            }),
+        }
+
         fields = [
             'title',
             'text',
+
             'city',
-            'count_neighbors',
-            'my_gender',
-            'neighbor_gender',
-            'my_age',
-            'min_age',
-            'max_age',
-            'budget',
-            'rent_period',
-            'my_lifestyles',
-            'neighbor_lifestyles',
             'housing_type',
-            #'move_in_date',
+            'budget',
+            'count_neighbors',
+            'move_in_date',
+
             'email',
             'telegram_username',
         ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.fields['title'].label = _('Заголовок')
-        self.fields['text'].label = _('Опис')
-        self.fields['city'].label = _('Місто')
-        self.fields['count_neighbors'].label = _('Кількість сусідів')
-        self.fields['my_gender'].label = _('Моя стать')
-        self.fields['neighbor_gender'].label = _('Стать сусіда')
-        self.fields['my_age'].label = _('Мій вік')
-        self.fields['min_age'].label = _('Мінімальний вік')
-        self.fields['max_age'].label = _('Максимальний вік')
-        self.fields['budget'].label = _('Бюджет')
-        self.fields['rent_period'].label = _('Період оренди')
-        self.fields['my_lifestyles'].label = _('Мій стиль життя')
-        self.fields['neighbor_lifestyles'].label = _('Стиль життя сусіда')
-        self.fields['housing_type'].label = _('Тип житла')
-        #self.fields['move_in_date'].label = _('Дата заселення')
-        self.fields['email'].label = _('Email')
-        self.fields['telegram_username'].label = _('Telegram')
-
-        self.fields['count_neighbors'].required = False
-        self.fields['my_gender'].required = False
-        self.fields['neighbor_gender'].required = False
-        self.fields['min_age'].required = False
-        self.fields['max_age'].required = False
-        self.fields['budget'].required = True
-        self.fields['rent_period'].required = False
-        self.fields['my_lifestyles'].required = False
-        self.fields['neighbor_lifestyles'].required = False
-        self.fields['housing_type'].required = False
-        #self.fields['move_in_date'].required = False
-
-        self.fields['title'].widget.attrs.update({'placeholder': _('заголовок*')})
-        self.fields['text'].widget.attrs.update({'placeholder': _('опис')})
-        self.fields['city'].widget.attrs.update({'placeholder': _('будь-яке місто')})
-        self.fields['count_neighbors'].widget.attrs.update({'placeholder': _('кількість сусідів')})
-        self.fields['min_age'].widget.attrs.update({'placeholder': _('мінімальний вік')})
-        self.fields['max_age'].widget.attrs.update({'placeholder': _('максимальний вік')})
-        self.fields['budget'].widget.attrs.update({'placeholder': _('бюджет (з людини € )')})
-        self.fields['email'].widget.attrs.update({'placeholder': _('email*')})
-        self.fields['telegram_username'].widget.attrs.update({'placeholder': _('telegram')})
-
 
 ThingsPostImageFormSet = post_image_formset(ThingsPost, ThingsPostImage)
 JobPostImageFormSet = post_image_formset(JobPost, JobPostImage)

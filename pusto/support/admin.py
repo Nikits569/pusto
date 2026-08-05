@@ -7,7 +7,7 @@ from django.utils import timezone
 
 @admin.register(SupportTicket)
 class SupportTicketAdmin(admin.ModelAdmin):
-    list_display = ('id', 'subject', 'email', 'status', 'created_at')
+    list_display = ('id', 'subject', 'email', 'status', 'created_at', 'ip_address', 'user_agent')
     list_filter = ('status', 'created_at')
     ordering = ('-created_at',)
     list_editable = ('status',)

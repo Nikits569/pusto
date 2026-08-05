@@ -3,7 +3,7 @@ from config import DB_CONFIG, PLACEHOLDER_HASH
 from django.utils.text import slugify
 from unidecode import unidecode
 import traceback
-
+from typing import Union
 import hashlib
 import os
 import sys
@@ -94,10 +94,10 @@ try:
 
         for row in rows:
                 photo_cash = get_cached_photo(row["image_url"])
-                if photo_hash == PLACEHOLDER_HASH:
+                if photo_cash == PLACEHOLDER_HASH:
                     continue  # заглушка "нет фото" — не проверяем на дубликат, просто продолжаем обработку
 
-                if photo_hash is False:
+                if photo_cash is False:
                     print('duplicate hash SKIP')
                     skipped += 1
                     continue
@@ -106,7 +106,10 @@ try:
                 text_en = row["text_en"] or text
                 text_sk = row["text_sk"] or text
 
-                title_sk = text[:25].strip()
+                location = row["adress"] or None
+
+                title = text[:25].strip()
+                title_sk = row["text_sk"][:25].strip()
                 title_en = text_en[:25].strip()
 
                 if row["category"] == "reality":
@@ -169,13 +172,14 @@ try:
                                 tg_deleted,
                                 email_confirmed,
         
-                                chat_id
+                                chat_id,
+                                adress
                             )
                             VALUES (
                                 %s,%s,%s,%s,%s,%s,%s,%s,
                                 %s,%s,%s,%s,%s,%s,%s,%s,%s,
                                 %s,%s,%s,%s,%s,%s,%s,%s,%s,
-                                %s,%s,%s,%s,%s
+                                %s,%s,%s,%s,%s,%s
                             )
                             """,
                             (
@@ -183,7 +187,7 @@ try:
 
                             row["created_at"],
 
-                            title_sk,
+                            title,
                             slugify(unidecode(title_sk)),
 
                             row["text"],      # основной текст = украинский
@@ -223,7 +227,8 @@ try:
                             0,
                             1,
 
-                             ""
+                             "",
+                            location
                         )
                     )
 
@@ -298,7 +303,7 @@ try:
                             "bazos",
                             row["created_at"],
 
-                            title_sk,
+                            title,
                             slugify(unidecode(title_sk)),
                             text,
                             row["city"],

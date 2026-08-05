@@ -258,11 +258,16 @@ function updateSectionUI(section, count) {
 }
 
 function makeCardHTML(item, ctype) {
-  const img = escapeHtml(
-    item.preview_image_path
-      ? `/media/${item.preview_image_path}`
-      : (item.first_image_url || FALLBACK_IMAGE)
-  );
+
+  let img;
+  if (item.source === 'telegram') {
+    console.log('telegram');
+    const safeChatId = String(item.chat_id || "").replace(/[^0-9]/g, "");
+    const safeMsgId = String(item.message_id || "").replace(/[^0-9]/g, "");
+    img = '/media/telegram_previews/' + safeChatId + '_' + safeMsgId + "/" + '1.jpg';
+  } else {
+    img = escapeHtml(item.link_bazos || "");
+  }
 
   const url = escapeHtml(item.page_url || "#");
   const title = escapeHtml(item.title || "");
@@ -326,7 +331,8 @@ function makeCardHTML(item, ctype) {
         <div class="card-media">
           ${badgesTop}
           ${badgesBottom}
-          <img src="${img}" class="image" loading="lazy" decoding="async" alt="${title}" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+          <img src="${img}" class="image" loading="lazy" decoding="async" alt="${title}" >
+          <* <img src="${img}" class="image" loading="lazy" decoding="async" alt="${title}" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'"> */
         </div>
 
         <div class="price-wrap">

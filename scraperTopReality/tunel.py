@@ -27,6 +27,8 @@ try:
                 text_en = row["text_en"] or text
                 text_sk = row["text_sk"] or text
 
+                location = row['adress'] or None
+
                 title_sk = text_sk[:25].strip()
                 title_en = text_en[:25].strip()
 
@@ -85,13 +87,17 @@ try:
                         tg_deleted,
                         email_confirmed,
 
-                        chat_id
+                        chat_id,
+                        
+                        ad_id, 
+                        
+                        adress
                     )
                     VALUES (
                         %s,%s,%s,%s,%s,%s,%s,%s,
                         %s,%s,%s,%s,%s,%s,%s,%s,%s,
                         %s,%s,%s,%s,%s,%s,%s,%s,%s,
-                        %s,%s,%s,%s,%s
+                        %s,%s,%s,%s,%s,%s,%s
                     )
                     """,
                     (
@@ -139,7 +145,11 @@ try:
                         0,
                         1,
 
-                        ""
+                        '',
+                        row['ad_id'],
+
+                        location,
+
                     )
                 )
 
