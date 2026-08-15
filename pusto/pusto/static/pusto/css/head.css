@@ -84,62 +84,148 @@ header .centerBlock {
   gap: 30px;
 }
 
-/* search */
-.search {
-  position: relative;
-  width: min(830px, 100%);
-  display: flex;
-  align-items: center;
+.header-add-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    border: 0;
+    height:48px;
+    padding:0 24px;
+
+    border-radius:999px;
+
+    background:#fff;
+    cursor: pointer;
+    color: rgba(17, 24, 39, 0.55);
+    font-size:16px;
+    font-weight:600;
+    font-family:inherit;
+    text-decoration:none;
+
+    cursor:pointer;
+
+    transition:
+        background .22s ease,
+        color .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        transform .15s ease;
 }
 
-.search input {
-  width: 100%;
-  height: 52px;
-  border-radius: 9999px;
-
-  background: #ffffff;
-  border: 1px solid rgba(17, 24, 39, 0.10);
-
-  padding: 0 18px 0 46px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #111827;
-
-  outline: none;
-  box-shadow:
-    0 1px 0 rgba(17,24,39,0.04),
-    0 12px 28px rgba(17,24,39,0.08);
-  transition: box-shadow 140ms ease, border-color 140ms ease, transform 140ms ease;
+.header-add-btn:hover{
+    background:#2D338A;
+    color:#fff;
+    box-shadow:0 8px 20px rgba(45,51,138,.18);
 }
 
-header .search input::placeholder {
-  color: rgba(17, 24, 39, 0.35);
-  text-transform: lowercase;
-  font-size: 15px;
+.header-add-btn:active{
+    transform:scale(.98);
 }
 
-.search input:focus {
-  border-color: rgba(17, 24, 39, 0.18);
-  box-shadow:
-    0 1px 0 rgba(17,24,39,0.04),
-    0 18px 40px rgba(17,24,39,0.12);
-  transform: translateY(-1px);
+.header-add-btn svg{
+    width:18px;
+    height:18px;
+    transition:inherit;
 }
 
-.search-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: rgba(17, 24, 39, 0.45);
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-  z-index: 2;
+.header-add-btn:hover svg{
+    stroke:#fff;
 }
 
-.search input:focus + .search-icon {
-  transform: translateY(-1px);
+@media (max-width:768px){
+    .header-add-btn{
+        display:none;
+    }
+}
+
+.add-modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.25s;
+
+    z-index:9999;
+}
+
+.add-modal-overlay.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.add-modal{
+    width:420px;
+    max-width:90%;
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:28px;
+
+    position:relative;
+
+    box-shadow:0 15px 50px rgba(0,0,0,.18);
+}
+
+.add-modal h2{
+    margin-bottom:25px;
+    font-size:24px;
+}
+
+.add-option{
+    display:flex;
+    align-items:center;
+    gap:18px;
+
+    text-decoration:none;
+    color:#222;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    margin-bottom:14px;
+
+    transition:.2s;
+
+    border:1px solid #ececec;
+}
+
+.add-option:hover{
+    background:#f6f7ff;
+    border-color:#2D338A;
+}
+
+.add-option strong{
+    display:block;
+    font-size:18px;
+}
+
+.add-option span{
+    color:#777;
+    font-size:14px;
+}
+
+.add-modal-close{
+    position:absolute;
+    right:18px;
+    top:18px;
+
+    border:none;
+    background:none;
+
+    font-size:22px;
+
+    cursor:pointer;
 }
 /* right: true vertical centering */
 header .rightBlock {

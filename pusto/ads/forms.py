@@ -178,7 +178,7 @@ class NeighborPostForm(BasePostForm):
             'neighbor_gender': forms.Select(),
             'min_age': forms.NumberInput(attrs={'placeholder': _('мінімальний вік')}),
             'max_age': forms.NumberInput(attrs={'placeholder': _('максимальний вік')}),
-            'budget': forms.NumberInput(attrs={'placeholder': _('бюджет')}),
+            'budget': forms.NumberInput(attrs={'placeholder': _('ціна місяць')}),
             'rent_period': forms.Select(),
             'housing_type': forms.Select(),
         }
@@ -197,35 +197,39 @@ class RentPostForm(BasePostForm):
 
         widgets = BasePostForm.Meta.widgets | {
             'city': forms.Select(),
-
             'housing_type': forms.Select(),
-
-            'budget': forms.NumberInput(attrs={
-                'placeholder': _('ціна за місяць (€)')
-            }),
-
-            'count_neighbors': forms.NumberInput(attrs={
-                'placeholder': _('кількість мешканців')
-            }),
-
+            'budget': forms.NumberInput(),
+            'count_neighbors': forms.NumberInput(),
             'move_in_date': forms.DateInput(attrs={
-                'type': 'date'
+                'type': 'date',
             }),
         }
 
         fields = [
             'title',
             'text',
-
             'city',
             'housing_type',
             'budget',
-            'count_neighbors',
             'move_in_date',
-
             'email',
             'telegram_username',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['budget'].widget.attrs.update({
+            'placeholder': _('Ціна за місяць (€)')
+        })
+
+        self.fields['telegram_username'].widget.attrs.update({
+            'placeholder': _('telegram')
+        })
+
+        self.fields['move_in_date'].widget.attrs.update({
+            'type': 'date'
+        })
 
 ThingsPostImageFormSet = post_image_formset(ThingsPost, ThingsPostImage)
 JobPostImageFormSet = post_image_formset(JobPost, JobPostImage)

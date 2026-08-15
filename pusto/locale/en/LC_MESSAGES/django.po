@@ -1415,10 +1415,10 @@ msgstr "free"
 msgid "оренда"
 msgstr "rent"
 
-msgid "кімнату"
+msgid "кімната"
 msgstr "a room"
 
-msgid "квартиру"
+msgid "квартира"
 msgstr "an apartment"
 
 msgid "гуртожиток"
@@ -2021,3 +2021,28 @@ msgstr "anyone"
 
 msgid "Локація"
 msgstr "location"
+
+msgid "ціна місяць"
+msgstr "price per month"
+
+msgid "здаю житло"
+msgstr "rent out"
+
+msgid "Додати оголошення"
+msgstr "add listing"
+
+msgid "Що ви хочете додати?"
+msgstr "What would you like to add?"
+
+msgid "Купити або продати"
+msgstr "Buy or sell"
+
+msgid "Здати або знайти квартиру"
+msgstr "Rent out or find a home"
+
+msgid "Шукаю або пропоную кімнату"
+msgstr "Find or offer a room"
+
+msgid "Сусіда"
+msgstr "Roommate"
+

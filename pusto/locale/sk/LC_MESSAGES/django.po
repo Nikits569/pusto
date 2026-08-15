@@ -1415,10 +1415,10 @@ msgstr "zadarmo"
 msgid "оренда"
 msgstr "prenájom"
 
-msgid "кімнату"
-msgstr "izbu"
+msgid "кімната"
+msgstr "izba"
 
-msgid "квартиру"
+msgid "квартира"
 msgstr "byt"
 
 msgid "гуртожиток"
@@ -1969,3 +1969,27 @@ msgstr "ktokoľvek"
 
 msgid "Локація"
 msgstr "Lokalita"
+
+msgid "ціна місяць"
+msgstr "Cena za mesiac"
+
+msgid "здаю житло"
+msgstr "Prenajímam bývanie"
+
+msgid "Додати оголошення"
+msgstr "pridať inzerát"
+
+msgid "Що ви хочете додати?"
+msgstr "Čo chcete pridať?"
+
+msgid "Купити або продати"
+msgstr "Kúpiť alebo predať"
+
+msgid "Здати або знайти квартиру"
+msgstr "Prenajať alebo nájsť bývanie"
+
+msgid "Шукаю або пропоную кімнату"
+msgstr "Hľadám alebo ponúkam izbu"
+
+msgid "Сусіда"
+msgstr "Spolubývajúci"

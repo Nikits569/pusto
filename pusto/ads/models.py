@@ -212,7 +212,7 @@ class ThingsPost(models.Model):
     img_bazos = models.CharField(max_length=1000, null=True, blank=True, default=None, verbose_name=_('Image Bazos'))
 
     link_facebook = models.CharField(max_length=1000, null=True, blank=True, verbose_name=_('Facebook link'))
-    # phone = models.CharField(max_length=20, blank=True)
+    score = models.IntegerField(default=0)
     caseType = models.CharField(
         max_length=50,
         choices=CaseTypeThing.choices,
@@ -325,7 +325,7 @@ class NeighborPost(models.Model):
     deposit = models.CharField(blank=True, null=True, max_length=150, verbose_name=_('Deposit'))
 
     link_facebook = models.CharField(max_length=1000, null=True, blank=True, verbose_name=_('Facebook link'))
-    # phone = models.CharField(max_length=20, blank=True)
+    score = models.IntegerField(default=0)
     caseType = models.CharField(
         max_length=30,
         choices=CaseTypeNeighbor.choices,

@@ -73,6 +73,7 @@ try:
         # финальный коммит для остатка
         conn.commit()
         print(f"Done. Total translated: {processed}")
-
+except Exception as e:
+    print(e)
 finally:
     conn.close()

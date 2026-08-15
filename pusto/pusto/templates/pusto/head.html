@@ -112,24 +112,59 @@
   <button onclick="rejectCookies()">Reject</button>
 </div>
     <header>
-        <div class="leftBlock">
-            <a href="{% url 'ads:select' %}" id="logo"><img src="{% static 'ads/images/logo.png' %}"></a>
-        </div>
+            <div class="leftBlock">
+                <a href="{% url 'ads:select' %}" id="logo"><img src="{% static 'ads/images/logo.png' %}"></a>
+            </div>
 
-        <div class="centerBlock">
-            <form class="search" action="{% url 'ads:global_search' %}" method="get" onsubmit="return trackSearch(this)">
-                <span class="search-icon">
-                    <svg viewBox="0 0 24 24" width="18" height="18">
-                        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
-                        <line x1="16.65" y1="16.65" x2="21" y2="21" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                </span>
-                <input type="text" name="q" placeholder="{% trans 'пошук' %}" value="{{ request.GET.q }}">
-            </form>
 
-        </div>
+            <div class="rightBlock">
+                <button class="header-add-btn" id="openAddModal">
 
-        <div class="rightBlock">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+
+                {% trans 'Додати оголошення' %}
+
+                </button>
+
+                <div class="add-modal-overlay" id="addModal">
+
+                    <div class="add-modal">
+
+                        <button class="add-modal-close" id="closeAddModal">
+                            ✕
+                        </button>
+
+                        <h2>{% trans 'Що ви хочете додати?' %}</h2>
+
+                        <a href="{% url 'ads:things_add' 'sell' %}" class="add-option">
+                            📦
+                            <div>
+                                <strong>{% trans 'Речі' %}</strong>
+                                <span>{% trans 'Купити або продати' %}</span>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'ads:neighbor_add' 'rent' %}" class="add-option">
+                            🏠
+                            <div>
+                                <strong>{% trans 'Житло' %}</strong>
+                                <span>{% trans 'Здати або знайти квартиру' %}</span>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'ads:neighbor_add' 'findNeighbor' %}" class="add-option">
+                            👥
+                            <div>
+                                <strong>{% trans 'Сусіда' %}</strong>
+                                <span>{% trans 'Шукаю або пропоную кімнату' %}</span>
+                            </div>
+                        </a>
+
+                    </div>
+
+                </div>
             {% if user.is_authenticated %}
                 <a href="{% url 'profiles:MyProfile' %}" id="myprofile">{% trans "мій профіль" %}</a>
             {% else %}
@@ -340,12 +375,12 @@
         </div>
         <div class="footerBottom">
           <span class="copyright">© 2026 pusto.sk</span>
-          <!--
-            <div class="langs">
-             <a href="?lang=ua" class="lang isActive">UA</a>
-             <a href="?lang=sk" class="lang">SK</a>
-            </div>
-           --!>
+            <!--
+              <div class="langs">
+                <a href="?lang=ua" class="lang isActive">UA</a>
+                <a href="?lang=sk" class="lang">SK</a>
+              </div>
+            -->
 
         </div>
 
@@ -365,6 +400,7 @@
     </div>
     </footer>
 </body>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   console.log("initSourceTracking started");
@@ -534,30 +570,6 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <script>
-  const promoEndDate = new Date("2026-05-16T23:59:59").getTime();
-
-  function updatePromoTimer() {
-    const now = new Date().getTime();
-    const distance = promoEndDate - now;
-
-    if (distance <= 0) {
-      document.getElementById("promoTimer").textContent = "Акция завершена";
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((distance / (1000 * 60)) % 60);
-    const seconds = Math.floor((distance / 1000) % 60);
-
-    document.getElementById("promoTimer").textContent =
-      `${days}д ${hours}ч ${minutes}м ${seconds}с`;
-  }
-
-  updatePromoTimer();
-  setInterval(updatePromoTimer, 1000);
-</script>
-<script>
   function trackEvent(eventName, params = {}) {
     if (typeof gtag === "function") {
       gtag("event", eventName, params);
@@ -580,6 +592,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     return true;
     }
+</script>
+<script>
+    const modal = document.getElementById('addModal');
+
+    document.getElementById('openAddModal').onclick = () => {
+        modal.classList.add('active');
+    };
+
+    document.getElementById('closeAddModal').onclick = () => {
+        modal.classList.remove('active');
+    };
+
+    modal.onclick = (e) => {
+        if(e.target === modal){
+            modal.classList.remove('active');
+        }
+    };
+
+    document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape'){
+            modal.classList.remove('active');
+        }
+    });
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </html>

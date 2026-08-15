@@ -435,8 +435,13 @@
               {% endif %}
 
               <h5 class="info {{ i.source }}">
-                {{ i.city }} - {{ i.created_at|date:"d F Y р. H:i" }}
-                <span class="freshness-dot" data-created="{{ i.created_at|date:'c' }}" title=""></span>
+                  {% if i.source == 'bazos' %}
+                    {{ i.city }} - {{ i.created_at|date:"d F" }}
+                    <span class="freshness-dot" data-created="{{ i.created_at|date:'c' }}" title=""></span>
+                  {% else %}
+                    {{ i.city }} - {{ i.created_at|date:"d F Y р. H:i" }}
+                    <span class="freshness-dot" data-created="{{ i.created_at|date:'c' }}" title=""></span>
+                  {% endif %}
               </h5>
           </div>
         </a>

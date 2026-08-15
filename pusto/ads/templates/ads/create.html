@@ -5,7 +5,7 @@ id_subcategory
 {% block createAds %}
 
 <link rel="stylesheet" href="{% static 'ads/css/create.css' %}">
-<title>{% trans 'створити оголошення' %} {{ formType }}</title>
+<title>{% trans 'створити оголошення' %}</title>
 <div class="createForm">
     {% if formType == 'things' %}
         <div class="ads-type-switch">
@@ -19,30 +19,20 @@ id_subcategory
                 {% trans 'купівля' %}
             </a>
 
-            <!--<a href="{% url 'ads:things_add' 'free' %}" -->
-            <!--   class="ads-type-link {% if slug == 'free' %}is-active{% endif %}"> -->
-            <!--    {% trans 'безкоштовно' %} -->
-            <!--</a> -->
         </div>
-    {% elif formType == 'jobs' %}
-        <div class="ads-type-switch">
-            <a href="{% url 'ads:job_add' 'findJob' %}"
-               class="ads-type-link {% if slug == 'findJob' %}is-active{% endif %}">
-                {% trans 'шукаю роботу' %}
-            </a>
 
-            <a href="{% url 'ads:job_add' 'giveJob' %}"
-               class="ads-type-link {% if slug == 'giveJob' %}is-active{% endif %}">
-                {% trans 'шукаю працівника' %}
-            </a>
-        </div>
-    {% elif formType == 'neighbors' %}
+    {% elif formType == 'neighbors' or formType == 'rent' %}
         <div class="ads-type-switch">
             <a href="{% url 'ads:neighbor_add' 'findNeighbor' %}"
                class="ads-type-link {% if slug == 'findNeighbor' %}is-active{% endif %}">
                 {% trans 'шукаю сусіда' %}
             </a>
+            <a href="{% url 'ads:neighbor_add' 'rent' %}"
+               class="ads-type-link {% if slug == 'rent' %}is-active{% endif %}">
+                {% trans 'здаю житло' %}
+            </a>
         </div>
+
     {% endif %}
 
 
@@ -277,7 +267,6 @@ id_subcategory
                     {% endif %}
                 </div>
             </div>
-
         {% elif formType == 'rent' %}
             <div class="neighbors-form">
                 <div class="form-grid">
@@ -288,14 +277,18 @@ id_subcategory
                         {% if form.title %}
                             <div class="form-group">
                                 <div class="form-input-wrapper">{{ form.title }}</div>
-                                {% if form.title.errors %}<div class="form-error">{{ form.title.errors }}</div>{% endif %}
+                                {% if form.title.errors %}
+                                    <div class="form-error">{{ form.title.errors }}</div>
+                                {% endif %}
                             </div>
                         {% endif %}
 
                         {% if form.text %}
                             <div class="form-group">
                                 <div class="form-input-wrapper">{{ form.text }}</div>
-                                {% if form.text.errors %}<div class="form-error">{{ form.text.errors }}</div>{% endif %}
+                                {% if form.text.errors %}
+                                    <div class="form-error">{{ form.text.errors }}</div>
+                                {% endif %}
                             </div>
                         {% endif %}
                     </div>
@@ -304,68 +297,59 @@ id_subcategory
                         {% if form.email %}
                             <div class="form-group">
                                 <div class="form-input-wrapper">{{ form.email }}</div>
-                                {% if form.email.errors %}<div class="form-error">{{ form.email.errors }}</div>{% endif %}
-                            </div>
-                        {% endif %}
-
-                        {% if form.phone %}
-                            <div class="form-group">
-                                <div class="form-input-wrapper">{{ form.phone }}</div>
-                                {% if form.phone.errors %}<div class="form-error">{{ form.phone.errors }}</div>{% endif %}
+                                {% if form.email.errors %}
+                                    <div class="form-error">{{ form.email.errors }}</div>
+                                {% endif %}
                             </div>
                         {% endif %}
 
                         {% if form.telegram_username %}
                             <div class="form-group">
                                 <div class="form-input-wrapper">{{ form.telegram_username }}</div>
-                                {% if form.telegram_username.errors %}<div class="form-error">{{ form.telegram_username.errors }}</div>{% endif %}
+                                {% if form.telegram_username.errors %}
+                                    <div class="form-error">{{ form.telegram_username.errors }}</div>
+                                {% endif %}
                             </div>
                         {% endif %}
                     </div>
                 </div>
 
                 <div class="neighbors-section">
-                    <div class="neighbors-section__title">{% trans 'основні параметри' %}</div>
+                    <div class="neighbors-section__title">
+                        {% trans 'основні параметри' %}
+                    </div>
 
                     <div class="neighbors-row neighbors-row--3">
+
                         {% if form.city %}
                             <div class="form-group">
                                 <div class="form-input-wrapper">{{ form.city }}</div>
-                                {% if form.city.errors %}<div class="form-error">{{ form.city.errors }}</div>{% endif %}
+                                {% if form.city.errors %}
+                                    <div class="form-error">{{ form.city.errors }}</div>
+                                {% endif %}
                             </div>
                         {% endif %}
 
-                        {% if form.count_neighbors %}
+                        {% if form.housing_type %}
                             <div class="form-group">
-                                <div class="form-input-wrapper">{{ form.count_neighbors }}</div>
-                                {% if form.count_neighbors.errors %}<div class="form-error">{{ form.count_neighbors.errors }}</div>{% endif %}
+                                <div class="form-input-wrapper">{{ form.housing_type }}</div>
+                                {% if form.housing_type.errors %}
+                                    <div class="form-error">{{ form.housing_type.errors }}</div>
+                                {% endif %}
                             </div>
                         {% endif %}
 
                         {% if form.budget %}
                             <div class="form-group">
                                 <div class="form-input-wrapper">{{ form.budget }}</div>
-                                {% if form.budget.errors %}<div class="form-error">{{ form.budget.errors }}</div>{% endif %}
+                                {% if form.budget.errors %}
+                                    <div class="form-error">{{ form.budget.errors }}</div>
+                                {% endif %}
                             </div>
                         {% endif %}
+
                     </div>
 
-                    <div class="neighbors-row neighbors-row--3">
-
-                        {% if form.housing_type %}
-                            <div class="form-group">
-                                <div class="form-input-wrapper">{{ form.housing_type }}</div>
-                                {% if form.housing_type.errors %}<div class="form-error">{{ form.housing_type.errors }}</div>{% endif %}
-                            </div>
-                        {% endif %}
-
-                        {% if form.move_in_date %}
-                            <div class="form-group">
-                                <div class="form-input-wrapper">{{ form.move_in_date }}</div>
-                                {% if form.move_in_date.errors %}<div class="form-error">{{ form.move_in_date.errors }}</div>{% endif %}
-                            </div>
-                        {% endif %}
-                    </div>
                 </div>
 
                 <div class="bottom-full">
@@ -379,8 +363,11 @@ id_subcategory
                                         <div class="formset-row {% if forloop.first %}is-first{% endif %}">
                                             <div class="formset-file">
                                                 {{ f.image }}
+
                                                 {% if f.image.errors %}
-                                                    <div class="form-error">{{ f.image.errors }}</div>
+                                                    <div class="form-error">
+                                                        {{ f.image.errors }}
+                                                    </div>
                                                 {% endif %}
                                             </div>
 
@@ -415,7 +402,195 @@ id_subcategory
                 </div>
             </div>
 
-        {% endif %}
+        {% else %}
+        <div class="form-grid">
+            <div class="column-title">{% trans 'дані оголошення' %}</div>
+            <div class="column-title">{% trans 'особисті дані' %}</div>
+
+            <div class="left-column">
+                {% if form.title %}
+                    <div class="form-group">
+                        <div class="form-input-wrapper">
+                            {{ form.title }}
+                        </div>
+                        {% if form.title.errors %}
+                            <div class="form-error">
+                                {{ form.title.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if form.text %}
+                    <div class="form-group">
+                        <div class="form-input-wrapper">
+                            {{ form.text }}
+                        </div>
+                        {% if form.text.errors %}
+                            <div class="form-error">
+                                {{ form.text.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if form.price %}
+                    <div class="form-group">
+                        <div class="form-input-wrapper">
+                            {{ form.price }}
+                        </div>
+                        {% if form.price.errors %}
+                            <div class="form-error">
+                                {{ form.price.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <div class="city-condition-row">
+                    {% if form.city %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">
+                                {{ form.city }}
+                            </div>
+                            {% if form.city.errors %}
+                                <div class="form-error">
+                                    {{ form.city.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.condition %}
+                        <div class="form-group">
+                            <div class="form-input-wrapper">
+                                {{ form.condition }}
+                            </div>
+                            {% if form.condition.errors %}
+                                <div class="form-error">
+                                    {{ form.condition.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="right-column">
+                {% if form.email %}
+                    <div class="form-group">
+                        <div class="form-input-wrapper">
+                            {{ form.email }}
+                        </div>
+                        {% if form.email.errors %}
+                            <div class="form-error">
+                                {{ form.email.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if form.telegram_username %}
+                    <div class="form-group">
+                        <div class="form-input-wrapper">
+                            {{ form.telegram_username }}
+                        </div>
+                        {% if form.telegram_username.errors %}
+                            <div class="form-error">
+                                {{ form.telegram_username.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="bottom-full">
+
+                {% if form.category %}
+                    <div class="form-group form-group-category">
+                        <div class="form-input-wrapper">
+                            {{ form.category }}
+                        </div>
+
+                        {% if form.category.errors %}
+                            <div class="form-error">
+                                {{ form.category.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if formset %}
+                    <div class="bottom-actions">
+
+                        <div class="upload-row">
+                            <div id="formset-container" class="formset-container">
+
+                                {{ formset.management_form }}
+
+                                {% for f in formset %}
+                                    <div class="formset-row {% if forloop.first %}is-first{% endif %}">
+
+                                        <div class="formset-file">
+                                            {{ f.image }}
+
+                                            {% if f.image.errors %}
+                                                <div class="form-error">
+                                                    {{ f.image.errors }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+
+                                        {% if not forloop.first %}
+                                            <label class="formset-delete">
+                                                {{ f.DELETE }}
+                                                <span>
+                                                    {% trans 'видалити' %}
+                                                </span>
+                                            </label>
+                                        {% endif %}
+
+                                        {% for hidden in f.hidden_fields %}
+                                            {{ hidden }}
+                                        {% endfor %}
+
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+                            <button
+                                type="button"
+                                id="add-photo"
+                                class="btn-add-photo"
+                            >
+                                {% trans 'додати фото' %}
+                            </button>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn-submit"
+                        >
+                            {% trans 'Опублікувати' %}
+                        </button>
+
+                    </div>
+
+                {% else %}
+
+                    <button
+                        type="submit"
+                        class="btn-submit btn-submit--single"
+                    >
+                        {% trans 'Опублікувати' %}
+                    </button>
+
+                {% endif %}
+
+            </div>
+        </div>
+    {% endif %}
     </form>
 </div>
 

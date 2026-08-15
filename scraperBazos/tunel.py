@@ -40,12 +40,9 @@ categories = {
 
 categories_id = {
     "bycycle": 23,
-    "electric_scooter": 25,
-    "phone": 16,
     "monitor": 26,
-    "PC": 17,
-    "notebook": 17,
-    "fridge": 29
+    "fridge": 29,
+    "furniture": 20
 
 }
 
@@ -283,7 +280,9 @@ try:
                             tg_deleted,
                             email_confirmed,
         
-                            chat_id
+                            chat_id,
+                            
+                            score
         
                         )
                         VALUES (
@@ -296,7 +295,7 @@ try:
                             %s,%s,
                             %s,%s,
                             %s,%s,
-                            %s
+                            %s, %s
                         )
                         """, (
 
@@ -334,7 +333,9 @@ try:
                             0,
                             1,
 
-                            ""
+                            "",
+
+                            40
 
                         ))
                         inserted += 1

@@ -142,6 +142,7 @@ try:
         print(f"Получено строк из `{SOURCE_TABLE}`: {len(rows)}")
 
         for row in rows:
+            score = 20
 
             category = str(
                 row.get("categoria")
@@ -164,6 +165,13 @@ try:
 
             if not text.strip():
                 continue
+
+            if row.get('text'):
+                score += 10
+            if row.get('price'):
+                score += 10
+            if row.get('get_photo'):
+                score += 20
 
             title = text[:100].strip()
 
@@ -191,6 +199,8 @@ try:
                 status="active",
 
                 preview_image=row.get("preview_image"),
+
+                score=score,
             )
 
             try:

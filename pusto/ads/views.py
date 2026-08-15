@@ -35,6 +35,7 @@ from urllib.parse import quote
 from django.core.cache import cache
 import requests
 from interactions.forms import *
+from django.db.models import Case, When, Value, IntegerField
 
 TG_SUPERGROUP_PREFIX = 1000000000000
 
@@ -77,11 +78,6 @@ class GlobalSearchView(View):
 
         )
 
-        #jobs_qs = search_jobs_queryset(
-        #    JobPost.objects.all(),
-        #    q_normalized,
-        #)
-
         neighbors_qs = search_neighbors_queryset(
             NeighborPost.objects.all(),
             q_normalized,
@@ -89,19 +85,14 @@ class GlobalSearchView(View):
         )
 
         things_count = things_qs.count()
-        #jobs_count = jobs_qs.count()
         neighbors_count = neighbors_qs.count()
 
         print('THINGS COUNT:', things_count)
-        #print('JOBS COUNT:', jobs_count)
         print('NEIGHBORS COUNT:', neighbors_count)
 
         best_target = 'ads:things_all'
         best_count = things_count
 
-        #if jobs_count > best_count:
-        #    best_target = 'ads:jobs_all'
-        #    best_count = jobs_count
 
         if neighbors_count > best_count:
             best_target = 'ads:neighbors_all'
@@ -368,7 +359,22 @@ class BaseAdsList(BaseListMixin, TemplateView):
 
     def apply_default_ordering(self, queryset):
         queryset = self.with_image_priority_annotation(queryset)
-        return queryset.order_by("-has_any_image", "-created_at", "-id")
+
+        queryset = queryset.annotate(
+            source_priority=Case(
+                When(source='telegram', then=Value(0)),
+                When(source='pusto', then=Value(0)),  # если есть свои объявления
+                default=Value(1),  # bazos, reality и т.д.
+                output_field=IntegerField(),
+            )
+        )
+
+        return queryset.order_by(
+            "-has_any_image",
+            "source_priority",
+            "-created_at",
+            "-id",
+        )
 
 
     def apply_user_sorting(self, queryset, sort, order):
@@ -774,6 +780,14 @@ class BaseCreatePostView(CreateView):
             prefix=self.image_formset_prefix
         )
 
+    def form_invalid(self, form):
+        print("=" * 50)
+        print("FORM INVALID")
+        print(form.errors)
+        print(form.non_field_errors())
+        print("=" * 50)
+        return super().form_invalid(form)
+
     def set_extra_fields_for_get(self):
         slug = self.kwargs.get('slug')
         self.section = self.section_map.get(slug, self.model.__name__.lower())
@@ -831,6 +845,7 @@ class BaseCreatePostView(CreateView):
 
     def form_valid(self, form):
         print("POST CREATED")
+
         # if not self.check_daily_limit():
         #     messages.error(self.request, "Вы достигли лимита на сегодня.")
         #     return self.form_invalid(form)
@@ -953,6 +968,10 @@ class NeighborCreateView(BaseCreatePostView):
         'rent': 'rent',
     }
 
+    def get_form_class(self):
+        if self.kwargs.get("slug") == "rent":
+            return RentPostForm
+        return NeighborPostForm
 
 from django.conf import settings
 
