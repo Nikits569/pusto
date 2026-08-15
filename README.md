@@ -1,35 +1,31 @@
 # Pusto.sk
+https://pusto.sk/
 
-**Pusto.sk** is a multilingual marketplace platform for students and Ukrainian communities in Slovakia. It aggregates listings from multiple sources into a single searchable platform, making it easier to find housing, jobs, and second-hand items.
-
-🌐 **Live Demo:** https://pusto.sk
-
----
+**Pusto.sk** is a multilingual marketplace platform for students and Ukrainian communities in Slovakia. It aggregates listings from multiple sources into a single searchable platform, making it easier to find housing, neighbors, and second-hand items.
 
 ## 🚀 Features
 
 - Multi-source listing aggregation
 - Housing marketplace
-- Job board
 - Buy & Sell marketplace
 - Favorites system
-- Advanced filtering and search
+- Advanced search and filtering
 - Multilingual interface (English, Slovak, Ukrainian)
-- Automatic content translation
-- Admin moderation panel
-- Telegram parser
-- Telegram posting bot
-- Stripe payment integration
-- Premium advertisements
-- Top advertisement placement
 - Responsive design
 - SEO optimization
-- Email notifications
+- Admin moderation panel
+- Dynamic categories and subcategories
 - Contact forms
-- Dynamic category and subcategory system
+- Email notifications
+- Premium advertisement promotion
+- Banner advertisements
+- Poster advertisements
+- Featured listings
+- Flexible advertisement duration
+- Cryptocurrency payments
+- Manual payment verification
 - User-friendly interface
 
----
 
 ## 🛠 Tech Stack
 
@@ -48,88 +44,75 @@
 - Telegram Bot API
 - Telethon
 
----
 
 ## ⚙️ Infrastructure
 
 - Linux VPS deployment
 - Gunicorn application server
 - Nginx reverse proxy
-- HTTPS with SSL
 - Cloudflare protection
-- Scheduled background tasks (Cron)
 - MySQL database
-- Environment-based configuration
+- Cron-based scheduled tasks
+- Environment-based configuration (.env)
+- Background automation services
+- Media and static file management
+- Search engine optimization (SEO)
+- Multilingual architecture
 
----
 
 ## 🤖 Automation
 
-- Telegram channel parser
-- Automatic post filtering
-- Automatic translation pipeline
-- Scheduled data synchronization
-- Background scraping tasks
-- Content moderation workflow
-
----
+- Aggregates listings from 10+ external platforms
+- Parses Telegram channels and multiple marketplace sources
+- Automatically publishes listings to the platform
+- Translates every listing into three languages
+- Downloads and processes listing images
+- Detects and removes spam and irrelevant posts
+- Classifies listings into categories and subcategories
+- Extracts prices, locations, contact information, and other metadata
+- Detects duplicate listings
+- Continuously checks whether listings still exist on their original sources and automatically removes unavailable ones
+- Runs scheduled background synchronization and processing tasks
 
 ## 💳 Monetization
 
-- Stripe payment integration
 - Premium advertisements
-- Featured listings
-- Advertisement duration management
-
----
+- Featured listing promotion
+- Banner advertisements
+- Poster advertisements
+- Flexible advertisement duration
+- Cryptocurrency payments
+- Manual bank card payment verification by administrator
 
 ## 🌍 Languages
 
-- 🇬🇧 English
-- 🇸🇰 Slovak
-- 🇺🇦 Ukrainian
+- English
+- Slovak
+- Ukrainian
 
----
 
 ## 📸 Screenshots
 
 ### Homepage
 
-![Homepage](assets/home.png)
+![Homepage](assets/p1.png)
+![Homepage](assets/p4.png)
 
 ### Marketplace
 
-![Marketplace](assets/marketplace.png)
+![Marketplace](assets/p6.png)
+![Marketplace](assets/p7.png)
+![Marketplace](assets/p9.png)
+![Marketplace](assets/p9.png)
 
-### Housing
+### Profile&Other
 
-![Housing](assets/housing.png)
+![Profile](assets/p10.png)
+![Profile](assets/p5.png)
+![Profile](assets/p3.png)
+![Profile](assets/p2.png)
 
-### Jobs
 
-![Jobs](assets/jobs.png)
+## 👤 Author
 
-### Admin Panel
-
-![Admin](assets/admin.png)
-
----
-
-## 🚀 Installation
-
-```bash
-git clone https://github.com/Nikits569/pusto.git
-cd pusto
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-python manage.py migrate
-python manage.py runserver
-```
-
----
-
-## 👨‍💻 Author
-
-Developed by **Nikita Pustovoitov**
+Mykyta Pustovoitov
